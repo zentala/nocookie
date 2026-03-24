@@ -20,11 +20,12 @@
     --mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--font); color: var(--text); line-height: 1.7; display: flex; min-height: 100vh; }
+  body { font-family: var(--font); color: var(--text); line-height: 1.7; min-height: 100vh; }
+  .spec-layout { display: flex; }
 
   /* Sidebar */
   .sidebar { width: 260px; background: var(--gray-light); border-right: 1px solid var(--border);
-    padding: 24px 20px; position: fixed; top: 0; bottom: 0; overflow-y: auto; flex-shrink: 0; }
+    padding: 24px 20px; position: fixed; top: 38px; bottom: 0; overflow-y: auto; flex-shrink: 0; }
   .sidebar h2 { font-size: 14px; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
   .sidebar h2 svg { width: 18px; height: 18px; }
   .sidebar nav a { display: block; padding: 6px 10px; font-size: 13px; color: var(--text-muted); text-decoration: none;
@@ -92,6 +93,7 @@
 </head>
 <body>
 <div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html">Landing</a><a href="standard-spec.html" class="mn-active">Spec</a></div>
+<div class="spec-layout">
   <aside class="sidebar">
     <h2>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L3 7v6c0 5.25 3.75 10.05 9 11.25C17.25 23.05 21 18.25 21 13V7l-9-5z"/></svg>
@@ -187,9 +189,9 @@
 
     <h2 id="examples">CMP Examples</h2>
     <div class="example-tabs">
-      <div class="example-tab active" onclick="showExample('onetrust')">OneTrust</div>
-      <div class="example-tab" onclick="showExample('cookiebot')">Cookiebot</div>
-      <div class="example-tab" onclick="showExample('didomi')">Didomi</div>
+      <div class="example-tab active" onclick="showExample('onetrust',this)">OneTrust</div>
+      <div class="example-tab" onclick="showExample('cookiebot',this)">Cookiebot</div>
+      <div class="example-tab" onclick="showExample('didomi',this)">Didomi</div>
     </div>
     <div class="example-panel active" id="ex-onetrust">
       <div class="code-wrapper" style="margin-top:0">
@@ -276,6 +278,7 @@
       <pre>https://cookies-accepter.org/standard/v1/schema.json</pre>
     </div>
   </main>
+</div><!-- /spec-layout -->
 
 <script>
   function copyCode(btn) {
@@ -285,10 +288,10 @@
       setTimeout(() => btn.textContent = 'Copy', 1500);
     });
   }
-  function showExample(id) {
+  function showExample(id, el) {
     document.querySelectorAll('.example-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.example-panel').forEach(p => p.classList.remove('active'));
-    event.target.classList.add('active');
+    el.classList.add('active');
     document.getElementById('ex-' + id).classList.add('active');
   }
   // Sidebar active on scroll
