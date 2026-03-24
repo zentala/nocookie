@@ -7,3 +7,6 @@
 
 ## Wave 2 (after Wave 1)
 - [x] Compile final research report combining all findings
+
+## Wave 3 (added post-research)
+- [x] E001-T04: Legal risk analysis
