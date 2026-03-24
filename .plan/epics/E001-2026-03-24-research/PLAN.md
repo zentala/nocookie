@@ -1,8 +1,9 @@
 ---
 id: E001
 title: Research — Competitive Landscape, Cookie Standards & CMP Analysis
-status: active
+status: done
 created: 2026-03-24
+completed: 2026-03-24
 ---
 
 # E001: Research
@@ -26,8 +27,8 @@ Understand the existing landscape before building anything. Answer:
 - E001-T03: Research popular CMPs and their DOM patterns
 
 ## Acceptance Criteria
-- [ ] Report covers all 5 questions above
-- [ ] Competitive analysis with feature comparison table
-- [ ] Cookie category taxonomy documented
-- [ ] Top 5 CMPs DOM patterns documented
-- [ ] Gaps identified that our project can fill
+- [x] Report covers all 5 questions above
+- [x] Competitive analysis with feature comparison table
+- [x] Cookie category taxonomy documented
+- [x] Top 5 CMPs DOM patterns documented (9 done)
+- [x] Gaps identified that our project can fill
