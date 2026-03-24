@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — Options</title>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --accent: #10b981; --accent-light: #d1fae5;
+    --green: #10b981; --red: #ef4444; --gray: #6b7280; --gray-light: #f3f4f6;
+    --white: #ffffff; --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --radius: 8px; --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: var(--gray-light); color: var(--text); }
+
+  .page-header { background: var(--primary); color: var(--white); padding: 24px 32px; }
+  .page-header h1 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
+  .page-header svg { width: 28px; height: 28px; }
+
+  .tabs { display: flex; background: var(--white); border-bottom: 2px solid var(--border); padding: 0 32px; }
+  .tab { padding: 14px 20px; font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer;
+         border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--primary); border-color: var(--primary); font-weight: 600; }
+
+  .content { max-width: 720px; margin: 24px auto; padding: 0 24px; }
+  .card { background: var(--white); border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+          box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .card h2 { font-size: 16px; margin-bottom: 16px; color: var(--primary); }
+  .card h3 { font-size: 14px; margin: 16px 0 8px; color: var(--text); }
+
+  .profile-row { margin-bottom: 20px; }
+  .profile-row label { font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+  .profile-row select { width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 14px; font-family: var(--font); }
+
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0;
+    border-bottom: 1px solid var(--gray-light); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { display: flex; align-items: center; gap: 10px; }
+  .toggle-label span { font-size: 14px; }
+  .toggle-label .badge { font-size: 10px; background: var(--gray-light); padding: 2px 8px; border-radius: 10px; color: var(--text-muted); }
+  .info-btn { background: none; border: 1px solid var(--border); border-radius: 50%; width: 20px; height: 20px;
+    font-size: 11px; cursor: pointer; color: var(--text-muted); margin-left: 4px; }
+  .info-expand { font-size: 12px; color: var(--text-muted); padding: 6px 0 6px 34px; display: none; line-height: 1.5; }
+  .info-expand.open { display: block; }
+
+  .switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: .2s; }
+  .slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; bottom: 3px;
+    background: var(--white); border-radius: 50%; transition: .2s; }
+  .switch input:checked + .slider { background: var(--accent); }
+  .switch input:checked + .slider::before { transform: translateX(18px); }
+  .switch input:disabled + .slider { opacity: .5; cursor: default; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 10px; background: var(--gray-light); font-weight: 600; font-size: 12px;
+       text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); }
+  td { padding: 10px; border-bottom: 1px solid var(--gray-light); }
+  .btn-sm { padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border); background: var(--white);
+    font-size: 12px; cursor: pointer; margin-right: 4px; }
+  .btn-sm:hover { background: var(--gray-light); }
+  .btn-sm.del:hover { background: #fee2e2; color: var(--red); border-color: var(--red); }
+  .btn-add { padding: 8px 16px; background: var(--primary); color: var(--white); border: none;
+    border-radius: 6px; font-size: 13px; cursor: pointer; font-family: var(--font); margin-bottom: 16px; }
+
+  .slider-range { display: flex; align-items: center; gap: 12px; }
+  .slider-range input[type=range] { flex: 1; accent-color: var(--primary); }
+  .slider-range .val { font-size: 13px; font-weight: 600; min-width: 50px; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stat-box { background: var(--gray-light); border-radius: var(--radius); padding: 16px; text-align: center; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--primary); }
+  .stat-box .lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .bar-chart { margin-top: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; }
+  .bar-row .bar-label { width: 100px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+  .bar-row .bar-track { flex: 1; height: 20px; background: var(--gray-light); border-radius: 4px; overflow: hidden; }
+  .bar-row .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px;
+    font-size: 11px; color: var(--white); font-weight: 600; min-width: fit-content; }
+  .bar-row .bar-count { width: 40px; font-size: 12px; color: var(--text-muted); }
+
+  .about-links { list-style: none; }
+  .about-links li { padding: 8px 0; border-bottom: 1px solid var(--gray-light); }
+  .about-links a { color: var(--primary-light); text-decoration: none; font-size: 14px; }
+  .about-links a:hover { text-decoration: underline; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+</style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L3 7v6c0 5.25 3.75 10.05 9 11.25C17.25 23.05 21 18.25 21 13V7l-9-5z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Cookies Accepter Settings
+    </h1>
+  </div>
+  <div class="tabs">
+    <div class="tab active" data-tab="prefs">Preferences</div>
+    <div class="tab" data-tab="sites">Site Overrides</div>
+    <div class="tab" data-tab="advanced">Advanced</div>
+    <div class="tab" data-tab="stats">Statistics</div>
+    <div class="tab" data-tab="about">About</div>
+  </div>
+
+  <!-- TAB: Preferences -->
+  <div class="content tab-panel active" id="tab-prefs">
+    <div class="card">
+      <h2>Cookie Preferences</h2>
+      <div class="profile-row">
+        <label>Profile</label>
+        <select id="profile-select" onchange="applyProfile(this.value)">
+          <option value="privacy">Privacy Maximum</option>
+          <option value="balanced" selected>Balanced</option>
+          <option value="analytics">Allow Analytics</option>
+          <option value="all">Accept All</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label"><span>Essential</span><span class="badge">always on</span>
+          <button class="info-btn" onclick="toggleInfo(this)">i</button></div>
+        <label class="switch"><input type="checkbox" checked disabled><span class="slider"></span></label>
+      </div>
+      <div class="info-expand">Strictly necessary cookies for site functionality: session IDs, CSRF tokens, load balancing. Privacy impact: <strong>None</strong>.</div>
+      <div class="toggle-row">
+        <div class="toggle-label"><span>Functional</span>
+          <button class="info-btn" onclick="toggleInfo(this)">i</button></div>
+        <label class="switch"><input type="checkbox" data-cat="functional" checked onchange="catChanged()"><span class="slider"></span></label>
+      </div>
+      <div class="info-expand">Preferences like language, region, UI settings. Examples: language cookie, theme preference. Privacy impact: <strong>Low</strong>.</div>
+      <div class="toggle-row">
+        <div class="toggle-label"><span>Analytics</span>
+          <button class="info-btn" onclick="toggleInfo(this)">i</button></div>
+        <label class="switch"><input type="checkbox" data-cat="analytics" onchange="catChanged()"><span class="slider"></span></label>
+      </div>
+      <div class="info-expand">Usage measurement: page views, scroll depth, feature usage. Examples: Google Analytics, Plausible. Privacy impact: <strong>Medium</strong>.</div>
+      <div class="toggle-row">
+        <div class="toggle-label"><span>Marketing</span>
+          <button class="info-btn" onclick="toggleInfo(this)">i</button></div>
+        <label class="switch"><input type="checkbox" data-cat="marketing" onchange="catChanged()"><span class="slider"></span></label>
+      </div>
+      <div class="info-expand">Ad targeting and cross-site tracking. Examples: Facebook Pixel, Google Ads remarketing. Privacy impact: <strong>High</strong>.</div>
+      <div class="toggle-row">
+        <div class="toggle-label"><span>Social Media</span>
+          <button class="info-btn" onclick="toggleInfo(this)">i</button></div>
+        <label class="switch"><input type="checkbox" data-cat="social" onchange="catChanged()"><span class="slider"></span></label>
+      </div>
+      <div class="info-expand">Social sharing widgets and embedded content. Examples: Facebook Like, Twitter embeds. Privacy impact: <strong>High</strong>.</div>
+    </div>
+  </div>
+
+  <!-- TAB: Site Overrides -->
+  <div class="content tab-panel" id="tab-sites">
+    <div class="card">
+      <h2>Site-Specific Rules</h2>
+      <button class="btn-add" onclick="alert('Add override dialog would open here')">+ Add Override</button>
+      <table>
+        <thead><tr><th>Domain</th><th>Mode</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>mybank.com</td><td>Accept All</td><td><button class="btn-sm">Edit</button><button class="btn-sm del">Delete</button></td></tr>
+          <tr><td>ads-heavy.com</td><td>Reject All</td><td><button class="btn-sm">Edit</button><button class="btn-sm del">Delete</button></td></tr>
+          <tr><td>news-site.com</td><td>Custom</td><td><button class="btn-sm">Edit</button><button class="btn-sm del">Delete</button></td></tr>
+          <tr><td>social-app.io</td><td>Disabled</td><td><button class="btn-sm">Edit</button><button class="btn-sm del">Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: Advanced -->
+  <div class="content tab-panel" id="tab-advanced">
+    <div class="card">
+      <h2>Advanced Settings</h2>
+      <div class="toggle-row"><div class="toggle-label"><span>Auto-consent</span></div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <p style="font-size:12px;color:var(--text-muted);padding:4px 0 12px">When off, detects popups but does not act automatically.</p>
+      <div class="toggle-row"><div class="toggle-label"><span>Enable heuristic fallback</span></div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <p style="font-size:12px;color:var(--text-muted);padding:4px 0 12px">Try generic button text matching for unknown CMPs.</p>
+      <div class="toggle-row"><div class="toggle-label"><span>Show notifications</span></div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-label"><span>Log consent actions</span></div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-label"><span>Enable well-known standard</span></div>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <h3>Consent Delay</h3>
+      <div class="slider-range">
+        <input type="range" min="0" max="2000" step="100" value="500" oninput="this.nextElementSibling.textContent=this.value+'ms'">
+        <span class="val">500ms</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);padding:8px 0 0">Time to wait after CMP detection before acting. Lower is faster but may act before CMP is fully loaded.</p>
+    </div>
+  </div>
+
+  <!-- TAB: Statistics -->
+  <div class="content tab-panel" id="tab-stats">
+    <div class="card">
+      <h2>Statistics</h2>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num">1,247</div><div class="lbl">Popups Handled</div></div>
+        <div class="stat-box"><div class="num">42</div><div class="lbl">This Week</div></div>
+        <div class="stat-box"><div class="num">189</div><div class="lbl">This Month</div></div>
+        <div class="stat-box"><div class="num">9</div><div class="lbl">CMPs Recognized</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>By Method</h3>
+      <div class="bar-chart">
+        <div class="bar-row"><span class="bar-label">API call</span><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--accent)">50%</div></div><span class="bar-count">623</span></div>
+        <div class="bar-row"><span class="bar-label">Click</span><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--primary-light)">33%</div></div><span class="bar-count">412</span></div>
+        <div class="bar-row"><span class="bar-label">Heuristic</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#f59e0b">13%</div></div><span class="bar-count">167</span></div>
+        <div class="bar-row"><span class="bar-label">Well-known</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#8b5cf6">4%</div></div><span class="bar-count">45</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>By CMP</h3>
+      <div class="bar-chart">
+        <div class="bar-row"><span class="bar-label">OneTrust</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary)">312</div></div><span class="bar-count"></span></div>
+        <div class="bar-row"><span class="bar-label">Cookiebot</span><div class="bar-track"><div class="bar-fill" style="width:53%;background:var(--primary-light)">278</div></div><span class="bar-count"></span></div>
+        <div class="bar-row"><span class="bar-label">Unknown</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--gray)">167</div></div><span class="bar-count"></span></div>
+        <div class="bar-row"><span class="bar-label">Didomi</span><div class="bar-track"><div class="bar-fill" style="width:26%;background:var(--accent)">134</div></div><span class="bar-count"></span></div>
+        <div class="bar-row"><span class="bar-label">Quantcast</span><div class="bar-track"><div class="bar-fill" style="width:18%;background:#8b5cf6">98</div></div><span class="bar-count"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: About -->
+  <div class="content tab-panel" id="tab-about">
+    <div class="card">
+      <h2>About Cookies Accepter</h2>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:16px">Set your cookie preferences once. We handle the rest. Cookies Accepter auto-applies your consent choices on every website, so you never have to click through cookie popups again.</p>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Version 0.1.0 &middot; Manifest V3</p>
+      <ul class="about-links">
+        <li><a href="#">GitHub Repository</a></li>
+        <li><a href="#">cookies-accepter.org</a></li>
+        <li><a href="#">Open Standard Specification</a></li>
+        <li><a href="#">Report an Issue</a></li>
+        <li><a href="#">Contribute CMP Rules</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:16px">Licensed under MIT. Made with care for your privacy.</p>
+    </div>
+  </div>
+
+<script>
+  const profiles = {
+    privacy:   { functional: false, analytics: false, marketing: false, social: false },
+    balanced:  { functional: true,  analytics: false, marketing: false, social: false },
+    analytics: { functional: true,  analytics: true,  marketing: false, social: false },
+    all:       { functional: true,  analytics: true,  marketing: true,  social: true },
+  };
+  function applyProfile(val) {
+    const p = profiles[val]; if (!p) return;
+    document.querySelectorAll('[data-cat]').forEach(cb => { cb.checked = p[cb.dataset.cat]; });
+  }
+  function catChanged() {
+    const state = {};
+    document.querySelectorAll('[data-cat]').forEach(cb => { state[cb.dataset.cat] = cb.checked; });
+    const match = Object.entries(profiles).find(([,p]) =>
+      Object.keys(p).every(k => p[k] === state[k]));
+    document.getElementById('profile-select').value = match ? match[0] : 'custom';
+  }
+  function toggleInfo(btn) {
+    const exp = btn.closest('.toggle-row').nextElementSibling;
+    if (exp && exp.classList.contains('info-expand')) exp.classList.toggle('open');
+  }
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

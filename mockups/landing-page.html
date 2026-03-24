@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — Set your cookie preferences once</title>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --primary-dark: #0f0d2e;
+    --accent: #10b981; --accent-dark: #059669; --accent-light: #d1fae5;
+    --indigo-50: #eef2ff; --white: #ffffff; --text: #111827; --text-muted: #6b7280;
+    --border: #e5e7eb; --gray-light: #f9fafb; --radius: 12px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  nav { padding: 16px 0; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 10; }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; color: var(--primary); text-decoration: none; }
+  .nav-logo svg { width: 26px; height: 26px; }
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--text-muted); text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { color: var(--primary); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; font-family: var(--font); transition: all .2s; }
+  .btn-accent { background: var(--accent); color: var(--white); }
+  .btn-accent:hover { background: var(--accent-dark); }
+  .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+  .btn-outline:hover { background: var(--primary); color: var(--white); }
+  .btn-white { background: var(--white); color: var(--primary); }
+  .btn-white:hover { background: var(--indigo-50); }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    color: var(--white); padding: 80px 0 64px; text-align: center; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 48px;
+    background: var(--white); clip-path: ellipse(55% 100% at 50% 100%); }
+  .hero h1 { font-size: 44px; line-height: 1.15; max-width: 650px; margin: 0 auto 16px; font-weight: 800; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { font-size: 18px; color: rgba(255,255,255,.75); max-width: 520px; margin: 0 auto 32px; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-pills { display: flex; gap: 24px; justify-content: center; margin-top: 40px; font-size: 14px; color: rgba(255,255,255,.6); }
+  .hero-pills span { display: flex; align-items: center; gap: 6px; }
+  .hero-pills svg { width: 16px; height: 16px; color: var(--accent); }
+
+  /* Section */
+  section { padding: 72px 0; }
+  .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent); margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 800; margin-bottom: 16px; color: var(--primary); }
+  .section-sub { font-size: 16px; color: var(--text-muted); max-width: 560px; margin-bottom: 40px; }
+  .text-center { text-align: center; }
+  .text-center .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* Problem */
+  .problem { background: var(--gray-light); }
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .problem-card { background: var(--white); border-radius: var(--radius); padding: 28px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .problem-card .icon { width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .problem-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .problem-card p { font-size: 14px; color: var(--text-muted); }
+
+  /* How it works */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; counter-reset: step; }
+  .step { position: relative; padding-top: 48px; }
+  .step::before { counter-increment: step; content: counter(step); position: absolute; top: 0; left: 0;
+    width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: var(--white);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+  .step h3 { font-size: 16px; margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--text-muted); }
+
+  /* Standard */
+  .standard-section { background: var(--primary-dark); color: var(--white); }
+  .standard-section .section-label { color: var(--accent); }
+  .standard-section .section-title { color: var(--white); }
+  .standard-section .section-sub { color: rgba(255,255,255,.6); }
+  .code-block { background: #0d0b21; border-radius: var(--radius); padding: 24px; font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 13px; line-height: 1.7; color: #c4b5fd; overflow-x: auto; max-width: 540px; margin: 0 auto; }
+  .code-block .key { color: #93c5fd; }
+  .code-block .str { color: #86efac; }
+  .code-block .punc { color: #6b7280; }
+
+  /* For devs / owners */
+  .audience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .audience-card { border-radius: var(--radius); padding: 32px; border: 2px solid var(--border); }
+  .audience-card h3 { font-size: 20px; margin-bottom: 8px; }
+  .audience-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+  .audience-card ul { list-style: none; margin-bottom: 20px; }
+  .audience-card li { padding: 4px 0; font-size: 14px; color: var(--text); }
+  .audience-card li::before { content: '\2713'; color: var(--accent); margin-right: 8px; font-weight: 700; }
+
+  /* Stats */
+  .stats-bar { background: var(--accent); color: var(--white); padding: 48px 0; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center; }
+  .stats-grid .num { font-size: 36px; font-weight: 800; }
+  .stats-grid .lbl { font-size: 13px; opacity: .8; }
+
+  /* Footer */
+  footer { background: var(--primary-dark); color: rgba(255,255,255,.5); padding: 40px 0; font-size: 13px; }
+  footer .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer a { color: rgba(255,255,255,.7); text-decoration: none; }
+  footer a:hover { color: var(--white); }
+  .footer-links { display: flex; gap: 20px; }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 28px; }
+    .problem-grid, .steps, .audience-grid, .stats-grid { grid-template-columns: 1fr; }
+    .hero-pills { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav><div class="container">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L3 7v6c0 5.25 3.75 10.05 9 11.25C17.25 23.05 21 18.25 21 13V7l-9-5z"/></svg>
+      Cookies Accepter
+    </a>
+    <div class="nav-links">
+      <a href="#">Extension</a><a href="#">Standard</a><a href="#">Docs</a><a href="#">GitHub</a>
+      <a href="#" class="btn btn-accent" style="padding:8px 18px;font-size:13px">Install Extension</a>
+    </div>
+  </div></nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Set your cookie preferences <em>once</em>. We handle the rest.</h1>
+      <p>Stop clicking through cookie popups on every website. Cookies Accepter applies your consent choices automatically.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-accent" style="font-size:16px;padding:14px 32px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Install for Chrome
+        </a>
+        <a href="#" class="btn btn-white">View the Standard</a>
+      </div>
+      <div class="hero-pills">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Works now with 9 CMPs</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Open standard for all</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> AI agent ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="problem">
+    <div class="container text-center">
+      <div class="section-label">The Problem</div>
+      <div class="section-title">You click through 50+ cookie popups per week</div>
+      <div class="section-sub">The EU gave you the right to granular consent. The UX makes that right impractical.</div>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="icon" style="background:#fee2e2;color:#ef4444">&#128557;</div>
+          <h3>Popup Fatigue</h3>
+          <p>Every site, every visit. You just click "Accept All" because customizing takes too long.</p>
+        </div>
+        <div class="problem-card">
+          <div class="icon" style="background:#fef3c7;color:#f59e0b">&#128256;</div>
+          <h3>13+ CMP Platforms</h3>
+          <p>OneTrust, Cookiebot, Didomi... each implements consent differently. No consistency.</p>
+        </div>
+        <div class="problem-card">
+          <div class="icon" style="background:var(--indigo-50);color:var(--primary)">&#128683;</div>
+          <h3>No Machine Standard</h3>
+          <p>Existing blockers use brittle CSS selectors that break when CMPs update.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section>
+    <div class="container text-center">
+      <div class="section-label">How It Works</div>
+      <div class="section-title">Three steps to cookie freedom</div>
+      <div class="section-sub">Install, configure once, forget about cookie popups forever.</div>
+      <div class="steps" style="text-align:left">
+        <div class="step">
+          <h3>Install the extension</h3>
+          <p>One click from the Chrome Web Store. No account needed, no data collected.</p>
+        </div>
+        <div class="step">
+          <h3>Set your preferences</h3>
+          <p>Choose a privacy profile or customize which cookie categories you accept: functional, analytics, marketing, social.</p>
+        </div>
+        <div class="step">
+          <h3>Browse freely</h3>
+          <p>The extension detects cookie popups and applies your choices automatically via CMP APIs or smart click simulation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Standard -->
+  <section class="standard-section">
+    <div class="container text-center">
+      <div class="section-label">Open Standard</div>
+      <div class="section-title">Like robots.txt, but for cookie consent</div>
+      <div class="section-sub">A single JSON file at <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">/.well-known/cookie-consent.json</code> makes your consent UI machine-readable.</div>
+      <div class="code-block" style="text-align:left">
+        <span class="punc">{</span><br>
+        &nbsp;&nbsp;<span class="key">"version"</span><span class="punc">:</span> <span class="str">"1.0"</span><span class="punc">,</span><br>
+        &nbsp;&nbsp;<span class="key">"categories"</span><span class="punc">:</span> <span class="punc">[</span><span class="str">"essential"</span><span class="punc">,</span> <span class="str">"analytics"</span><span class="punc">,</span> <span class="str">"marketing"</span><span class="punc">]</span><span class="punc">,</span><br>
+        &nbsp;&nbsp;<span class="key">"cmp"</span><span class="punc">:</span> <span class="punc">{</span> <span class="key">"name"</span><span class="punc">:</span> <span class="str">"cookiebot"</span> <span class="punc">}</span><span class="punc">,</span><br>
+        &nbsp;&nbsp;<span class="key">"selectors"</span><span class="punc">:</span> <span class="punc">{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"acceptAll"</span><span class="punc">:</span> <span class="str">"#CybotCookiebotDialogBodyButtonAccept"</span><span class="punc">,</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"rejectAll"</span><span class="punc">:</span> <span class="str">"#CybotCookiebotDialogBodyButtonDecline"</span><br>
+        &nbsp;&nbsp;<span class="punc">}</span><br>
+        <span class="punc">}</span>
+      </div>
+      <div style="margin-top:32px"><a href="#" class="btn btn-accent">Read the Specification</a></div>
+    </div>
+  </section>
+
+  <!-- For devs / owners -->
+  <section>
+    <div class="container text-center">
+      <div class="section-label">Get Involved</div>
+      <div class="section-title">Built for everyone in the ecosystem</div>
+      <div class="section-sub">Whether you build websites or just browse them.</div>
+      <div class="audience-grid" style="text-align:left">
+        <div class="audience-card">
+          <h3>For Developers</h3>
+          <p>Integrate the open standard into your tools and platforms.</p>
+          <ul><li>Full JSON Schema and TypeScript types</li><li>Validator library (npm)</li><li>Example files for 9 CMPs</li><li>Contribute CMP rules on GitHub</li></ul>
+          <a href="#" class="btn btn-outline" style="font-size:13px">View the Docs</a>
+        </div>
+        <div class="audience-card">
+          <h3>For Website Owners</h3>
+          <p>Make your cookie consent machine-readable in 5 minutes.</p>
+          <ul><li>One JSON file, no code changes</li><li>Works with your existing CMP</li><li>Online validator tool</li><li>WordPress plugin coming soon</li></ul>
+          <a href="#" class="btn btn-outline" style="font-size:13px">Quick Start Guide</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div><div class="num">1.2M+</div><div class="lbl">Popups Handled</div></div>
+        <div><div class="num">9</div><div class="lbl">CMPs Supported</div></div>
+        <div><div class="num">340+</div><div class="lbl">Sites with Standard</div></div>
+        <div><div class="num">100%</div><div class="lbl">Open Source</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer><div class="container">
+    <span>&copy; 2026 Cookies Accepter &middot; Open source, MIT licensed</span>
+    <div class="footer-links">
+      <a href="#">GitHub</a><a href="#">Privacy Policy</a><a href="#">Contact</a><a href="#">Standard Spec</a>
+    </div>
+  </div></footer>
+</body>
+</html>
