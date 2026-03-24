@@ -1,0 +1,64 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/session-start.sh\""
+        }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/post-tool-bash.sh\""
+        }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/enforce-worktree.sh\""
+        }]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{
+          "type": "agent",
+          "prompt": "FIRST: Run `git diff --stat` and `git diff --cached --stat` and `git diff HEAD~1 --stat 2>/dev/null`.\n\nIf there are NO changes to source code files (ignore .plan/, .arch/, .md-only changes, .json config):\n→ Respond {\"ok\": true} IMMEDIATELY. Do NOT update STATE.md, do NOT review code. Exit fast.\n\nIf there ARE source code changes (.ts, .tsx, .js, .py, .rs, .go, .sh, etc.):\n→ Do BOTH jobs below.\n\n## Job 1: Update STATE.md\nRead .plan/STATE.md. Update to reflect current reality:\n- git status, git branch, active worktrees\n- Task statuses, current wave, next steps\n- Update `updated:` timestamp in YAML frontmatter\n- Write the updated file\n\n## Job 2: Quality gate\nNOT a linter (precommit handles that). Catch what linters CANNOT:\n1. **Silent failures**: empty catch, swallowed errors, async without handling, API assuming success\n2. **Security**: injection, hardcoded secrets, missing input validation at boundaries\n3. **Architecture**: broken contracts, circular deps, logic in wrong layer, race conditions\n4. **Missing tests**: new branching untested, error paths untested, edge cases\n5. **DevEx traps**: breaking changes without migration, implicit deps, magic strings\n\nRead active epic's IMPROVEMENTS.md AND .plan/IMPROVEMENTS.md. Are we repeating a caught pattern?\n\nRules:\n- Max 5 items, by production blast radius\n- Each: file:line, what's wrong, what breaks in prod\n- Clean → {\"ok\": true}\n- Issues → {\"ok\": false, \"reason\": \"Before merge:\\n<items>\"}\n- NEVER flag: formatting, naming, file length, missing docs\n\nIf user approved fixes, save to:\n- Epic-specific → epic's IMPROVEMENTS.md\n- Cross-cutting → .plan/IMPROVEMENTS.md\nFormat: ## YYYY-MM-DD — E<epic>-T<id>: <summary>\\n- what and why\\n- files affected",
+          "timeout": 120
+        }]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/pre-compact.sh\""
+        }]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/notify.sh\""
+        }]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "bash \"$HOME/.claude/hooks/session-cleanup.sh\""
+        }]
+      }
+    ]
+  }
+}
