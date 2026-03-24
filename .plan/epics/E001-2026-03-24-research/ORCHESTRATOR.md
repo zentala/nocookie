@@ -10,3 +10,4 @@
 
 ## Wave 3 (added post-research)
 - [x] E001-T04: Legal risk analysis
+- [x] E001-T05: EU direction analysis (Digital Omnibus, ePrivacy, ADPC, GPC)
