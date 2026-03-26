@@ -10,6 +10,23 @@ import type { CMPRule, WellKnownCookieConsent } from "@/shared/types";
 import type { RuleSource } from "@/background/rule-engine";
 import { getWellKnownCache, setWellKnownCache } from "@/shared/storage-api";
 
+/**
+ * Maps wire-format (kebab-case) category names from the well-known JSON standard
+ * to internal camelCase identifiers used by the extension.
+ */
+const WIRE_TO_INTERNAL: Record<string, string> = {
+  essential: "essential",
+  functional: "functional",
+  analytics: "analytics",
+  marketing: "marketing",
+  "social-media": "socialMedia",
+};
+
+/** Convert a wire-format category key to its internal representation. */
+export function wireToInternalCategory(wire: string): string {
+  return WIRE_TO_INTERNAL[wire] ?? wire;
+}
+
 const WELL_KNOWN_PATH = "/.well-known/cookie-consent.json";
 
 /** Cache TTL for successful fetches (24 hours). */
@@ -174,7 +191,8 @@ function buildCustomActions(
   const steps: CMPRule["actions"]["custom"] = [];
 
   if (data.categorySelectors) {
-    for (const [, sel] of Object.entries(data.categorySelectors)) {
+    const normalized = normalizeSelectors(data.categorySelectors);
+    for (const [, sel] of Object.entries(normalized)) {
       if (sel.toggle) {
         steps.push({ type: "toggle", target: sel.toggle });
       }
@@ -192,15 +210,27 @@ function buildCustomActions(
   return steps;
 }
 
-/** Build category mapping from well-known data. */
+/** Build category mapping from well-known data, normalizing wire-format keys. */
 function buildCategoryMapping(data: WellKnownCookieConsent): CMPRule["categoryMapping"] {
-  const selectors = data.categorySelectors ?? {};
+  const normalized = normalizeSelectors(data.categorySelectors);
   return {
-    functional: selectors.functional?.cmpId ?? "functional",
-    analytics: selectors.analytics?.cmpId ?? "analytics",
-    marketing: selectors.marketing?.cmpId ?? "marketing",
-    socialMedia: selectors.socialMedia?.cmpId ?? "socialMedia",
+    functional: normalized.functional?.cmpId ?? "functional",
+    analytics: normalized.analytics?.cmpId ?? "analytics",
+    marketing: normalized.marketing?.cmpId ?? "marketing",
+    socialMedia: normalized.socialMedia?.cmpId ?? "socialMedia",
   };
+}
+
+/** Normalize wire-format category selector keys to internal camelCase keys. */
+function normalizeSelectors(
+  selectors?: Record<string, { toggle?: string; cmpId?: string }>,
+): Record<string, { toggle?: string; cmpId?: string }> {
+  if (!selectors) return {};
+  const result: Record<string, { toggle?: string; cmpId?: string }> = {};
+  for (const [key, value] of Object.entries(selectors)) {
+    result[wireToInternalCategory(key)] = value;
+  }
+  return result;
 }
 
 /**

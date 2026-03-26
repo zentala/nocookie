@@ -11,6 +11,7 @@ import {
   wellKnownRuleSource,
   setWellKnownRule,
   clearWellKnownRule,
+  wireToInternalCategory,
 } from "@/content/well-known-reader";
 import type { WellKnownCookieConsent } from "@/shared/types";
 
@@ -205,6 +206,50 @@ describe("wellKnownToRule", () => {
     expect(rule.actions.acceptAll).toEqual([]);
     expect(rule.actions.rejectAll).toEqual([]);
     expect(rule.actions.custom).toEqual([]);
+  });
+});
+
+describe("wireToInternalCategory", () => {
+  it("maps social-media to socialMedia", () => {
+    expect(wireToInternalCategory("social-media")).toBe("socialMedia");
+  });
+  it("passes through already-camelCase categories", () => {
+    expect(wireToInternalCategory("functional")).toBe("functional");
+    expect(wireToInternalCategory("analytics")).toBe("analytics");
+    expect(wireToInternalCategory("marketing")).toBe("marketing");
+    expect(wireToInternalCategory("essential")).toBe("essential");
+  });
+  it("passes through unknown categories unchanged", () => {
+    expect(wireToInternalCategory("custom-unknown")).toBe("custom-unknown");
+  });
+});
+
+describe("wellKnownToRule with wire-format social-media", () => {
+  it("maps social-media categorySelector to socialMedia in categoryMapping", () => {
+    const data: WellKnownCookieConsent = {
+      version: "1.0",
+      categories: ["essential", "socialMedia"],
+      categorySelectors: {
+        "social-media": { toggle: "#social-toggle", cmpId: "social_cookies" },
+      },
+    };
+    const rule = wellKnownToRule(data);
+    expect(rule.categoryMapping.socialMedia).toBe("social_cookies");
+  });
+  it("includes social-media toggle in custom actions", () => {
+    const data: WellKnownCookieConsent = {
+      version: "1.0",
+      categories: ["essential", "socialMedia"],
+      categorySelectors: {
+        "social-media": { toggle: "#social-toggle" },
+      },
+      selectors: { save: "#save-btn" },
+    };
+    const rule = wellKnownToRule(data);
+    expect(rule.actions.custom).toContainEqual({
+      type: "toggle",
+      target: "#social-toggle",
+    });
   });
 });
 
