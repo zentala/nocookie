@@ -9,7 +9,78 @@
   <body>
     <div id="app">
       <h1>NoCookie Options</h1>
-      <p>Configure your cookie preferences.</p>
+
+      <nav class="tabs" role="tablist" aria-label="Options sections">
+        <button
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-preferences"
+          id="tab-preferences"
+          tabindex="0"
+        >
+          Preferences
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-overrides"
+          id="tab-overrides"
+          tabindex="-1"
+        >
+          Site Overrides
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-advanced"
+          id="tab-advanced"
+          tabindex="-1"
+        >
+          Advanced
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-statistics"
+          id="tab-statistics"
+          tabindex="-1"
+        >
+          Statistics
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-about"
+          id="tab-about"
+          tabindex="-1"
+        >
+          About
+        </button>
+      </nav>
+
+      <div role="tabpanel" id="panel-preferences" aria-labelledby="tab-preferences">
+        <section class="profile-section">
+          <label for="profile-select">Profile</label>
+          <select id="profile-select"></select>
+        </section>
+
+        <section id="categories-list" class="categories-section">
+          <!-- Populated by options.ts -->
+        </section>
+      </div>
+
+      <div role="tabpanel" id="panel-overrides" aria-labelledby="tab-overrides" hidden>
+        <p class="placeholder">Site overrides coming soon.</p>
+      </div>
+      <div role="tabpanel" id="panel-advanced" aria-labelledby="tab-advanced" hidden>
+        <p class="placeholder">Advanced settings coming soon.</p>
+      </div>
+      <div role="tabpanel" id="panel-statistics" aria-labelledby="tab-statistics" hidden>
+        <p class="placeholder">Statistics coming soon.</p>
+      </div>
+      <div role="tabpanel" id="panel-about" aria-labelledby="tab-about" hidden>
+        <p class="placeholder">About NoCookie coming soon.</p>
+      </div>
     </div>
     <script type="module" src="options.ts"></script>
   </body>
