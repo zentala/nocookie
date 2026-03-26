@@ -241,6 +241,298 @@ h1 {
   color: #991b1b;
 }
 
+/* -- Buttons -------------------------------------------------------------- */
+
+.btn-primary {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: #2563eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.btn-small:hover {
+  background: #f3f4f6;
+}
+
+.btn-danger {
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.btn-danger:hover {
+  background: #fef2f2;
+}
+
+/* -- Overrides table ------------------------------------------------------ */
+
+#overrides-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+#overrides-table th,
+#overrides-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+#overrides-table th {
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.empty-message {
+  color: #999;
+  font-style: italic;
+  text-align: center;
+}
+
+/* -- Override modal -------------------------------------------------------- */
+
+#override-modal {
+  border: none;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+#override-modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-field {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+.modal-field input,
+.modal-field select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.custom-pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+#custom-prefs {
+  margin-top: 8px;
+  padding: 8px 0;
+}
+
+/* -- Advanced settings ---------------------------------------------------- */
+
+.setting-row {
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setting-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.setting-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.setting-desc {
+  margin: 4px 0 0;
+  color: #888;
+  font-size: 13px;
+}
+
+.delay-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#setting-consentDelay {
+  width: 140px;
+}
+
+#delay-value {
+  min-width: 52px;
+  text-align: right;
+  font-size: 13px;
+  color: #555;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Statistics ----------------------------------------------------------- */
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breakdown-item {
+  margin-bottom: 10px;
+}
+
+.breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.breakdown-label {
+  font-weight: 500;
+}
+
+.breakdown-count {
+  color: #666;
+}
+
+.breakdown-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* -- About ---------------------------------------------------------------- */
+
+#about-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.about-tagline {
+  color: #666;
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.about-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.about-links li {
+  margin-bottom: 8px;
+}
+
+.about-links a {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.about-links a:hover {
+  text-decoration: underline;
+}
+
 /* -- Placeholder panels --------------------------------------------------- */
 
 .placeholder {

@@ -1,9 +1,6 @@
 /**
- * Options page entry point.
- *
- * Renders the preferences tab with profile selector and category
- * toggles. Persists state to chrome.storage.sync. Implements
- * accessible tab navigation with keyboard support.
+ * Options page entry point. Renders preferences tab with profile
+ * selector and category toggles, initializes other tabs.
  */
 
 import {
@@ -16,8 +13,10 @@ import {
 } from "@/shared/categories";
 import { getPreferences, getProfile, setPreferences, setProfile } from "@/shared/storage-api";
 import type { UserPreferences } from "@/shared/types";
-
-// -- Tab navigation ---------------------------------------------------------
+import { initAbout } from "./options-about";
+import { initAdvanced } from "./options-advanced";
+import { initOverrides } from "./options-overrides";
+import { initStats } from "./options-stats";
 
 /** All tab IDs in display order. */
 const TAB_IDS = [
@@ -46,7 +45,6 @@ export function activateTab(tabId: string): void {
   }
 }
 
-/** Set up tab click and keyboard handlers. */
 export function initTabs(): void {
   const tablist = document.querySelector('[role="tablist"]');
   if (!tablist) return;
@@ -81,8 +79,6 @@ export function initTabs(): void {
   });
 }
 
-// -- Profile selector -------------------------------------------------------
-
 /** Populate the profile <select> with all profile options. */
 export function populateProfileSelect(select: HTMLSelectElement, activeProfile: ProfileName): void {
   select.textContent = "";
@@ -104,8 +100,6 @@ export function detectProfile(prefs: UserPreferences): ProfileName {
   return "custom";
 }
 
-// -- Category toggles -------------------------------------------------------
-
 /** Build an info panel element with description, examples, and impact. */
 function buildInfoPanel(
   id: string,
@@ -120,17 +114,14 @@ function buildInfoPanel(
 
   const descP = document.createElement("p");
   descP.textContent = description;
-
   const examplesP = document.createElement("p");
   examplesP.textContent = `Examples: ${examples.join(", ")}`;
-
   const impactP = document.createElement("p");
   impactP.textContent = "Privacy impact: ";
   const badge = document.createElement("span");
   badge.className = `impact-badge impact-${impact}`;
   badge.textContent = impact;
   impactP.appendChild(badge);
-
   panel.append(descP, examplesP, impactP);
   return panel;
 }
@@ -180,8 +171,6 @@ export function buildCategoryList(container: HTMLElement, preferences: UserPrefe
   }
 }
 
-// -- Toggle + info handlers -------------------------------------------------
-
 /** Toggle a category switch value and persist. */
 export async function handleToggle(
   categoryId: CategoryId,
@@ -219,8 +208,6 @@ export function syncToggles(preferences: UserPreferences): void {
   }
 }
 
-// -- Init -------------------------------------------------------------------
-
 /** Initialize the options page (called on DOMContentLoaded). */
 export async function initOptions(): Promise<void> {
   initTabs();
@@ -234,6 +221,12 @@ export async function initOptions(): Promise<void> {
 
   populateProfileSelect(profileSelect, profile);
   buildCategoryList(categoriesList, preferences);
+
+  // Initialize other tabs
+  await initOverrides();
+  await initAdvanced();
+  await initStats();
+  initAbout();
 
   profileSelect.addEventListener("change", async () => {
     const selected = profileSelect.value as ProfileName;

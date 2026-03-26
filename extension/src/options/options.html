@@ -70,16 +70,57 @@
       </div>
 
       <div role="tabpanel" id="panel-overrides" aria-labelledby="tab-overrides" hidden>
-        <p class="placeholder">Site overrides coming soon.</p>
+        <button id="add-override" class="btn-primary">+ Add Override</button>
+        <table id="overrides-table">
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Mode</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic rows rendered by options-overrides.ts -->
+          </tbody>
+        </table>
+
+        <dialog id="override-modal">
+          <form method="dialog">
+            <h3 class="modal-title">Site Override</h3>
+            <label class="modal-field">
+              Domain
+              <input type="text" id="override-domain" placeholder="example.com" required />
+            </label>
+            <label class="modal-field">
+              Mode
+              <select id="override-mode">
+                <option value="whitelist">Accept All</option>
+                <option value="blacklist">Reject All</option>
+                <option value="custom">Custom</option>
+                <option value="disabled">Disabled</option>
+              </select>
+            </label>
+            <div id="custom-prefs" hidden>
+              <!-- Custom toggles built by options-overrides.ts -->
+            </div>
+            <div class="modal-actions">
+              <button type="submit" class="btn-primary">Save</button>
+              <button type="button" id="cancel-override" class="btn-secondary">Cancel</button>
+            </div>
+          </form>
+        </dialog>
       </div>
+
       <div role="tabpanel" id="panel-advanced" aria-labelledby="tab-advanced" hidden>
-        <p class="placeholder">Advanced settings coming soon.</p>
+        <!-- Built dynamically by options-advanced.ts -->
       </div>
+
       <div role="tabpanel" id="panel-statistics" aria-labelledby="tab-statistics" hidden>
-        <p class="placeholder">Statistics coming soon.</p>
+        <!-- Built dynamically by options-stats.ts -->
       </div>
+
       <div role="tabpanel" id="panel-about" aria-labelledby="tab-about" hidden>
-        <p class="placeholder">About NoCookie coming soon.</p>
+        <!-- Built dynamically by options-about.ts -->
       </div>
     </div>
     <script type="module" src="options.ts"></script>
