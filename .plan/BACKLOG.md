@@ -1,6 +1,8 @@
 # Backlog
 
 ## High Priority
+- E002-T24: Chrome Web Store publishing — needs $5 developer account, screenshots, privacy policy, promotional images
+- Cloudflare Pages deployment for nocookie.zentala.io
 - Cross-browser settings sync via Google account / Google Drive / chrome.storage.sync
 
 ## Ideas
