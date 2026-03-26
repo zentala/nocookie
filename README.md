@@ -8,7 +8,7 @@ The EU gave users the right to decide about their privacy. But in practice, cook
 
 ## The Solution
 
-**NoCookie** lets you decide *once* what your cookie preferences are, then automatically applies them everywhere:
+**NoCookie** lets you decide _once_ what your cookie preferences are, then automatically applies them everywhere:
 
 - **Chrome Extension** — automatically handles cookie consent popups based on your configured preferences, with a consent dashboard showing what was accepted/rejected across all sites
 - **Open Standard** — a `/.well-known/cookie-consent.json` file that website owners can serve to make cookie consent machine-readable
@@ -27,6 +27,7 @@ The EU gave users the right to decide about their privacy. But in practice, cook
 ## Cookie Categories
 
 The standard supports common consent categories:
+
 - **Essential** — required for the site to function
 - **Functional** — remember preferences, language, region
 - **Analytics** — anonymous usage statistics
@@ -36,6 +37,7 @@ The standard supports common consent categories:
 ## Project Structure
 
 This is a monorepo containing:
+
 - `extension/` — Chrome extension (Manifest V3, TypeScript)
 - `cmp-plugin/` — open-source CMP widget for website owners (`@nocookie/cmp`)
 - `website/` — project website and documentation (Astro, Cloudflare Pages)

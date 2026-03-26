@@ -7,7 +7,10 @@ body {
   min-height: 200px;
   margin: 0;
   padding: 16px;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 14px;
   color: #1a1a1a;
   background: #ffffff;

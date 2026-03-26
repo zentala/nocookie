@@ -6,7 +6,10 @@ body {
   max-width: 640px;
   margin: 0 auto;
   padding: 24px;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 14px;
   color: #1a1a1a;
   background: #ffffff;

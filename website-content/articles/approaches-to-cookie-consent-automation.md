@@ -1,6 +1,6 @@
 # Approaches to Automating Cookie Consent: A Complete Overview
 
-*How we got from "Do Not Track" to machine-readable consent signals -- and what comes next.*
+_How we got from "Do Not Track" to machine-readable consent signals -- and what comes next._
 
 ---
 
@@ -79,7 +79,7 @@ TCF's answer is the TC String -- a base64-encoded bitfield that compactly repres
 
 The engineering is impressive. The purpose taxonomy is granular (11 purposes, from "store information on a device" to "develop and improve services"). The vendor ecosystem is comprehensive (1,200+ registered vendors). TCF v2.2 closed a significant loophole by removing legitimate interest as a legal basis for personalization purposes (3-6), requiring explicit consent instead.
 
-But TCF serves the ad industry, not users. It was designed to make data processing *easier to justify*, not easier to refuse. Privacy advocates, including noyb and EDRi, argue that TCF creates an elaborate infrastructure for the appearance of consent while enabling mass data sharing. Academic research shows that most TCF consent UIs employ dark patterns.
+But TCF serves the ad industry, not users. It was designed to make data processing _easier to justify_, not easier to refuse. Privacy advocates, including noyb and EDRi, argue that TCF creates an elaborate infrastructure for the appearance of consent while enabling mass data sharing. Academic research shows that most TCF consent UIs employ dark patterns.
 
 The legal ground is also uncertain. In February 2022, the Belgian Data Protection Authority ruled that IAB Europe acted as a joint controller of TC String data and violated GDPR. In May 2025, the Brussels Market Court upheld a EUR 250,000 fine, confirming that TC Strings constitute personal data and that IAB Europe lacked a valid legal basis for their processing.
 
@@ -194,6 +194,7 @@ NoCookie was designed by studying every approach above and asking: what would it
 **From GPC, we borrowed simplicity.** Our open standard -- `/.well-known/cookie-consent.json` -- is a single JSON file that website owners can write by hand in five minutes. No HTTP header negotiation. No browser API dependency. No multi-party coordination required. Like `robots.txt` for cookie consent.
 
 A minimal valid file is four lines:
+
 ```json
 {
   "version": "1.0",
@@ -237,7 +238,7 @@ Set your preferences once. We handle the rest.
 
 ---
 
-*NoCookie is an open-source project. The extension, standard specification, and all documentation are available on [GitHub](https://github.com/nocookie).*
+_NoCookie is an open-source project. The extension, standard specification, and all documentation are available on [GitHub](https://github.com/nocookie)._
 
 ---
 

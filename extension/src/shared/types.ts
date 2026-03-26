@@ -4,3 +4,5 @@
  * Contains interfaces and types used across background,
  * content scripts, popup, and options pages.
  */
+
+export {};

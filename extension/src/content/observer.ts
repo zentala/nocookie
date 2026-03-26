@@ -4,3 +4,5 @@
  * Watches for dynamically injected consent dialogs that appear
  * after initial page load using MutationObserver.
  */
+
+export {};
