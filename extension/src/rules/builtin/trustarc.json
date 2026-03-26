@@ -1,0 +1,23 @@
+{
+  "name": "trustarc",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": ["#truste-consent-track", "#truste-consent-content"],
+    "scriptUrls": ["consent.trustarc.com", "choices.trustarc.com"],
+    "jsGlobals": ["truste", "TrustArcCookieConsent"]
+  },
+  "categoryMapping": {
+    "functional": "functional",
+    "analytics": "analytics",
+    "marketing": "advertising"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".pdynamicbutton .call" }],
+    "rejectAll": [{ "type": "click", "target": ".pdynamicbutton .rejectAll" }],
+    "custom": [
+      { "type": "click", "target": "#truste-show-consent" },
+      { "type": "waitFor", "target": ".prefPanel", "timeout": 2000 },
+      { "type": "toggle", "target": ".prefPanel input[type='checkbox']" }
+    ]
+  }
+}

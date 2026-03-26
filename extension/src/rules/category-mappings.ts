@@ -68,11 +68,77 @@ export const DIDOMI_MAPPING: CategoryMapping = {
   strategy: "api",
 };
 
+/**
+ * Quantcast uses TCF purpose IDs.
+ * Purpose 3 = Functional, Purpose 5 = Measurement, Purpose 1 = Marketing.
+ */
+export const QUANTCAST_MAPPING: CategoryMapping = {
+  cmpName: "quantcast",
+  categories: { functional: "3", analytics: "5", marketing: "1" },
+  strategy: "api",
+};
+
+/**
+ * TrustArc uses named preference categories.
+ * Categories: required (always on), functional, analytics, advertising.
+ */
+export const TRUSTARC_MAPPING: CategoryMapping = {
+  cmpName: "trustarc",
+  categories: { functional: "functional", analytics: "analytics", marketing: "advertising" },
+  strategy: "toggles",
+};
+
+/**
+ * CookieYes uses named categories via its banner API.
+ * Categories: necessary (always on), functional, analytics, advertisement.
+ */
+export const COOKIEYES_MAPPING: CategoryMapping = {
+  cmpName: "cookieyes",
+  categories: { functional: "functional", analytics: "analytics", marketing: "advertisement" },
+  strategy: "api",
+};
+
+/**
+ * Complianz (WordPress plugin) uses named consent categories.
+ * Categories: functional (always on), functional, statistics, marketing.
+ */
+export const COMPLIANZ_MAPPING: CategoryMapping = {
+  cmpName: "complianz",
+  categories: { functional: "functional", analytics: "statistics", marketing: "marketing" },
+  strategy: "api",
+};
+
+/**
+ * Osano uses uppercase purpose identifiers via its SDK.
+ * Purposes: ESSENTIAL (always on), PERSONALIZATION, ANALYTICS, MARKETING.
+ */
+export const OSANO_MAPPING: CategoryMapping = {
+  cmpName: "osano",
+  categories: { functional: "PERSONALIZATION", analytics: "ANALYTICS", marketing: "MARKETING" },
+  strategy: "api",
+};
+
+/**
+ * consentmanager uses numeric purpose IDs (TCF-based).
+ * Purpose 3 = Functional, Purpose 2 = Analytics, Purpose 4 = Marketing.
+ */
+export const CONSENTMANAGER_MAPPING: CategoryMapping = {
+  cmpName: "consentmanager",
+  categories: { functional: "3", analytics: "2", marketing: "4" },
+  strategy: "api",
+};
+
 /** All supported per-category CMP mappings. */
 export const ALL_MAPPINGS: ReadonlyArray<CategoryMapping> = [
   ONETRUST_MAPPING,
   COOKIEBOT_MAPPING,
   DIDOMI_MAPPING,
+  QUANTCAST_MAPPING,
+  TRUSTARC_MAPPING,
+  COOKIEYES_MAPPING,
+  COMPLIANZ_MAPPING,
+  OSANO_MAPPING,
+  CONSENTMANAGER_MAPPING,
 ];
 
 /**

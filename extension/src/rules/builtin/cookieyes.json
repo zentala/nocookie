@@ -1,0 +1,19 @@
+{
+  "name": "cookieyes",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": [".cky-consent-container", "#cky-consent"],
+    "scriptUrls": ["cdn-cookieyes.com", "app.cookieyes.com"],
+    "jsGlobals": ["cookieyes", "CookieYes"]
+  },
+  "categoryMapping": {
+    "functional": "functional",
+    "analytics": "analytics",
+    "marketing": "advertisement"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".cky-btn-accept" }],
+    "rejectAll": [{ "type": "click", "target": ".cky-btn-reject" }],
+    "custom": [{ "type": "eval", "target": "cookieyes.performBannerAction('reject')" }]
+  }
+}

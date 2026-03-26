@@ -28,12 +28,18 @@ function prefs(overrides: Partial<Omit<UserPreferences, "essential">> = {}): Use
 }
 
 describe("Category mappings", () => {
-  it("ALL_MAPPINGS contains exactly 3 CMPs", () => {
-    expect(ALL_MAPPINGS).toHaveLength(3);
+  it("ALL_MAPPINGS contains exactly 9 CMPs", () => {
+    expect(ALL_MAPPINGS).toHaveLength(9);
     const names = ALL_MAPPINGS.map((m) => m.cmpName);
     expect(names).toContain("onetrust");
     expect(names).toContain("cookiebot");
     expect(names).toContain("didomi");
+    expect(names).toContain("quantcast");
+    expect(names).toContain("trustarc");
+    expect(names).toContain("cookieyes");
+    expect(names).toContain("complianz");
+    expect(names).toContain("osano");
+    expect(names).toContain("consentmanager");
   });
 
   it("OneTrust mapping has correct category IDs", () => {

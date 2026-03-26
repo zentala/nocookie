@@ -1,0 +1,19 @@
+{
+  "name": "consentmanager",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": ["#cmpbox", "#cmpbox2"],
+    "scriptUrls": ["cdn.consentmanager.net", "delivery.consentmanager.net"],
+    "jsGlobals": ["__cmp", "cmp_api"]
+  },
+  "categoryMapping": {
+    "functional": "3",
+    "analytics": "2",
+    "marketing": "4"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".cmpboxbtn.cmpboxbtnyes" }],
+    "rejectAll": [{ "type": "click", "target": ".cmpboxbtn.cmpboxbtnno" }],
+    "custom": [{ "type": "eval", "target": "__cmp('setConsent', {})" }]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "complianz",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": [".cmplz-cookiebanner", "#cmplz-cookiebanner-container"],
+    "scriptUrls": ["complianz/assets", "cookiebanner/js"],
+    "jsGlobals": ["complianz", "cmplz_function"]
+  },
+  "categoryMapping": {
+    "functional": "functional",
+    "analytics": "statistics",
+    "marketing": "marketing"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".cmplz-btn.cmplz-accept" }],
+    "rejectAll": [{ "type": "click", "target": ".cmplz-btn.cmplz-deny" }],
+    "custom": [
+      {
+        "type": "eval",
+        "target": "document.dispatchEvent(new CustomEvent('cmplz_fire_categories', {detail:{categories:['functional']}}))"
+      }
+    ]
+  }
+}

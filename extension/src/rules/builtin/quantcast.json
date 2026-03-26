@@ -1,0 +1,21 @@
+{
+  "name": "quantcast",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": [".qc-cmp2-container", "#qc-cmp2-ui"],
+    "scriptUrls": ["quantcast.mgr.consensu.org", "cmp2.quantcast.com"],
+    "jsGlobals": ["__tcfapi", "quantserve"]
+  },
+  "categoryMapping": {
+    "functional": "3",
+    "analytics": "5",
+    "marketing": "1"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".qc-cmp2-summary-buttons button[mode='primary']" }],
+    "rejectAll": [
+      { "type": "click", "target": ".qc-cmp2-summary-buttons button[mode='secondary']" }
+    ],
+    "custom": [{ "type": "eval", "target": "__tcfapi('setConsent', 2, function(){}, {})" }]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "osano",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": [".osano-cm-window", ".osano-cm-dialog"],
+    "scriptUrls": ["cmp.osano.com"],
+    "jsGlobals": ["Osano"]
+  },
+  "categoryMapping": {
+    "functional": "PERSONALIZATION",
+    "analytics": "ANALYTICS",
+    "marketing": "MARKETING"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": ".osano-cm-accept-all" }],
+    "rejectAll": [{ "type": "click", "target": ".osano-cm-deny-all" }],
+    "custom": [{ "type": "eval", "target": "Osano.cm.consentManager.updateConsentState({})" }]
+  }
+}

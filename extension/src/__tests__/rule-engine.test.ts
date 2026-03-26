@@ -21,8 +21,18 @@ describe("Rule engine", () => {
   describe("loadBuiltinRules", () => {
     it("loads all builtin rules successfully", () => {
       const rules = loadBuiltinRules();
-      expect(rules.length).toBe(3);
-      expect(rules.map((r) => r.name).sort()).toEqual(["cookiebot", "didomi", "onetrust"]);
+      expect(rules.length).toBe(9);
+      expect(rules.map((r) => r.name).sort()).toEqual([
+        "complianz",
+        "consentmanager",
+        "cookiebot",
+        "cookieyes",
+        "didomi",
+        "onetrust",
+        "osano",
+        "quantcast",
+        "trustarc",
+      ]);
     });
 
     it("returns valid CMPRule objects", () => {

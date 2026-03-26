@@ -9,6 +9,23 @@
 
 import type { ActionSequence, UserPreferences } from "@/shared/types";
 import { getMappingForCmp } from "@/rules/category-mappings";
+import {
+  buildQuantcastConsent,
+  buildTrustArcConsent,
+  buildCookieYesConsent,
+  buildComplianzConsent,
+  buildOsanoConsent,
+  buildConsentmanagerConsent,
+} from "@/background/additional-cmp-builders";
+
+export {
+  buildQuantcastConsent,
+  buildTrustArcConsent,
+  buildCookieYesConsent,
+  buildComplianzConsent,
+  buildOsanoConsent,
+  buildConsentmanagerConsent,
+} from "@/background/additional-cmp-builders";
 
 /**
  * Check whether a CMP supports per-category consent via our mappings.
@@ -39,6 +56,18 @@ export function buildCustomConsentAction(
       return buildCookiebotConsent(preferences);
     case "didomi":
       return buildDidomiConsent(preferences);
+    case "quantcast":
+      return buildQuantcastConsent(preferences);
+    case "trustarc":
+      return buildTrustArcConsent(preferences);
+    case "cookieyes":
+      return buildCookieYesConsent(preferences);
+    case "complianz":
+      return buildComplianzConsent(preferences);
+    case "osano":
+      return buildOsanoConsent(preferences);
+    case "consentmanager":
+      return buildConsentmanagerConsent(preferences);
     default:
       return null;
   }

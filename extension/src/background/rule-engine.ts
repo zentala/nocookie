@@ -18,6 +18,12 @@ import { validateRule } from "@/rules/schema";
 import onetrustData from "@/rules/builtin/onetrust.json";
 import cookiebotData from "@/rules/builtin/cookiebot.json";
 import didomiData from "@/rules/builtin/didomi.json";
+import quantcastData from "@/rules/builtin/quantcast.json";
+import trustarcData from "@/rules/builtin/trustarc.json";
+import cookieyesData from "@/rules/builtin/cookieyes.json";
+import complianzData from "@/rules/builtin/complianz.json";
+import osanoData from "@/rules/builtin/osano.json";
+import consentmanagerData from "@/rules/builtin/consentmanager.json";
 
 /** Result of matching detection signals to a rule. */
 export interface RuleMatch {
@@ -55,7 +61,17 @@ const externalSources: RuleSource[] = [];
 export function loadBuiltinRules(): CMPRule[] {
   builtinRules.clear();
 
-  const rawRules: unknown[] = [onetrustData, cookiebotData, didomiData];
+  const rawRules: unknown[] = [
+    onetrustData,
+    cookiebotData,
+    didomiData,
+    quantcastData,
+    trustarcData,
+    cookieyesData,
+    complianzData,
+    osanoData,
+    consentmanagerData,
+  ];
   const loaded: CMPRule[] = [];
 
   for (const raw of rawRules) {
