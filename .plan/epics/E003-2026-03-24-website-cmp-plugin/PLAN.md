@@ -29,9 +29,11 @@ Website owners who want to be GDPR-compliant must install a Consent Management P
 1. **Free, open-source CMP** that website owners can install in under 10 minutes
 2. **Native extension integration** — users with our extension never see a popup on sites using our CMP
 3. **Standard-compliant output** — auto-generates `/.well-known/cookie-consent.json`
-4. **Cookie policy icons** — standardized visual indicators like Creative Commons badges
-5. **Auto-generated documentation** — full cookie policy page from configuration
-6. **Dead-simple configuration** — minimal JSON for common cases, extensible for advanced
+4. **Cookie policy icons** — standardized visual indicators like Creative Commons badges, downloadable badge kit
+5. **Three levels of cookie information** — quick popup banner, detailed preference center modal, full cookie policy page
+6. **Standardized cookie practice descriptions** — predefined, multi-language descriptions so website owners do not write from scratch
+7. **Visual configurator tool** — web-based preview/generator for website owners to configure and export their CMP setup
+8. **Dead-simple configuration** — minimal JSON for common cases, extensible for advanced
 
 ### 2.2 Out of Scope
 
@@ -49,11 +51,18 @@ Website owners who want to be GDPR-compliant must install a Consent Management P
 - [ ] Preference center shows per-category toggles with descriptions
 - [ ] Consent stored in first-party cookie, readable by site scripts
 - [ ] `/.well-known/cookie-consent.json` auto-generated from config
-- [ ] Cookie policy page auto-generated from config
-- [ ] Cookie policy icons render for each category
+- [ ] Cookie policy page auto-generated from config (embeddable and linkable)
+- [ ] Cookie policy page includes "last updated" timestamp and "change my preferences" button
+- [ ] Cookie policy icons render for each category at all sizes (16px-64px)
+- [ ] Standardized cookie practice descriptions available for all 5 categories (3 variants each)
+- [ ] Per-cookie description database covers top 20 common third-party cookies
+- [ ] Descriptions available in 5 languages (EN, DE, FR, ES, PL)
+- [ ] Downloadable badge kit with all icons and badges (SVG + CSS)
+- [ ] Visual configurator tool lets website owners preview banner, modal, and policy page
+- [ ] Configurator exports config JSON, script tag, well-known file, and badge kit
 - [ ] Chrome extension detects our CMP instantly and auto-applies preferences
 - [ ] Extension-to-CMP handshake completes in under 100ms
-- [ ] CMP is under 30KB gzipped (JS + CSS)
+- [ ] CMP is under 30KB gzipped (JS + CSS, excluding configurator)
 - [ ] WCAG 2.1 AA accessible
 - [ ] Works in all modern browsers (Chrome, Firefox, Safari, Edge)
 - [ ] 80%+ test coverage
@@ -1222,7 +1231,141 @@ The CMP auto-detects language from:
 
 ---
 
-## 11. Future Considerations (Not in Scope for E003)
+## 11. Standardized Cookie Practice Descriptions
+
+### 11.1 Design Philosophy
+
+Website owners should not need to write cookie descriptions from scratch. The CMP provides a taxonomy of standardized, human-readable descriptions for each cookie category and common cookie practices. This mirrors how Creative Commons provides standardized legal text — website owners pick from predefined descriptions or write custom ones.
+
+### 11.2 Category Descriptions (Standard Library)
+
+Each category comes with a default description in multiple languages. Website owners can:
+1. Use the default description as-is (zero effort)
+2. Select from alternative predefined descriptions (light customization)
+3. Write fully custom descriptions (full control)
+
+**Essential**:
+- Default: "These cookies are strictly necessary for the website to function. They enable core features like security, network management, and account access. You cannot disable these cookies."
+- Alt 1: "Required cookies that keep the site working. Without them, pages would not load correctly."
+- Alt 2: "Core cookies for basic website operation, security, and user authentication."
+
+**Functional**:
+- Default: "These cookies enable enhanced functionality and personalization, such as remembering your language preference, region, or display settings."
+- Alt 1: "Cookies that remember your preferences so you do not have to set them every visit."
+- Alt 2: "Used to provide features like live chat, video playback, and custom themes."
+
+**Analytics**:
+- Default: "These cookies help us understand how visitors interact with our website by collecting information anonymously. This helps us improve the site."
+- Alt 1: "We use analytics to measure which pages are popular and how visitors navigate the site."
+- Alt 2: "Performance cookies that help us diagnose issues and understand usage patterns."
+
+**Marketing**:
+- Default: "These cookies are used to deliver advertisements relevant to you and your interests. They may also limit the number of times you see an ad and measure the effectiveness of advertising campaigns."
+- Alt 1: "We share browsing data with advertising partners to show you relevant ads across the web."
+- Alt 2: "Used for targeted advertising and measuring ad campaign performance."
+
+**Social Media**:
+- Default: "These cookies enable social media features such as share buttons and embedded content from platforms like Facebook, Twitter, and Instagram."
+- Alt 1: "Allow you to share content on social networks and enable embedded social media widgets."
+- Alt 2: "Connect your browsing to your social media accounts for sharing and interaction features."
+
+### 11.3 Per-Cookie Practice Descriptions
+
+For common third-party cookies, the CMP includes a database of standardized descriptions:
+
+| Cookie | Provider | Standard Description |
+|--------|----------|---------------------|
+| `_ga` | Google Analytics | "Distinguishes unique visitors by assigning a randomly generated number" |
+| `_gid` | Google Analytics | "Identifies unique visitors within a 24-hour window" |
+| `_fbp` | Facebook | "Tracks visits across websites for ad delivery and retargeting" |
+| `_gcl_au` | Google Ads | "Stores conversion data for Google Ads click attribution" |
+| `fr` | Facebook | "Delivers targeted advertisements based on browsing behavior" |
+| `IDE` | Google DoubleClick | "Used for targeted advertising and ad campaign measurement" |
+
+This database is extensible — website owners can contribute descriptions for new cookies.
+
+### 11.4 Multi-Language Support
+
+All standard descriptions ship in at least 5 languages for v1:
+- English (EN)
+- German (DE)
+- French (FR)
+- Spanish (ES)
+- Polish (PL)
+
+Additional languages added in the same i18n pipeline as UI strings (T13).
+
+### 11.5 Usage Across Surfaces
+
+The standardized descriptions appear in:
+1. **Banner** — short category summary (one-line version)
+2. **Preference Center** — full category description + per-cookie purpose
+3. **Cookie Policy Page** — complete descriptions with provider links and legal context
+
+---
+
+## 12. Visual Preview / Configurator Tool
+
+### 12.1 Purpose
+
+A web-based tool where website owners can configure their CMP and see a live preview of what their banner, preference center, and cookie policy page will look like. This is the primary conversion funnel for CMP adoption — a website owner arrives, configures their setup, and leaves with everything they need to deploy.
+
+### 12.2 Tool Features
+
+**Step 1 — Basic Info**:
+- Site name, privacy contact email, policy URL
+- Language selection
+
+**Step 2 — Cookie Categories**:
+- Toggle which categories the site uses (essential is always on)
+- For each category: pick a standard description or write custom
+- For each category: add cookies (name, provider, duration, purpose)
+- Pre-populated templates for common setups ("Blog with analytics", "E-commerce with marketing", etc.)
+
+**Step 3 — Theme**:
+- Color picker for primary color, accept/reject button colors
+- Position selector (bottom-left, bottom-right, bottom-center, top-center)
+- Light / dark / auto mode toggle
+- Border radius slider
+- Font family selector
+
+**Step 4 — Live Preview**:
+- Split-screen: config on left, preview on right
+- Preview toggles between: banner view, preference center view, policy page view
+- Preview updates in real-time as config changes
+- Mobile / desktop preview toggle
+
+**Step 5 — Export**:
+- Download config JSON file
+- Copy `<script>` tag for CDN installation
+- Copy npm install command + init code
+- Download generated `cookie-consent.json` (well-known file)
+- Download badge kit (SVG icons + CSS)
+- One-click "Validate my setup" (checks config against schema)
+
+### 12.3 Technical Implementation
+
+- Built as a standalone page on cookies-accepter.org
+- Uses the actual CMP library for preview rendering (not a mockup)
+- Config state managed in URL hash for shareability (e.g., `cookies-accepter.org/configurator#config=base64...`)
+- No server required — all client-side
+- Export generates downloadable files via Blob URLs
+
+### 12.4 Templates
+
+Pre-built configurations for common site types:
+
+| Template | Categories | Cookies Included |
+|----------|-----------|-----------------|
+| **Minimal Blog** | Essential only | session, CSRF |
+| **Blog + Analytics** | Essential, Analytics | session, CSRF, _ga, _gid |
+| **Business Site** | Essential, Functional, Analytics | session, CSRF, lang, _ga, _gid |
+| **E-commerce** | Essential, Functional, Analytics, Marketing | session, cart, _ga, _gid, _fbp |
+| **Full Stack** | All 5 categories | Common cookies per category |
+
+---
+
+## 13. Future Considerations (Not in Scope for E003)
 
 - **Admin dashboard**: Web-based configuration UI instead of JSON config
 - **Server-side script blocking**: Intercept third-party scripts before consent

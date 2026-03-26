@@ -198,7 +198,13 @@ Detection runs in priority order. First match wins.
   - etc.
 - Good secondary signal, especially before CMP DOM renders
 
-**Layer 5 -- Generic heuristic fallback** (lowest priority):
+**Layer 5 -- Autoconsent library** (broad coverage):
+- If no well-known file, no native rule, and no JS API/DOM match, delegate to autoconsent
+- Autoconsent covers 100+ CMPs with tested rules (see section 2.8)
+- Preference mapping via `AutoconsentAdapter`
+- Confidence: medium-high (autoconsent rules are actively maintained)
+
+**Layer 6 -- Generic heuristic fallback** (lowest priority):
 - Look for elements with common consent-related attributes:
   - Buttons containing text: "Accept All", "Reject All", "I Agree", "Alle akzeptieren", etc.
   - Fixed/sticky positioned overlays with cookie-related text
@@ -261,6 +267,69 @@ interface CMPRule {
     rejectAll: ActionSequence;
     custom: ActionSequence;  // open prefs -> set toggles -> save
   };
+}
+```
+
+### 2.8 Autoconsent Integration
+
+**Architectural change**: Rather than building CMP detection and execution rules from scratch for each CMP, we wrap DuckDuckGo's `@duckduckgo/autoconsent` library as our primary CMP interaction engine. This gives us 100+ CMP rules immediately.
+
+**Why autoconsent**: The E001 research (SUMMARY.md) explicitly recommends: "Use autoconsent as foundation -- it's more modern, has better architecture, and already includes Consent-O-Matic compatibility." Building equivalent coverage from scratch would take months and duplicate work that is already open-source and actively maintained.
+
+**Integration architecture**:
+```
+Detection Priority (unchanged):
+  1. /.well-known/cookie-consent.json  (our standard, highest priority)
+  2. Our native CMP rules              (for CMPs we want custom handling)
+  3. Autoconsent library                (100+ CMPs, bulk coverage)
+  4. Generic heuristic fallback         (unknown CMPs)
+```
+
+**How it works**:
+- Import `@duckduckgo/autoconsent` as a dependency
+- Wrap it in an adapter layer (`AutoconsentAdapter`) that translates between autoconsent's action model and our preference-based model
+- Map our 5-category `UserPreferences` to autoconsent's opt-in/opt-out actions per CMP
+- Our native rules (T08-T10) take priority when both we and autoconsent have rules for a CMP
+- Autoconsent handles the long tail of CMPs we have not written custom rules for
+
+**What this changes for existing tasks**:
+- T08/T09/T10 (OneTrust, Cookiebot, Didomi) become: "verify autoconsent works with this CMP + write integration tests + add custom per-category preference mapping if autoconsent's default is insufficient"
+- T18/T19 (additional CMPs) become: "verify autoconsent coverage + write integration tests for these CMPs" instead of writing rules from scratch
+- T06 (rule engine) still exists but now also manages the autoconsent adapter as a rule source
+
+**Preference mapping challenge**: Autoconsent primarily supports opt-out (reject all non-essential). Our differentiator is per-category control. The adapter must:
+1. Check if autoconsent's rule for a CMP supports per-category actions
+2. If yes: map our categories to the CMP's categories via autoconsent
+3. If no: fall back to binary accept/reject based on user profile, then log as "partial" consent
+
+### 2.9 GPC Header Emission
+
+**What**: When the user's profile rejects marketing cookies (Privacy Maximum, Balanced, or custom with `marketing: false`), the extension emits the Global Privacy Control signal on all requests.
+
+**Legal significance**: GPC is legally enforceable in 12 US states (California, Colorado, Connecticut, Delaware, Indiana, Iowa, Montana, New Hampshire, New Jersey, Oregon, Tennessee, Texas). California AB 566 mandates browser-level GPC support by January 2027. Emitting GPC alongside CMP-level consent provides defense-in-depth.
+
+**Implementation**:
+1. **HTTP header**: Use `chrome.declarativeNetRequest` to add `Sec-GPC: 1` header to all outgoing requests when GPC is enabled
+2. **JavaScript property**: Inject `navigator.globalPrivacyControl = true` via content script in MAIN world
+3. **User control**: GPC emission is tied to the user's marketing preference. When marketing is rejected, GPC is on. Users can override this in Advanced settings.
+
+**Manifest permission**: Requires adding `"declarativeNetRequest"` to the permissions array and `"declarativeNetRequestWithHostAccess"` for dynamic rule creation.
+
+```typescript
+// GPC rule (declarativeNetRequest)
+{
+  id: 1,
+  priority: 1,
+  action: {
+    type: 'modifyHeaders',
+    requestHeaders: [
+      { header: 'Sec-GPC', operation: 'set', value: '1' }
+    ]
+  },
+  condition: {
+    urlFilter: '*',
+    resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'script', 'image']
+  }
 }
 ```
 
@@ -378,6 +447,12 @@ The popup is the primary interaction surface. It shows the current page's status
 5. **Disabled** (gray, muted) -- extension is off for this domain
    - "Extension disabled for this site"
    - "Enable" button
+
+6. **Scanning** (blue/animated) -- CMP detection is in progress
+   - "Detecting cookie popup..." with a subtle spinner/pulse animation
+   - Shown between page load and CMP detection completion
+   - If no CMP detected after configurable timeout (default: 5s), transitions to "No popup detected"
+   - Reassurance text: "The extension is actively checking this page"
 
 **Quick actions in popup**:
 - Profile dropdown (switch between presets without opening options)
@@ -519,6 +594,144 @@ Four icon variants (each in 16/32/48/128px):
 | Disabled | Shield (gray, muted) | -- | Extension off for this domain |
 
 The badge text can optionally show the number of categories accepted (e.g., "1" for essential-only, "4" for all).
+
+### 3.4 First-Run Onboarding Flow
+
+**Why this is required**: The legal analysis (E001-T04) explicitly states that consent given on the user's behalf must be "informed" -- the user must understand what the extension does and actively choose a profile. Without onboarding, user activation is critically low (design review finding) and we risk the consent not being legally valid.
+
+**Flow**:
+
+```
+Step 1: Welcome
++--------------------------------------+
+|  [shield icon]                       |
+|  Welcome to Cookies Accepter         |
+|                                      |
+|  Cookie popups are about to become   |
+|  a thing of the past. Let's set up   |
+|  your preferences in 15 seconds.     |
+|                                      |
+|           [Get Started ->]           |
++--------------------------------------+
+
+Step 2: Choose Profile
++--------------------------------------+
+|  How much do you care about          |
+|  cookie privacy?                     |
+|                                      |
+|  [card] Privacy Maximum              |
+|    Only essential cookies.           |
+|    Maximum privacy protection.       |
+|                                      |
+|  [card] Balanced (recommended)       |
+|    Essential + functional cookies.   |
+|    Good privacy, sites work well.    |
+|                                      |
+|  [card] Accept All                   |
+|    Accept everything. Sites get      |
+|    full functionality.               |
+|                                      |
+|  [link] I want to customize ->       |
++--------------------------------------+
+
+Step 3 (optional): Customize Categories
++--------------------------------------+
+|  Fine-tune your preferences          |
+|                                      |
+|  [x] Essential (always on)           |
+|      Session, auth, security         |
+|                                      |
+|  [ ] Functional     [toggle]         |
+|      Language, region, UI prefs      |
+|                                      |
+|  [ ] Analytics      [toggle]         |
+|      Page views, performance         |
+|                                      |
+|  [ ] Marketing      [toggle]         |
+|      Ad targeting, retargeting       |
+|                                      |
+|  [ ] Social Media   [toggle]         |
+|      Social sharing, embeds          |
+|                                      |
+|           [Save & Continue ->]       |
++--------------------------------------+
+
+Step 4: Done
++--------------------------------------+
+|  [animated shield turning green]     |
+|                                      |
+|  You're all set!                     |
+|                                      |
+|  Profile: Balanced                   |
+|  Accepting: Essential + Functional   |
+|  Rejecting: Analytics, Marketing,    |
+|             Social Media             |
+|                                      |
+|  Cookie popups will now be handled   |
+|  automatically. Click the extension  |
+|  icon anytime to see what happened.  |
+|                                      |
+|           [Start Browsing]           |
++--------------------------------------+
+```
+
+**Technical implementation**:
+- Opens as a new tab via `chrome.tabs.create()` triggered by `chrome.runtime.onInstalled` listener
+- Onboarding page is `src/onboarding/onboarding.html`
+- Profile selection is stored to `chrome.storage.sync` immediately
+- If user closes tab without completing, extension uses "Privacy Maximum" as default (privacy-protective)
+- A flag `onboardingCompleted: boolean` in storage prevents re-showing on browser restart
+
+### 3.5 Consent Dashboard Page
+
+**What**: A dedicated `dashboard.html` page in the extension (accessible from popup "View consent history" link and options page) that shows a comprehensive view of all consent actions the extension has taken.
+
+**Audience**: Power users, privacy enthusiasts, and anyone who wants to verify what the extension is doing on their behalf.
+
+**Layout**:
+
+```
++------------------------------------------------------+
+|  Consent Dashboard                    [Export v]      |
++------------------------------------------------------+
+|  Summary:  1,247 popups handled across 412 sites     |
+|  Profile:  Balanced                                   |
++------------------------------------------------------+
+|  [Search: filter by domain...] [Filter: All CMPs v]  |
++------------------------------------------------------+
+|  example.com              visited 47x                 |
+|    CMP: OneTrust | Method: API | Confidence: High    |
+|    Accepted: Essential, Functional                    |
+|    Rejected: Analytics, Marketing, Social Media       |
+|    Last handled: 2 hours ago                          |
+|    [Change preferences for this site]                 |
+|  --------------------------------------------------- |
+|  news-site.com            visited 23x                 |
+|    CMP: Cookiebot | Method: Click | Confidence: High |
+|    Accepted: Essential, Functional, Analytics         |
+|    Rejected: Marketing                                |
+|    Last handled: 1 day ago                            |
+|    [Change preferences for this site]                 |
+|  --------------------------------------------------- |
+|  blog.example.org         visited 5x                  |
+|    CMP: Unknown | Method: Heuristic | Confidence: Low|
+|    Accepted: Essential only                           |
+|    Last handled: 3 days ago                           |
+|    [Change preferences for this site]                 |
++------------------------------------------------------+
+|  Page 1 of 42            [< Prev] [Next >]           |
++------------------------------------------------------+
+```
+
+**Features**:
+- **Sort**: by visit frequency (most visited first, using `chrome.history` API), by date (most recent first), by CMP, by confidence level
+- **Filter**: by CMP name, by method (API/click/heuristic/well-known), by confidence, by category (e.g., "show me sites where marketing is enabled")
+- **Search**: filter by domain name
+- **Per-site actions**: change preferences for a specific site (creates a domain override), re-consent (clear cookies + reload), disable extension for site
+- **Export**: download consent log as JSON or CSV for personal records or compliance purposes
+- **Requires permission**: `chrome.history` (read-only) for visit frequency. This permission is requested lazily only when user opens the dashboard, not at install time.
+
+**Data source**: reads from `chrome.storage.local` `consentLog` entries, enriched with `chrome.history` visit counts.
 
 ---
 
@@ -738,7 +951,7 @@ cookies-accepter.org/
   /guide/cookiebot            -- Cookiebot-specific guide
   /guide/wordpress            -- WordPress guide
   /guide/ai                   -- Guide for AI agents
-  /validator                  -- Online validator (paste URL, check your file)
+  /validator                  -- Online validator + generator (see 6.4)
   /faq                        -- FAQ + legal information
   /blog                       -- Updates, adoption metrics, CMP coverage
   /.well-known/cookie-consent.json  -- Dog-fooding: our own site uses the standard
@@ -764,6 +977,31 @@ cookies-accepter.org/
 5. **For developers**: Link to spec, schema, implementation guide
 6. **Stats**: (when available) "X popups handled, Y sites support the standard"
 7. **Footer**: GitHub, privacy policy, contact
+
+### 6.4 Online Validator/Generator Tool
+
+**Location**: `cookies-accepter.org/validator`
+
+**Critical for adoption**: Website owners need a tool to create and validate `cookie-consent.json` files. Without this, the "For Website Owners" adoption story has no endpoint (design review finding). This is the conversion funnel for standard adoption.
+
+**Two modes**:
+
+**Validator mode** (default):
+1. User enters a URL (e.g., `https://example.com`)
+2. Tool fetches `https://example.com/.well-known/cookie-consent.json`
+3. Validates against the JSON Schema
+4. Shows results: valid/invalid, field-by-field breakdown, warnings for optional fields, suggestions for improvement
+5. If 404: shows "No file found. Use Generator mode to create one."
+
+**Generator mode**:
+1. User selects their CMP from a dropdown (OneTrust, Cookiebot, Didomi, etc.) or "Custom/Unknown"
+2. Form pre-fills known selectors and API patterns for that CMP
+3. User fills in remaining fields: categories, additional selectors, policy URL, contact
+4. Live preview of the JSON output updates as user fills the form
+5. "Copy to clipboard" and "Download as file" buttons
+6. Deployment instructions: "Place this file at `/.well-known/cookie-consent.json` on your web server"
+
+**Implementation**: Runs entirely client-side (no backend). Uses the same `packages/schema/` validator library as the extension (T17). Built as an Astro page with interactive client-side JS.
 
 ---
 
@@ -916,6 +1154,17 @@ The extension UI must support multiple languages. The heuristic detector must ma
 
 The extension popup and options page must be keyboard-navigable and screen-reader friendly. Use semantic HTML, ARIA labels, sufficient color contrast. The traffic-light icon states should not rely solely on color (add shape/text distinction). The open standard should include an `aria` field for accessibility attributes of consent elements.
 
+**Specific requirements from design review (P1)**:
+- All toggle switches must have `role="switch"`, `aria-checked` state, and visible focus indicators
+- Status indicators must use shape/icon differentiation per state (checkmark for handled, exclamation for attention, X for error, dash for none) -- not just color
+- Gear button and all icon-only buttons must have `aria-label`
+- Info expand/collapse buttons must have `aria-expanded` and `aria-controls` attributes
+- All expandable sections must be keyboard-operable (Enter/Space to toggle)
+- Color contrast must meet WCAG AA for all text (4.5:1 for normal text, 3:1 for large text)
+- Onboarding flow must be fully keyboard-navigable
+
+**Cross-cutting**: Accessibility is not a separate feature -- it must be applied to ALL UI work (popup, options, onboarding, dashboard). Task T30 handles the audit and fixes, but each UI task (T13-T15, T27-T28) must implement accessible markup from the start.
+
 ### 9.3 Performance Impact
 
 The content script runs on every page. It must be lightweight:
@@ -1011,3 +1260,11 @@ Multi-layer testing approach:
 - [ ] Extension works on SPAs (re-detects on navigation)
 - [ ] All code has 80%+ test coverage
 - [ ] Extension popup and options are keyboard-accessible
+- [ ] Autoconsent integration provides 100+ CMP coverage
+- [ ] GPC header is emitted when marketing cookies are rejected
+- [ ] First-run onboarding flow guides user to choose a profile
+- [ ] Consent dashboard shows per-site consent history with search/filter
+- [ ] Validator/generator tool works on the website
+- [ ] Popup shows "Scanning..." state during CMP detection
+- [ ] All UI passes WCAG AA accessibility audit (ARIA attributes, keyboard nav, contrast)
+- [ ] Status indicators use shape/icon differentiation (not color-only)

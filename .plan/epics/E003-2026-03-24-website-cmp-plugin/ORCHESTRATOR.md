@@ -29,8 +29,12 @@ created: 2026-03-24
 | E003-T16 | E2E tests with Playwright | 4 | High | 8h | [ ] |
 | E003-T17 | Documentation & examples | 5 | Medium | 6h | [ ] |
 | E003-T18 | Extension-side integration (E002 update) | 5 | Medium | 4h | [ ] |
+| E003-T19 | Standardized cookie practice descriptions | 2 | Medium | 5h | [ ] |
+| E003-T20 | Downloadable badge kit & icon publishing | 4 | Low | 3h | [ ] |
+| E003-T21 | Cookie practice descriptions i18n (DE/FR/ES/PL) | 4 | Medium | 6h | [ ] |
+| E003-T22 | Visual preview / configurator tool | 5 | High | 12h | [ ] |
 
-**Total estimate**: ~88h across 18 tasks in 5 waves.
+**Total estimate**: ~114h across 22 tasks in 5 waves.
 
 ---
 
@@ -95,9 +99,9 @@ All four tasks are independent and can run in parallel.
 
 ---
 
-## Wave 2: UI Components (T05-T08) — Depends on Wave 1
+## Wave 2: UI Components & Descriptions (T05-T08, T19) — Depends on Wave 1
 
-T05 is independent within this wave. T06, T07, T08 each depend on T05 for theme/CSS infrastructure. T06, T07, T08 are otherwise independent and can run in parallel once T05 is done.
+T05 is independent within this wave. T06, T07, T08, T19 each depend on T05 for theme/CSS infrastructure (T19 also depends on T02 for types). T06, T07, T08, T19 are otherwise independent and can run in parallel once T05 is done.
 
 ### E003-T05: Theme Engine & CSS Variables
 **Complexity**: Medium | **Estimate**: 4h
@@ -154,17 +158,32 @@ T05 is independent within this wave. T06, T07, T08 each depend on T05 for theme/
 **Complexity**: Medium | **Estimate**: 6h
 
 - [ ] Design and create SVG icons for 5 categories (lock, gear, chart, megaphone, share)
-- [ ] Create privacy level badges (4 levels: maximum, friendly, balanced, full tracking)
-- [ ] Create compliance badges (GDPR, GPC, Standard, Extension Ready)
-- [ ] Implement icon renderer supporting sizes: xs(16), sm(20), md(24), lg(32), xl(48)
+- [ ] Create privacy level badges (4 levels: "Privacy Maximum", "Balanced", "Allow Analytics", "Accept All")
+- [ ] Create compliance badges ("GDPR Compliant", "GPC Supported", "TCF Compatible", "Cookie Consent Standard")
+- [ ] Implement icon renderer supporting sizes: xs(16), sm(20), md(24), lg(32), xl(48), xxl(64)
 - [ ] Implement pill-shaped badge renderer (icon + text, color-coded)
 - [ ] Dark mode variants for all icons and badges
 - [ ] SVG sprite sheet for efficient loading
 - [ ] Accessibility: `aria-label` on every icon, never color-only
 - [ ] Export icons for use in banner, preference center, policy page
+- [ ] Ensure all icons work at 16px (inline text) and 64px (policy page hero)
+- [ ] Color coding consistent with design system (indigo/emerald palette)
 - [ ] Unit tests for icon generation; visual snapshot tests
 
 **Output**: `icons.ts`, `icons.css`, SVG assets, badge renderer.
+
+### E003-T19: Standardized Cookie Practice Descriptions
+**Complexity**: Medium | **Estimate**: 5h
+
+- [ ] Create taxonomy of standardized descriptions for each cookie category (3 variants per category: default, alt 1, alt 2)
+- [ ] Create per-cookie description database for common third-party cookies (_ga, _gid, _fbp, _gcl_au, fr, IDE, etc.)
+- [ ] Define standard one-liner versions for banner display (short) vs full versions for preference center and policy page (long)
+- [ ] Implement description selector: website owner picks from predefined OR writes custom
+- [ ] Integrate descriptions into config schema (CategoryConfig gains `descriptionPreset` field)
+- [ ] Wire descriptions into banner text, preference center, and policy page
+- [ ] Unit tests for description lookup, fallback to default, custom override
+
+**Output**: `descriptions.ts` with standardized cookie practice description taxonomy, integrated into config pipeline.
 
 ---
 
@@ -176,21 +195,27 @@ T09, T10, T11, T12 are all independent of each other. All four can run in parall
 **Complexity**: High | **Estimate**: 8h
 
 - [ ] Implement HTML generator from config (categories, cookies, legal text)
+- [ ] List all categories with icons (category icon + name + description)
+- [ ] Show each cookie: name, provider, purpose, duration, type (1st/3rd party)
 - [ ] Include privacy level badge in header (computed from active categories)
 - [ ] Include compliance badges
 - [ ] Generate category sections with expandable cookie tables
 - [ ] Include working toggle controls (connected to consent state)
-- [ ] Include "How to change preferences" section with button to open preference center
+- [ ] Include "Change my preferences" button that reopens the CMP preference center
+- [ ] Include "How to change preferences" section
 - [ ] Include "What are cookies" standard explanation
 - [ ] Include "Your rights" section (GDPR text, configurable jurisdiction)
 - [ ] Include contact section from config
+- [ ] Include "Last updated" timestamp (auto-generated from config or build time)
 - [ ] Include "Powered by" footer
-- [ ] Implement injection mode (`<div id="ca-policy">`) and standalone mode
+- [ ] Implement injection mode (`<div id="ca-policy">`) for embedding in existing pages
+- [ ] Implement standalone mode for linkable standalone HTML page
+- [ ] Auto-update page content when config changes (re-render on config mutation)
 - [ ] Responsive layout, print-friendly CSS
 - [ ] Search/filter for sites with many cookies
 - [ ] Unit tests for HTML generation; E2E tests for interactive elements
 
-**Output**: `policy-page.ts` generating complete cookie policy page.
+**Output**: `policy-page.ts` generating complete, embeddable/linkable cookie policy page.
 
 ### E003-T10: Well-Known JSON Generator
 **Complexity**: Low | **Estimate**: 3h
@@ -245,9 +270,9 @@ T09, T10, T11, T12 are all independent of each other. All four can run in parall
 
 ---
 
-## Wave 4: Polish & Quality (T13-T16) — Depends on Wave 3
+## Wave 4: Polish & Quality (T13-T16, T20-T21) — Depends on Wave 3
 
-T13, T14, T15, T16 are all independent. All four can run in parallel.
+T13, T14, T15, T16, T20, T21 are all independent. All six can run in parallel. T20 depends on T08 (icons). T21 depends on T13 (i18n pipeline) and T19 (descriptions).
 
 ### E003-T13: Internationalization (i18n)
 **Complexity**: Medium | **Estimate**: 6h
@@ -324,11 +349,37 @@ T13, T14, T15, T16 are all independent. All four can run in parallel.
 
 **Output**: Comprehensive E2E test suite with 80%+ coverage.
 
+### E003-T20: Downloadable Badge Kit & Icon Publishing
+**Complexity**: Low | **Estimate**: 3h
+
+- [ ] Package all category icons as standalone SVG files (individual + sprite sheet)
+- [ ] Package all privacy level badges as standalone SVGs
+- [ ] Package all compliance badges as standalone SVGs
+- [ ] Create a CSS file with badge classes for direct HTML embedding
+- [ ] Create downloadable ZIP archive with all icons, badges, and CSS
+- [ ] Publish badge kit on cookies-accepter.org as a downloadable resource
+- [ ] Create usage guide: how to embed badges in site footer, README, documentation
+- [ ] Ensure all SVGs are optimized (SVGO) and accessible (aria-labels, title elements)
+
+**Output**: Downloadable badge kit ZIP + hosted badge assets on CDN.
+
+### E003-T21: Cookie Practice Descriptions i18n (DE/FR/ES/PL)
+**Complexity**: Medium | **Estimate**: 6h
+
+- [ ] Translate all standard category descriptions (3 variants x 5 categories) into DE, FR, ES, PL
+- [ ] Translate all per-cookie standard descriptions into DE, FR, ES, PL
+- [ ] Translate one-liner banner versions into DE, FR, ES, PL
+- [ ] Integrate description translations into the i18n pipeline from T13
+- [ ] Fallback chain: config language > detected language > EN
+- [ ] Unit tests for description i18n loading and fallback
+
+**Output**: Multi-language description files for 5 languages (EN + DE/FR/ES/PL).
+
 ---
 
-## Wave 5: Documentation & Extension Integration (T17-T18) — Depends on Wave 4
+## Wave 5: Documentation, Integration & Configurator (T17-T18, T22) — Depends on Wave 4
 
-T17 and T18 are independent and can run in parallel.
+T17, T18, and T22 are independent and can run in parallel. T22 depends on T08 (icons), T09 (policy page), T19 (descriptions), and T05 (theme) — all completed in earlier waves.
 
 ### E003-T17: Documentation & Examples
 **Complexity**: Medium | **Estimate**: 6h
@@ -362,6 +413,40 @@ T17 and T18 are independent and can run in parallel.
 
 **Output**: Extension detects and handles our CMP natively.
 
+### E003-T22: Visual Preview / Configurator Tool
+**Complexity**: High | **Estimate**: 12h
+
+- [ ] Create web page at cookies-accepter.org/configurator
+- [ ] Implement Step 1: Basic Info form (site name, contact, policy URL, language)
+- [ ] Implement Step 2: Cookie Categories configurator
+  - [ ] Toggle categories on/off (essential always on)
+  - [ ] Per-category: pick standard description preset or write custom
+  - [ ] Per-category: add/edit/remove cookies (name, provider, duration, purpose, type)
+  - [ ] Pre-built templates: "Minimal Blog", "Blog + Analytics", "Business Site", "E-commerce", "Full Stack"
+- [ ] Implement Step 3: Theme configurator
+  - [ ] Color pickers for primary, accept, reject colors
+  - [ ] Position selector (bottom-left, bottom-right, bottom-center, top-center)
+  - [ ] Light / dark / auto mode toggle
+  - [ ] Border radius and font selectors
+- [ ] Implement Step 4: Live Preview panel
+  - [ ] Split-screen layout: config on left, preview on right
+  - [ ] Preview toggles between banner, preference center, and policy page views
+  - [ ] Real-time preview updates as config changes (uses actual CMP library for rendering)
+  - [ ] Mobile / desktop preview toggle (viewport width simulation)
+- [ ] Implement Step 5: Export panel
+  - [ ] Download config JSON file
+  - [ ] Copy CDN `<script>` tag to clipboard
+  - [ ] Copy npm install + init code snippet
+  - [ ] Download generated `cookie-consent.json` (well-known file)
+  - [ ] Download badge kit (SVG icons + CSS)
+  - [ ] "Validate my setup" button (checks config against JSON schema)
+- [ ] Config state in URL hash for shareability (base64 encoded)
+- [ ] Fully client-side (no server required, Blob URLs for downloads)
+- [ ] Responsive layout for the configurator itself
+- [ ] Unit tests for config generation; E2E tests for the full configurator flow
+
+**Output**: Hosted configurator tool at cookies-accepter.org/configurator — the primary conversion funnel for CMP adoption.
+
 ---
 
 ## Dependency Graph
@@ -373,10 +458,11 @@ Wave 1 (parallel, no deps):
   T03 ──┼── Wave 2
   T04 ──┘
 
-Wave 2 (T05 first, then T06/T07/T08 parallel):
+Wave 2 (T05 first, then T06/T07/T08/T19 parallel):
   T05 ──┬── T06 ──┐
-        ├── T07 ──┼── Wave 3
-        └── T08 ──┘
+        ├── T07 ──┤
+        ├── T08 ──┼── Wave 3
+        └── T19 ──┘
 
 Wave 3 (all parallel):
   T09 ──┐
@@ -387,12 +473,15 @@ Wave 3 (all parallel):
 Wave 4 (all parallel):
   T13 ──┐
   T14 ──┤
-  T15 ──┼── Wave 5
-  T16 ──┘
+  T15 ──┤
+  T16 ──┼── Wave 5
+  T20 ──┤
+  T21 ──┘
 
 Wave 5 (parallel):
   T17
   T18
+  T22
 ```
 
 ## Critical Path
@@ -400,11 +489,11 @@ Wave 5 (parallel):
 The longest sequential chain determines minimum calendar time:
 
 ```
-T01 (4h) → T05 (4h) → T07 (8h) → T09 (8h) → T16 (8h) → T17 (6h)
-= 38h sequential minimum on the critical path
+T01 (4h) → T05 (4h) → T07 (8h) → T09 (8h) → T16 (8h) → T22 (12h)
+= 44h sequential minimum on the critical path
 ```
 
-With parallel execution within waves, the total calendar time is significantly less than the 88h sum.
+With parallel execution within waves, the total calendar time is significantly less than the 114h sum. The configurator tool (T22) is now the longest Wave 5 task and extends the critical path by 6h compared to the original plan.
 
 ## Risk Register
 
@@ -412,6 +501,9 @@ With parallel execution within waves, the total calendar time is significantly l
 |------|--------|-----------|
 | Shadow DOM CSS encapsulation breaks in Safari | High | Test early in Wave 2; fallback to scoped CSS classes |
 | Extension bridge timing race condition | High | Implement retry logic; banner shows briefly then auto-closes |
-| Bundle size exceeds 30KB target | Medium | Tree-shake aggressively; lazy-load policy page and i18n |
+| Bundle size exceeds 30KB target | Medium | Tree-shake aggressively; lazy-load policy page, configurator, and i18n |
 | Cookie format conflicts with existing site cookies | Medium | Use unique prefix `ca_`; configurable cookie name |
 | Translation quality for 16 languages | Medium | Start with EN; community contributions for other languages |
+| Configurator tool scope creep | Medium | Ship minimal configurator first (config + banner preview); add policy page preview and templates in v1.1 |
+| Cookie description database maintenance | Low | Start with top 20 common cookies; community-driven expansion |
+| Badge/icon adoption without standard adoption | Low | Badge kit is standalone and useful even without the extension; promotes brand awareness |
