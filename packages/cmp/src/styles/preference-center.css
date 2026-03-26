@@ -1,0 +1,242 @@
+/* Preference center modal — second layer UI for per-category cookie toggles. */
+
+.ca-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--ca-color-overlay, rgba(0, 0, 0, 0.5));
+  z-index: var(--ca-z-index, 999999);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ca-prefs {
+  background: var(--ca-color-bg);
+  color: var(--ca-color-text);
+  border-radius: var(--ca-border-radius);
+  max-width: 600px;
+  width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  font-family: var(--ca-font-family);
+  font-size: var(--ca-font-size-base);
+}
+
+.ca-prefs__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ca-color-border, #e5e7eb);
+}
+
+.ca-prefs__header h2 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+.ca-prefs__close {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--ca-color-text);
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.ca-prefs__close:hover {
+  opacity: 0.7;
+}
+
+.ca-prefs__body {
+  overflow-y: auto;
+  padding: 16px 24px;
+  flex: 1;
+}
+
+.ca-prefs__actions {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--ca-color-border, #e5e7eb);
+}
+
+.ca-prefs__actions .ca-btn {
+  flex: 1;
+}
+
+.ca-category {
+  border-bottom: 1px solid var(--ca-color-border, #e5e7eb);
+  padding: 12px 0;
+}
+
+.ca-category:last-child {
+  border-bottom: none;
+}
+
+.ca-category__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ca-category__toggle-details {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  color: var(--ca-color-text);
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.ca-category__toggle-details:hover {
+  opacity: 0.8;
+}
+
+.ca-category__name {
+  font-weight: 600;
+}
+
+.ca-category__chevron {
+  transition: transform 0.2s;
+  display: inline-block;
+  font-size: 0.85em;
+}
+
+.ca-category__chevron--open {
+  transform: rotate(90deg);
+}
+
+.ca-category__desc {
+  margin: 4px 0 0;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.ca-category__always-active {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--ca-color-primary);
+  white-space: nowrap;
+}
+
+.ca-category__details {
+  padding: 8px 0;
+}
+
+/* Toggle switch */
+.ca-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.ca-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ca-toggle__slider {
+  position: absolute;
+  inset: 0;
+  background: var(--ca-color-border, #d1d5db);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ca-toggle__slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.ca-toggle input:checked + .ca-toggle__slider {
+  background: var(--ca-color-primary);
+}
+
+.ca-toggle input:checked + .ca-toggle__slider::before {
+  transform: translateX(20px);
+}
+
+.ca-toggle input:focus-visible + .ca-toggle__slider {
+  outline: 2px solid var(--ca-color-primary);
+  outline-offset: 2px;
+}
+
+/* Cookie detail table */
+.ca-cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.ca-cookie-table th,
+.ca-cookie-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ca-color-border, #e5e7eb);
+}
+
+.ca-cookie-table th {
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+/* Action buttons */
+.ca-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: calc(var(--ca-border-radius) / 2);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.ca-btn:hover {
+  opacity: 0.85;
+}
+
+.ca-btn--accept {
+  background: var(--ca-color-accept, #16a34a);
+  color: white;
+}
+
+.ca-btn--reject {
+  background: var(--ca-color-reject, #dc2626);
+  color: white;
+}
+
+.ca-btn--save {
+  background: var(--ca-color-primary);
+  color: white;
+}
+
+/* Responsive: full-screen on mobile */
+@media (max-width: 480px) {
+  .ca-prefs {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
