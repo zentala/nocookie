@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nocookie
+  description: Open standard + Chrome extension + CMP plugin for automatic cookie consent management
+  annotations:
+    github.com/project-slug: zentala/nocookie
+spec:
+  type: tool
+  lifecycle: development
+  owner: zentala

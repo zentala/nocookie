@@ -6,10 +6,12 @@ Four components in a monorepo, connected by an open standard:
 
 ```
 nocookie/
-├── extension/      → Chrome Extension (Manifest V3, TypeScript)
-├── cmp-plugin/     → CMP widget for websites (@nocookie/cmp)
-├── website/        → Project website (Astro, Cloudflare Pages)
-└── standard/       → Open standard specification
+├── extension/        → Chrome Extension (Manifest V3, TypeScript)
+├── packages/
+│   └── schema/       → @nocookie/schema — JSON Schema + validator library
+├── website/          → Project website (Astro, Cloudflare Pages)
+├── cmp-plugin/       → CMP widget for websites (@nocookie/cmp) [E003]
+└── website-content/  → Articles and content for the website
 ```
 
 ### Component Interaction
