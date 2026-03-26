@@ -10,6 +10,7 @@ import { createMessage } from "@/shared/messages";
 import type { ConfidenceLevel, ConsentResult } from "@/shared/types";
 import { EXECUTOR_MESSAGE_TYPE } from "./executor";
 import { findCmpSelector, startObserver, stopObserver } from "./observer";
+import { getWellKnown, wellKnownToRule, setWellKnownRule } from "./well-known-reader";
 
 /** Known CMP script URL patterns mapped to CMP names. */
 const CMP_SCRIPT_URLS: Record<string, string> = {
@@ -109,6 +110,7 @@ function cleanup(): void {
 
 /**
  * Run the full CMP detection flow:
+ * 0. Check well-known file (async, highest priority)
  * 1. Notify background: SCAN_STARTED
  * 2. Initial DOM selector scan
  * 3. Script URL scan
@@ -123,6 +125,41 @@ export function runDetection(): void {
   const scanMsg = createMessage("SCAN_STARTED", { tabId: 0 });
   chrome.runtime.sendMessage(scanMsg).catch(() => {});
 
+  // Step 0: Check well-known file (async, does not block other detection)
+  checkWellKnown()
+    .then((found) => {
+      if (found) return;
+      if (!scanning) return;
+      runDomDetection();
+    })
+    .catch(() => {
+      if (scanning) runDomDetection();
+    });
+}
+
+/**
+ * Check the well-known cookie consent file for the current domain.
+ * Returns true if found and valid, notifying CMP_DETECTED.
+ */
+async function checkWellKnown(): Promise<boolean> {
+  const domain = window.location.hostname;
+  const data = await getWellKnown(domain);
+  if (!data) return false;
+
+  const rule = wellKnownToRule(data);
+  setWellKnownRule(rule);
+
+  scanning = false;
+  const cmpName = data.cmp?.name ?? "well-known";
+  notifyCmpDetected(cmpName, "high");
+  return true;
+}
+
+/**
+ * Run DOM-based detection (selectors, scripts, observer).
+ * Called when well-known file is not available.
+ */
+function runDomDetection(): void {
   // Step 1: DOM selector scan
   const matchedSelector = findCmpSelector();
   if (matchedSelector) {
