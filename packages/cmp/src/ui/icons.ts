@@ -31,7 +31,8 @@ const CATEGORY_PATHS: Record<string, string> = {
   gear: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1-4h2l.4 1.6c.3.1.6.3.9.5l1.5-.6 1 1.7-1.1 1c.1.3.1.7 0 1l1.1 1.1-1 1.7-1.5-.6c-.3.2-.6.4-.9.5L13 18h-2l-.4-1.6c-.3-.1-.6-.3-.9-.5l-1.5.6-1-1.7 1.1-1c-.1-.3-.1-.7 0-1L7.2 7.8l1-1.7 1.5.6c.3-.2.6-.4.9-.5L11 6z",
   chart: "M7 17V11h2v6H7zm4 0V7h2v10h-2zm4 0v-4h2v4h-2z",
   megaphone: "M6 10v4h2l4 4V6L8 10H6zm10.5 2A4.5 4.5 0 0 0 14 8.5v7a4.47 4.47 0 0 0 2.5-3.5z",
-  share: "M16 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM8 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1.5-2.6-5-2.8m0 4.8 5-2.8",
+  share:
+    "M16 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM8 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1.5-2.6-5-2.8m0 4.8 5-2.8",
 };
 
 /** Aria label for each category icon. */
@@ -44,7 +45,10 @@ const CATEGORY_LABELS: Record<CategoryId, string> = {
 };
 
 /** Privacy level metadata for badge rendering. */
-const PRIVACY_LEVELS: Record<PrivacyLevel, { color: string; label: string; text: string; path: string }> = {
+const PRIVACY_LEVELS: Record<
+  PrivacyLevel,
+  { color: string; label: string; text: string; path: string }
+> = {
   maximum: {
     color: "#16a34a",
     label: "Privacy Maximum",
@@ -72,7 +76,10 @@ const PRIVACY_LEVELS: Record<PrivacyLevel, { color: string; label: string; text:
 };
 
 /** Compliance badge metadata. */
-const COMPLIANCE_BADGES: Record<ComplianceBadgeType, { color: string; label: string; text: string; icon: string }> = {
+const COMPLIANCE_BADGES: Record<
+  ComplianceBadgeType,
+  { color: string; label: string; text: string; icon: string }
+> = {
   gdpr: {
     color: "#2563eb",
     label: "GDPR Compliant",
@@ -200,17 +207,17 @@ export function generateSpriteSheet(): string {
     const label = CATEGORY_LABELS[id as CategoryId];
     symbols.push(
       `<symbol id="ca-icon-${id}" viewBox="0 0 24 24" role="img" aria-label="${label}">` +
-      `<circle cx="12" cy="12" r="12" fill="${meta.color}"/>` +
-      `<path d="${pathData}" fill="white" stroke="white" stroke-width="0.3"/>` +
-      `</symbol>`
+        `<circle cx="12" cy="12" r="12" fill="${meta.color}"/>` +
+        `<path d="${pathData}" fill="white" stroke="white" stroke-width="0.3"/>` +
+        `</symbol>`,
     );
   }
 
   for (const [id, meta] of Object.entries(PRIVACY_LEVELS)) {
     symbols.push(
       `<symbol id="ca-privacy-${id}" viewBox="0 0 24 24">` +
-      `<path d="${meta.path}" fill="${meta.color}"/>` +
-      `</symbol>`
+        `<path d="${meta.path}" fill="${meta.color}"/>` +
+        `</symbol>`,
     );
   }
 

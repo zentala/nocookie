@@ -19,16 +19,10 @@ import {
 } from "@/shared/constants";
 
 /** Build a minimal resolved config for testing. */
-function createConfig(
-  overrides?: Partial<ResolvedCMPConfig>,
-): ResolvedCMPConfig {
+function createConfig(overrides?: Partial<ResolvedCMPConfig>): ResolvedCMPConfig {
   return {
     siteName: "Test Site",
-    categories: [
-      { id: "essential", required: true },
-      { id: "analytics" },
-      { id: "marketing" },
-    ],
+    categories: [{ id: "essential", required: true }, { id: "analytics" }, { id: "marketing" }],
     theme: { ...DEFAULT_THEME },
     behavior: { ...DEFAULT_BEHAVIOR },
     language: "en",
@@ -94,9 +88,7 @@ describe("Banner", () => {
     it("renders the banner description from translations", () => {
       banner.render();
       const text = shadow.querySelector(".ca-banner__text");
-      expect(text?.textContent).toContain(
-        "We use cookies to enhance your browsing experience",
-      );
+      expect(text?.textContent).toContain("We use cookies to enhance your browsing experience");
     });
 
     it("renders category icon dots for each category", () => {
@@ -159,9 +151,7 @@ describe("Banner", () => {
       b.render();
       const link = shadow.querySelector(".ca-banner__link");
       expect(link).toBeTruthy();
-      expect(link?.getAttribute("href")).toBe(
-        "https://example.com/privacy",
-      );
+      expect(link?.getAttribute("href")).toBe("https://example.com/privacy");
       expect(link?.textContent).toBe("Learn more");
       b.destroy();
     });
@@ -338,21 +328,13 @@ describe("Banner", () => {
       const b = new Banner(cfg, consentState, eventBus, shadow);
       b.render();
 
-      expect(shadow.querySelector(".ca-banner__title")?.textContent).toBe(
-        "Eigene Zustimmung",
-      );
+      expect(shadow.querySelector(".ca-banner__title")?.textContent).toBe("Eigene Zustimmung");
       expect(shadow.querySelector(".ca-banner__text")?.textContent).toContain(
         "Wir verwenden Cookies.",
       );
-      expect(shadow.querySelector(".ca-btn--accept")?.textContent).toBe(
-        "Alle akzeptieren",
-      );
-      expect(shadow.querySelector(".ca-btn--reject")?.textContent).toBe(
-        "Alle ablehnen",
-      );
-      expect(shadow.querySelector(".ca-btn--customize")?.textContent).toBe(
-        "Anpassen",
-      );
+      expect(shadow.querySelector(".ca-btn--accept")?.textContent).toBe("Alle akzeptieren");
+      expect(shadow.querySelector(".ca-btn--reject")?.textContent).toBe("Alle ablehnen");
+      expect(shadow.querySelector(".ca-btn--customize")?.textContent).toBe("Anpassen");
       b.destroy();
     });
   });

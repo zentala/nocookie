@@ -174,27 +174,21 @@ export class Banner {
 
     if (this.config.behavior.rejectAllOnFirstLayer) {
       actions.appendChild(
-        this.createButton(
-          "ca-btn ca-btn--reject",
-          this.config.translations.rejectAll,
-          () => this.handleRejectAll(),
+        this.createButton("ca-btn ca-btn--reject", this.config.translations.rejectAll, () =>
+          this.handleRejectAll(),
         ),
       );
     }
 
     actions.appendChild(
-      this.createButton(
-        "ca-btn ca-btn--customize",
-        this.config.translations.customize,
-        () => this.handleCustomize(),
+      this.createButton("ca-btn ca-btn--customize", this.config.translations.customize, () =>
+        this.handleCustomize(),
       ),
     );
 
     actions.appendChild(
-      this.createButton(
-        "ca-btn ca-btn--accept",
-        this.config.translations.acceptAll,
-        () => this.handleAcceptAll(),
+      this.createButton("ca-btn ca-btn--accept", this.config.translations.acceptAll, () =>
+        this.handleAcceptAll(),
       ),
     );
 
@@ -202,11 +196,7 @@ export class Banner {
   }
 
   /** Create a button element with click handler. */
-  private createButton(
-    className: string,
-    text: string,
-    onClick: () => void,
-  ): HTMLButtonElement {
+  private createButton(className: string, text: string, onClick: () => void): HTMLButtonElement {
     const btn = document.createElement("button");
     btn.className = className;
     btn.textContent = text;

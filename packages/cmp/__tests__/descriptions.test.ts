@@ -5,7 +5,7 @@ import {
   resolveDescription,
 } from "../src/shared/descriptions";
 import type { DescriptionPreset } from "../src/shared/descriptions";
-import type { CategoryConfig, CategoryId } from "../src/shared/types";
+import type { CategoryConfig } from "../src/shared/types";
 import { CATEGORY_IDS } from "../src/shared/constants";
 
 const PRESETS: DescriptionPreset[] = ["default", "alt1", "alt2"];
@@ -33,10 +33,7 @@ describe("getCategoryDescription", () => {
   });
 
   it("falls back to default for unknown preset", () => {
-    const result = getCategoryDescription(
-      "essential",
-      "nonexistent" as DescriptionPreset,
-    );
+    const result = getCategoryDescription("essential", "nonexistent" as DescriptionPreset);
     const defaultResult = getCategoryDescription("essential", "default");
     expect(result).toEqual(defaultResult);
   });

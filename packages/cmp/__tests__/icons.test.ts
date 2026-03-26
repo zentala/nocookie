@@ -19,21 +19,23 @@ import { CATEGORY_IDS } from "@/shared/constants";
 
 const ALL_SIZES: IconSize[] = ["xs", "sm", "md", "lg", "xl", "xxl"];
 const SIZE_PX: Record<IconSize, number> = {
-  xs: 16, sm: 20, md: 24, lg: 32, xl: 48, xxl: 64,
+  xs: 16,
+  sm: 20,
+  md: 24,
+  lg: 32,
+  xl: 48,
+  xxl: 64,
 };
 
 describe("renderCategoryIcon", () => {
-  it.each(CATEGORY_IDS as unknown as CategoryId[])(
-    "renders valid SVG for category '%s'",
-    (id) => {
-      const svg = renderCategoryIcon(id);
-      expect(svg).toContain("<svg");
-      expect(svg).toContain("</svg>");
-      expect(svg).toContain("viewBox=\"0 0 24 24\"");
-      expect(svg).toContain("<circle");
-      expect(svg).toContain("<path");
-    },
-  );
+  it.each(CATEGORY_IDS as unknown as CategoryId[])("renders valid SVG for category '%s'", (id) => {
+    const svg = renderCategoryIcon(id);
+    expect(svg).toContain("<svg");
+    expect(svg).toContain("</svg>");
+    expect(svg).toContain('viewBox="0 0 24 24"');
+    expect(svg).toContain("<circle");
+    expect(svg).toContain("<path");
+  });
 
   it("defaults to md size (24px)", () => {
     const svg = renderCategoryIcon("essential");
@@ -62,7 +64,7 @@ describe("renderCategoryIcon", () => {
     }
   });
 
-  it("includes role=\"img\" for accessibility", () => {
+  it('includes role="img" for accessibility', () => {
     const svg = renderCategoryIcon("analytics");
     expect(svg).toContain('role="img"');
   });
@@ -121,7 +123,7 @@ describe("renderPrivacyBadge", () => {
     const html = renderPrivacyBadge(level);
     expect(html).toContain("ca-badge");
     expect(html).toContain(`ca-badge--privacy-${level}`);
-    expect(html).toContain("role=\"img\"");
+    expect(html).toContain('role="img"');
     expect(html).toContain("aria-label=");
     expect(html).toContain("<svg");
   });
@@ -152,7 +154,7 @@ describe("renderComplianceBadge", () => {
     const html = renderComplianceBadge(type);
     expect(html).toContain("ca-badge");
     expect(html).toContain(`ca-badge--${type}`);
-    expect(html).toContain("role=\"img\"");
+    expect(html).toContain('role="img"');
     expect(html).toContain("aria-label=");
     expect(html).toContain("<svg");
   });
