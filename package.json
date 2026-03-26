@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm --filter extension dev",
     "build": "pnpm --filter extension build",
-    "test": "pnpm --filter extension test",
+    "test": "pnpm -r run test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

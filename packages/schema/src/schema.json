@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nocookie.org/schemas/cookie-consent/1.0",
+  "title": "Cookie Consent Declaration",
+  "description": "Schema for /.well-known/cookie-consent.json — a machine-readable cookie consent declaration.",
+  "type": "object",
+  "required": ["version", "categories"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Schema version in major.minor format (e.g., \"1.0\")."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "enum": ["essential", "functional", "analytics", "marketing", "social-media"]
+      },
+      "contains": { "const": "essential" },
+      "description": "Cookie categories used on this site. Must include \"essential\"."
+    },
+    "cmp": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "description": "Consent Management Platform metadata."
+    },
+    "selectors": {
+      "type": "object",
+      "properties": {
+        "banner": { "type": "string" },
+        "acceptAll": { "type": "string" },
+        "rejectAll": { "type": "string" },
+        "preferences": { "type": "string" },
+        "save": { "type": "string" }
+      },
+      "description": "CSS selectors for consent UI elements."
+    },
+    "categorySelectors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "toggle": { "type": "string" },
+          "cmpId": { "type": "string" }
+        }
+      },
+      "description": "Per-category CSS selectors for toggle controls."
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "acceptAll": { "type": "string" },
+        "rejectAll": { "type": "string" },
+        "setCategory": { "type": "string" }
+      },
+      "description": "JavaScript API endpoints for programmatic consent control."
+    },
+    "gpc": {
+      "type": "boolean",
+      "description": "Whether the site respects Global Privacy Control signals."
+    },
+    "tcf": {
+      "type": "boolean",
+      "description": "Whether the site uses the IAB Transparency and Consent Framework."
+    },
+    "contact": {
+      "type": "string",
+      "format": "email",
+      "description": "Contact email for privacy-related inquiries."
+    },
+    "policyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the site's cookie/privacy policy."
+    }
+  },
+  "additionalProperties": true
+}
