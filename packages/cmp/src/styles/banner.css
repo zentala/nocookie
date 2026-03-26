@@ -1,0 +1,135 @@
+/**
+ * Banner styles for the NoCookie CMP first-layer consent dialog.
+ * Uses CSS custom properties defined in base.css / ThemeEngine.
+ */
+
+.ca-banner {
+  position: fixed;
+  z-index: var(--ca-z-index);
+  max-width: var(--ca-max-width);
+  width: calc(100% - 32px);
+  background: var(--ca-color-bg);
+  color: var(--ca-color-text);
+  border: 1px solid var(--ca-color-border);
+  border-radius: var(--ca-border-radius);
+  padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  font-family: var(--ca-font-family);
+  font-size: var(--ca-font-size-base);
+  line-height: 1.5;
+}
+
+.ca-banner__title {
+  margin: 0 0 4px;
+  font-size: calc(var(--ca-font-size-base) + 2px);
+  font-weight: 600;
+}
+
+.ca-banner__icons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.ca-banner__icon-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ca-banner__text {
+  margin: 8px 0 16px;
+}
+
+.ca-banner__link {
+  color: var(--ca-color-primary);
+  text-decoration: underline;
+}
+
+.ca-banner__link:hover {
+  color: var(--ca-color-primary-hover);
+}
+
+.ca-banner__link:focus-visible {
+  outline: 2px solid var(--ca-color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ca-banner__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ca-btn {
+  padding: 8px 16px;
+  border-radius: calc(var(--ca-border-radius) / 2);
+  border: 1px solid var(--ca-color-border);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.ca-btn:focus-visible {
+  outline: 2px solid var(--ca-color-primary);
+  outline-offset: 2px;
+}
+
+.ca-btn--accept {
+  background: var(--ca-color-accept);
+  color: white;
+  border-color: var(--ca-color-accept);
+}
+
+.ca-btn--accept:hover {
+  opacity: 0.9;
+}
+
+.ca-btn--reject {
+  background: transparent;
+  color: var(--ca-color-text);
+}
+
+.ca-btn--reject:hover {
+  background: var(--ca-color-border);
+}
+
+.ca-btn--customize {
+  background: transparent;
+  color: var(--ca-color-primary);
+  border-color: var(--ca-color-primary);
+}
+
+.ca-btn--customize:hover {
+  background: var(--ca-color-primary);
+  color: white;
+}
+
+/* Hide banner off-screen before entrance animation */
+.ca-banner--hidden {
+  display: none;
+}
+
+/* Exit animation */
+.ca-banner--exiting {
+  animation: ca-fade-out 0.2s ease-in forwards;
+}
+
+/* Responsive: stack buttons on mobile */
+@media (max-width: 480px) {
+  .ca-banner {
+    max-width: calc(100vw - 32px);
+  }
+
+  .ca-banner__actions {
+    flex-direction: column;
+  }
+
+  .ca-btn {
+    width: 100%;
+  }
+}

@@ -30,3 +30,15 @@ export {
   DEFAULT_POLICY_PAGE,
   DEFAULT_LANGUAGE,
 } from "./constants";
+
+export type {
+  CategoryDescription,
+  DescriptionPreset,
+  CommonCookieInfo,
+} from "./descriptions";
+
+export {
+  getCategoryDescription,
+  getCommonCookieInfo,
+  resolveDescription,
+} from "./descriptions";
