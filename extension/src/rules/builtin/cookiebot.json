@@ -1,0 +1,26 @@
+{
+  "name": "cookiebot",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": ["#CybotCookiebotDialog", "#CybotCookiebotDialogBody"],
+    "scriptUrls": ["consent.cookiebot.com"],
+    "jsGlobals": ["Cookiebot", "CookieConsent"]
+  },
+  "categoryMapping": {
+    "functional": "CookieCatPreferences",
+    "analytics": "CookieCatStatistics",
+    "marketing": "CookieCatMarketing"
+  },
+  "actions": {
+    "acceptAll": [
+      { "type": "click", "target": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll" }
+    ],
+    "rejectAll": [{ "type": "click", "target": "#CybotCookiebotDialogBodyButtonDecline" }],
+    "custom": [
+      {
+        "type": "click",
+        "target": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection"
+      }
+    ]
+  }
+}

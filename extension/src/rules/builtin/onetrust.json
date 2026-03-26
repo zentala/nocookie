@@ -1,0 +1,24 @@
+{
+  "name": "onetrust",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": ["#onetrust-consent-sdk", "#onetrust-banner-sdk"],
+    "scriptUrls": ["cdn.cookielaw.org", "optanon.blob.core.windows.net"],
+    "jsGlobals": ["OneTrust", "OptanonWrapper"]
+  },
+  "categoryMapping": {
+    "functional": "C0003",
+    "analytics": "C0002",
+    "marketing": "C0004",
+    "socialMedia": "C0005"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": "#onetrust-accept-btn-handler" }],
+    "rejectAll": [{ "type": "click", "target": "#onetrust-reject-all-handler" }],
+    "custom": [
+      { "type": "click", "target": "#onetrust-pc-btn-handler" },
+      { "type": "waitFor", "target": ".ot-pc-content", "timeout": 2000 },
+      { "type": "click", "target": ".save-preference-btn-handler" }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "didomi",
+  "version": "1.0.0",
+  "detection": {
+    "domSelectors": ["#didomi-host", "#didomi-popup"],
+    "scriptUrls": ["sdk.privacy-center.org"],
+    "jsGlobals": ["Didomi", "__didomi"]
+  },
+  "categoryMapping": {
+    "functional": "preferences",
+    "analytics": "analytics",
+    "marketing": "advertising",
+    "socialMedia": "social_media"
+  },
+  "actions": {
+    "acceptAll": [{ "type": "click", "target": "#didomi-notice-agree-button" }],
+    "rejectAll": [{ "type": "click", "target": "#didomi-notice-disagree-button" }],
+    "custom": [
+      { "type": "click", "target": "#didomi-notice-learn-more-button" },
+      { "type": "waitFor", "target": ".didomi-popup-container", "timeout": 2000 },
+      { "type": "click", "target": ".didomi-components-button--save" }
+    ]
+  }
+}
