@@ -9,32 +9,51 @@
 
 import "@/styles/base.css";
 
-/** Cookie consent category identifiers. */
-export type ConsentCategory = "necessary" | "functional" | "analytics" | "marketing";
+// Re-export public API from submodules
+export type {
+  CategoryId,
+  CookieDeclaration,
+  CategoryConfig,
+  ThemeConfig,
+  BehaviorConfig,
+  TranslationStrings,
+  WellKnownConfig,
+  PolicyPageConfig,
+  IconConfig,
+  CMPConfig,
+  ResolvedCMPConfig,
+  ConsentState,
+  CMPEvent,
+  CategoryMeta,
+} from "@/shared/index";
 
-/** User consent preferences per category. */
-export interface ConsentPreferences {
-  necessary: true;
-  functional: boolean;
-  analytics: boolean;
-  marketing: boolean;
-}
+export {
+  CATEGORY_IDS,
+  CATEGORY_META,
+  DEFAULT_THEME,
+  DEFAULT_BEHAVIOR,
+  DEFAULT_TRANSLATIONS,
+  DEFAULT_WELL_KNOWN,
+  DEFAULT_POLICY_PAGE,
+  DEFAULT_LANGUAGE,
+} from "@/shared/index";
 
-/** Configuration options for the CMP. */
-export interface NoCookieCMPConfig {
-  /** Whether to auto-attach the banner on initialization. */
-  autoShow?: boolean;
-  /** Target element to attach the Shadow DOM host. Defaults to `document.body`. */
-  target?: HTMLElement;
-  /** Initial consent preferences. */
-  defaults?: Partial<ConsentPreferences>;
-}
+export {
+  parseConfig,
+  expandCategory,
+  isValidCategoryId,
+  ConfigValidationError,
+} from "@/core/index";
+
+import type { CMPConfig, ResolvedCMPConfig, ConsentState } from "@/shared/types";
+import { parseConfig } from "@/core/config";
 
 /** CMP controller interface. */
 export interface NoCookieCMPInstance {
   readonly version: string;
-  init(config?: NoCookieCMPConfig): NoCookieCMPInstance;
-  getConsent(): ConsentPreferences;
+  init(config: CMPConfig): NoCookieCMPInstance;
+  getConsent(): ConsentState;
+  getConfig(): ResolvedCMPConfig | null;
 }
 
 /**
@@ -43,35 +62,52 @@ export interface NoCookieCMPInstance {
  * Manages cookie consent UI (Shadow DOM banner) and consent state.
  * This is a placeholder implementation to be expanded in subsequent tasks.
  */
-export const NoCookieCMP: NoCookieCMPInstance = {
-  /** Current library version. */
-  version: "0.1.0",
+export const NoCookieCMP: NoCookieCMPInstance = (() => {
+  let resolvedConfig: ResolvedCMPConfig | null = null;
 
-  /**
-   * Initialize the CMP with the given configuration.
-   *
-   * @param config - CMP configuration options
-   * @returns The CMP instance for chaining
-   */
-  init(config: NoCookieCMPConfig = {}): NoCookieCMPInstance {
-    const { autoShow = true, target, defaults } = config;
-    void autoShow;
-    void target;
-    void defaults;
-    return NoCookieCMP;
-  },
+  return {
+    version: "0.1.0",
 
-  /**
-   * Get current consent preferences.
-   *
-   * @returns Current consent state
-   */
-  getConsent(): ConsentPreferences {
-    return {
-      necessary: true,
-      functional: false,
-      analytics: false,
-      marketing: false,
-    };
-  },
-};
+    /**
+     * Initialize the CMP with the given configuration.
+     *
+     * @param config - CMP configuration from the site owner
+     * @returns The CMP instance for chaining
+     */
+    init(config: CMPConfig): NoCookieCMPInstance {
+      resolvedConfig = parseConfig(config);
+      return NoCookieCMP;
+    },
+
+    /**
+     * Get current consent preferences.
+     *
+     * @returns Current consent state per category
+     */
+    getConsent(): ConsentState {
+      if (!resolvedConfig) {
+        return {
+          essential: true,
+          functional: false,
+          analytics: false,
+          marketing: false,
+          "social-media": false,
+        };
+      }
+      const state: Record<string, boolean> = {};
+      for (const cat of resolvedConfig.categories) {
+        state[cat.id] = cat.defaultState ?? false;
+      }
+      return state as ConsentState;
+    },
+
+    /**
+     * Get the resolved configuration, or null if not yet initialized.
+     *
+     * @returns The resolved config or null
+     */
+    getConfig(): ResolvedCMPConfig | null {
+      return resolvedConfig;
+    },
+  };
+})();

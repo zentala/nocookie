@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nocookie.dev/schemas/cmp-config.json",
+  "title": "NoCookie CMP Configuration",
+  "description": "Configuration schema for the @nocookie/cmp consent management platform plugin.",
+  "type": "object",
+  "required": ["siteName", "categories"],
+  "properties": {
+    "siteName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of the website."
+    },
+    "privacyContact": {
+      "type": "string",
+      "description": "Privacy contact email."
+    },
+    "dpo": {
+      "type": "string",
+      "description": "Data Protection Officer contact."
+    },
+    "policyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the site's privacy policy."
+    },
+    "siteUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Main site URL."
+    },
+    "imprintUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the site's legal imprint."
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/categoryId" },
+          { "$ref": "#/definitions/categoryConfig" }
+        ]
+      },
+      "description": "Consent categories. Strings are expanded to full objects with defaults."
+    },
+    "theme": { "$ref": "#/definitions/themeConfig" },
+    "behavior": { "$ref": "#/definitions/behaviorConfig" },
+    "language": {
+      "type": "string",
+      "default": "en",
+      "description": "UI language code."
+    },
+    "translations": { "$ref": "#/definitions/translationStrings" },
+    "wellKnown": { "$ref": "#/definitions/wellKnownConfig" },
+    "policyPage": { "$ref": "#/definitions/policyPageConfig" },
+    "icons": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/definitions/categoryId" },
+      "additionalProperties": { "type": "string" },
+      "description": "Icon overrides per category."
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "categoryId": {
+      "type": "string",
+      "enum": ["essential", "functional", "analytics", "marketing", "social-media"]
+    },
+    "categoryConfig": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/definitions/categoryId" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "defaultState": { "type": "boolean" },
+        "cookies": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/cookieDeclaration" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cookieDeclaration": {
+      "type": "object",
+      "required": ["name", "provider", "duration", "purpose"],
+      "properties": {
+        "name": { "type": "string" },
+        "provider": { "type": "string" },
+        "providerUrl": { "type": "string", "format": "uri" },
+        "providerPrivacyUrl": { "type": "string", "format": "uri" },
+        "domain": { "type": "string" },
+        "duration": { "type": "string" },
+        "purpose": { "type": "string" },
+        "type": { "type": "string", "enum": ["first-party", "third-party"] }
+      },
+      "additionalProperties": false
+    },
+    "themeConfig": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["light", "dark", "auto"] },
+        "position": {
+          "type": "string",
+          "enum": ["bottom-left", "bottom-right", "bottom-center", "top-center"]
+        },
+        "primaryColor": { "type": "string" },
+        "acceptColor": { "type": "string" },
+        "rejectColor": { "type": "string" },
+        "backgroundColor": { "type": "string" },
+        "textColor": { "type": "string" },
+        "borderRadius": { "type": "number", "minimum": 0 },
+        "fontFamily": { "type": "string" },
+        "fontSize": { "type": "number", "minimum": 8 },
+        "maxWidth": { "type": "number", "minimum": 200 },
+        "zIndex": { "type": "integer", "minimum": 0 },
+        "showOverlay": { "type": "boolean" },
+        "animation": { "type": "string", "enum": ["slide-up", "fade-in", "none"] }
+      },
+      "additionalProperties": false
+    },
+    "behaviorConfig": {
+      "type": "object",
+      "properties": {
+        "consentExpiry": { "type": "integer", "minimum": 1 },
+        "showOnEveryVisit": { "type": "boolean" },
+        "rejectAllOnFirstLayer": { "type": "boolean" },
+        "closeOnScroll": { "type": "boolean" },
+        "closeOnOutsideClick": { "type": "boolean" },
+        "blockScriptsBeforeConsent": { "type": "boolean" },
+        "respectGPC": { "type": "boolean" },
+        "respectDNT": { "type": "boolean" },
+        "emitTCFSignal": { "type": "boolean" },
+        "googleConsentMode": { "type": "boolean" },
+        "cookieName": { "type": "string" },
+        "cookieDomain": { "type": "string" },
+        "cookiePath": { "type": "string" },
+        "cookieSecure": { "type": "boolean" },
+        "cookieSameSite": { "type": "string", "enum": ["Strict", "Lax", "None"] }
+      },
+      "additionalProperties": false
+    },
+    "translationStrings": {
+      "type": "object",
+      "properties": {
+        "bannerTitle": { "type": "string" },
+        "bannerDescription": { "type": "string" },
+        "acceptAll": { "type": "string" },
+        "rejectAll": { "type": "string" },
+        "customize": { "type": "string" },
+        "savePreferences": { "type": "string" },
+        "closeAriaLabel": { "type": "string" },
+        "categoryRequired": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "wellKnownConfig": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "categories": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/categoryId" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "policyPageConfig": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "title": { "type": "string" },
+        "intro": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

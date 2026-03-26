@@ -3,4 +3,4 @@
  * Core CMP modules: config, consent state, category registry, event bus.
  */
 
-export {};
+export { parseConfig, expandCategory, isValidCategoryId, ConfigValidationError } from "./config";
