@@ -27,7 +27,20 @@
   - E002-T33: Decide project name + create GitHub repo
   - E002 Wave 1: scaffolding (T01), types (T02), storage (T03), service worker (T04), content scripts (T05)
 
-## Session 2026-03-26 (auto — session ended without done.)
-- **Note**: Session ended without `done.` command. No journal was written.
-- **State at exit**: see STATE.md for last known state
-- **Action needed**: next session should review what happened and write proper journal
+## Session 2026-03-26 — Full E002 implementation (Waves 1-7)
+- **Goal**: Implement entire Chrome extension, open standard, and website
+- **Done**:
+  - **T33**: Project renamed to NoCookie, repo: zentala/nocookie, npm: @nocookie
+  - **Wave 1** (T01-T05): Scaffolding, shared types, storage wrapper, service worker, content scripts — 100 tests
+  - **Wave 2** (T06-T12, T25-T26): Rule engine, executor, autoconsent (2862 rules), GPC, heuristic detector, well-known reader — 266 tests
+  - **Wave 3** (T13-T16, T27, T31): Popup (6 states), options page (5 tabs), onboarding flow, badges, scanning state — 367 tests
+  - **Wave 4** (T17-T19, T28): @nocookie/schema validator package, 6 more CMP verifications (total 9), consent dashboard — 423 tests
+  - **Wave 5** (T20-T22, T29): Astro website with landing, spec page, validator/generator tool, 5 guides, articles section
+  - **Wave 6** (T23, T30): Accessibility audit + fixes, comprehensive test suite — 511 tests, 82.67% coverage
+  - **Wave 7** (T32): Articles integrated into website. T24 (Chrome Web Store) deferred — needs developer account
+- **Decisions**: NoCookie as project name, @nocookie npm scope, nocookie.zentala.io domain
+- **Findings this session**: 1
+  - autoconsent library has 2862 rules in JSON format, strictly binary opt-in/opt-out (no per-category)
+- **Stats**: 511 tests, 31 test files, 82.67% statement coverage, ~60 source files
+- **Deferred**: T24 (Chrome Web Store publishing) — needs $5 developer account
+- **Next**: E003 (CMP plugin), Cloudflare Pages deployment, Chrome Web Store submission
