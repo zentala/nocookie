@@ -1,0 +1,114 @@
+---
+/**
+ * Quick-start guide for adding the cookie consent declaration to any website.
+ */
+import Base from "@/layouts/Base.astro";
+
+const minimalExample = `{
+  "version": "1.0",
+  "categories": ["essential"]
+}`;
+
+const fullExample = `{
+  "version": "1.0",
+  "categories": ["essential", "analytics"],
+  "purposes": {
+    "analytics": {
+      "tool": "Plausible",
+      "retention": "30d"
+    }
+  },
+  "cmp": {
+    "name": "custom",
+    "selectors": {
+      "accept_all": "#cookie-accept",
+      "reject_all": "#cookie-reject"
+    }
+  }
+}`;
+---
+
+<Base title="Quick Start Guide - NoCookie" description="Add the Cookie Consent Standard to any website in under five minutes.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/guide" class="text-sm text-muted hover:text-white transition-colors">&larr; All Guides</a>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mt-4">
+        Quick Start <span class="text-primary">Guide</span>
+      </h1>
+      <p class="mt-4 text-lg text-muted">
+        Add the Cookie Consent Standard to your website in under five minutes.
+      </p>
+
+      {/* Step 1 */}
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">1</span>
+          Create the file
+        </h2>
+        <p class="mt-3 text-muted ml-11">
+          Create a file at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code> in your website root. Most hosting providers serve files from a <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">public/</code> or <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">static/</code> directory.
+        </p>
+      </div>
+
+      {/* Step 2 */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">2</span>
+          Add version and categories
+        </h2>
+        <p class="mt-3 text-muted ml-11">
+          The minimal valid file needs just two fields: <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">version</code> and <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">categories</code>.
+        </p>
+        <div class="ml-11 mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{minimalExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Step 3 */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">3</span>
+          Add optional details
+        </h2>
+        <p class="mt-3 text-muted ml-11">
+          You can enrich the file with purpose descriptions, CMP metadata, and UI selectors so extensions and AI agents can interact with your consent banner programmatically.
+        </p>
+        <div class="ml-11 mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{fullExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Step 4 */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">4</span>
+          Deploy
+        </h2>
+        <p class="mt-3 text-muted ml-11">
+          Deploy your site. The file must be accessible at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">https://yourdomain.com/.well-known/cookie-consent.json</code> with <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">Content-Type: application/json</code>. No CORS headers are required for same-origin requests; add <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">Access-Control-Allow-Origin: *</code> if you want third-party tools to read it.
+        </p>
+      </div>
+
+      {/* Step 5 */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">5</span>
+          Validate
+        </h2>
+        <p class="mt-3 text-muted ml-11">
+          Use the <a href="/validator" class="text-primary hover:text-primary-dark transition-colors">online validator</a> to check your file against the v1 schema. It verifies structure, required fields, and category values.
+        </p>
+      </div>
+
+      {/* Next steps */}
+      <div class="mt-14 rounded-xl border border-primary/30 bg-primary/5 p-6">
+        <h3 class="text-lg font-semibold text-white mb-3">Next steps</h3>
+        <ul class="space-y-2 text-muted text-sm">
+          <li>Read the <a href="/standard/v1" class="text-primary hover:text-primary-dark">full v1 specification</a> for all available fields</li>
+          <li>See platform-specific guides for <a href="/guide/onetrust" class="text-primary hover:text-primary-dark">OneTrust</a>, <a href="/guide/cookiebot" class="text-primary hover:text-primary-dark">Cookiebot</a>, or <a href="/guide/wordpress" class="text-primary hover:text-primary-dark">WordPress</a></li>
+          <li>Learn how <a href="/guide/ai" class="text-primary hover:text-primary-dark">AI agents</a> can implement the standard automatically</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>

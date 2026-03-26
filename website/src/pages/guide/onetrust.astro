@@ -1,0 +1,120 @@
+---
+/**
+ * OneTrust-specific implementation guide for the Cookie Consent Standard.
+ */
+import Base from "@/layouts/Base.astro";
+
+const categoryMapping = [
+  { onetrust: "C0001", standard: "essential", label: "Strictly Necessary" },
+  { onetrust: "C0002", standard: "functional", label: "Performance" },
+  { onetrust: "C0003", standard: "analytics", label: "Functional" },
+  { onetrust: "C0004", standard: "marketing", label: "Targeting" },
+  { onetrust: "C0005", standard: "social", label: "Social Media" },
+];
+
+const fullExample = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "purposes": {
+    "analytics": {
+      "tool": "Google Analytics",
+      "retention": "26mo"
+    },
+    "marketing": {
+      "tool": "Google Ads",
+      "retention": "540d"
+    }
+  },
+  "cmp": {
+    "name": "onetrust",
+    "selectors": {
+      "dialog": "#onetrust-consent-sdk",
+      "accept_all": "#onetrust-accept-btn-handler",
+      "reject_all": "#onetrust-reject-all-handler",
+      "settings": "#onetrust-pc-btn-handler"
+    },
+    "js_api": {
+      "accept_all": "OneTrust.AllowAll()",
+      "reject_all": "OneTrust.RejectAll()",
+      "get_consent": "OneTrust.GetDomainData().Groups"
+    }
+  }
+}`;
+---
+
+<Base title="OneTrust Guide - NoCookie" description="Map your OneTrust cookie categories to the Cookie Consent Standard.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/guide" class="text-sm text-muted hover:text-white transition-colors">&larr; All Guides</a>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mt-4">
+        OneTrust <span class="text-primary">Integration</span>
+      </h1>
+      <p class="mt-4 text-lg text-muted">
+        Map your OneTrust category groups to the open standard and make your consent banner machine-readable.
+      </p>
+
+      {/* Step 1: Find group IDs */}
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-white">1. Find your OneTrust group IDs</h2>
+        <p class="mt-3 text-muted">
+          OneTrust uses group IDs like <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">C0001</code> through <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">C0005</code>. You can find them in your OneTrust dashboard under <strong class="text-white">Categorizations &gt; Categories</strong>, or by inspecting the <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">otBannerSdk</code> script output in your browser DevTools.
+        </p>
+      </div>
+
+      {/* Step 2: Map categories */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">2. Map to standard categories</h2>
+        <p class="mt-3 text-muted mb-4">
+          Use this mapping as a starting point. Your site may have custom groups — map them to the closest standard category.
+        </p>
+        <div class="rounded-xl border border-white/10 bg-surface-light overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left p-3 text-muted font-medium">OneTrust ID</th>
+                <th class="text-left p-3 text-muted font-medium">OneTrust Label</th>
+                <th class="text-left p-3 text-muted font-medium">Standard Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categoryMapping.map((row) => (
+                <tr class="border-b border-white/5">
+                  <td class="p-3"><code class="text-primary text-xs">{row.onetrust}</code></td>
+                  <td class="p-3 text-white">{row.label}</td>
+                  <td class="p-3"><code class="text-primary text-xs">{row.standard}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Step 3: Selectors and API */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">3. Add selectors and API info</h2>
+        <p class="mt-3 text-muted">
+          OneTrust renders a banner with well-known DOM IDs and exposes a global JavaScript API. Adding these to your declaration lets extensions interact with the consent banner directly.
+        </p>
+      </div>
+
+      {/* Step 4: Full example */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">4. Full example</h2>
+        <p class="mt-3 text-muted mb-4">
+          Place this at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code>:
+        </p>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{fullExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Tip */}
+      <div class="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6">
+        <h3 class="text-lg font-semibold text-white mb-2">Tip</h3>
+        <p class="text-sm text-muted">
+          OneTrust updates its banner markup between versions. After upgrading OneTrust, verify the selectors still match by checking the <a href="/validator" class="text-primary hover:text-primary-dark">validator</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

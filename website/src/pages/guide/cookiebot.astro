@@ -1,0 +1,126 @@
+---
+/**
+ * Cookiebot-specific implementation guide for the Cookie Consent Standard.
+ */
+import Base from "@/layouts/Base.astro";
+
+const categoryMapping = [
+  { cookiebot: "necessary", standard: "essential", label: "Necessary" },
+  { cookiebot: "preferences", standard: "functional", label: "Preferences" },
+  { cookiebot: "statistics", standard: "analytics", label: "Statistics" },
+  { cookiebot: "marketing", standard: "marketing", label: "Marketing" },
+];
+
+const fullExample = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "purposes": {
+    "analytics": {
+      "tool": "Google Analytics",
+      "retention": "26mo"
+    },
+    "marketing": {
+      "tool": "Facebook Pixel",
+      "retention": "180d"
+    }
+  },
+  "cmp": {
+    "name": "cookiebot",
+    "selectors": {
+      "dialog": "#CybotCookiebotDialog",
+      "accept_all": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll",
+      "reject_all": "#CybotCookiebotDialogBodyButtonDecline",
+      "settings": "#CybotCookiebotDialogBodyLevelButtonCustomize"
+    },
+    "js_api": {
+      "accept_all": "Cookiebot.submitCustomConsent(true, true, true, true)",
+      "reject_all": "Cookiebot.submitCustomConsent(true, false, false, false)",
+      "get_consent": "Cookiebot.consent"
+    }
+  }
+}`;
+---
+
+<Base title="Cookiebot Guide - NoCookie" description="Map Cookiebot consent categories to the Cookie Consent Standard.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/guide" class="text-sm text-muted hover:text-white transition-colors">&larr; All Guides</a>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mt-4">
+        Cookiebot <span class="text-primary">Integration</span>
+      </h1>
+      <p class="mt-4 text-lg text-muted">
+        Map your Cookiebot consent categories to the open standard and expose selectors for automated consent handling.
+      </p>
+
+      {/* Step 1: Understand categories */}
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-white">1. Cookiebot category mapping</h2>
+        <p class="mt-3 text-muted mb-4">
+          Cookiebot uses four built-in consent categories. Map them to the standard categories below.
+        </p>
+        <div class="rounded-xl border border-white/10 bg-surface-light overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left p-3 text-muted font-medium">Cookiebot</th>
+                <th class="text-left p-3 text-muted font-medium">Standard Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categoryMapping.map((row) => (
+                <tr class="border-b border-white/5">
+                  <td class="p-3 text-white">{row.label} <code class="text-primary text-xs ml-1">({row.cookiebot})</code></td>
+                  <td class="p-3"><code class="text-primary text-xs">{row.standard}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Step 2: Add selectors */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">2. Add selectors</h2>
+        <p class="mt-3 text-muted">
+          Cookiebot renders its dialog with stable DOM IDs. The selectors below work with the default Cookiebot banner. If you use a customized template, inspect the rendered HTML to find the correct IDs.
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-muted ml-4">
+          <li><code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">#CybotCookiebotDialog</code> - main consent dialog</li>
+          <li><code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll</code> - accept all</li>
+          <li><code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">#CybotCookiebotDialogBodyButtonDecline</code> - reject all</li>
+        </ul>
+      </div>
+
+      {/* Step 3: Full example */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">3. Full example</h2>
+        <p class="mt-3 text-muted mb-4">
+          Place this at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code>:
+        </p>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{fullExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Cookiebot JS API */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">4. JavaScript API</h2>
+        <p class="mt-3 text-muted">
+          Cookiebot exposes a global <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">Cookiebot</code> object. The <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">js_api</code> entries let extensions call consent methods directly without clicking DOM elements.
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-muted ml-4">
+          <li><code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">Cookiebot.consent</code> - current consent state object</li>
+          <li><code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">Cookiebot.submitCustomConsent(n, p, s, m)</code> - set consent per category (boolean)</li>
+        </ul>
+      </div>
+
+      {/* Tip */}
+      <div class="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6">
+        <h3 class="text-lg font-semibold text-white mb-2">Tip</h3>
+        <p class="text-sm text-muted">
+          Cookiebot's dialog IDs have remained stable across versions, but always verify after updates. Test with the <a href="/validator" class="text-primary hover:text-primary-dark">validator</a> after any Cookiebot upgrade.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

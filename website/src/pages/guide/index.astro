@@ -1,0 +1,86 @@
+---
+/**
+ * Guide hub page with links to all implementation guides.
+ */
+import Base from "@/layouts/Base.astro";
+
+const guides = [
+  {
+    href: "/guide/quickstart",
+    title: "Quick Start",
+    time: "5 min",
+    description: "Add the cookie consent declaration to any website in under five minutes.",
+    icon: "M13 10V3L4 14h7v7l9-11h-7z",
+  },
+  {
+    href: "/guide/onetrust",
+    title: "OneTrust",
+    time: "10 min",
+    description: "Map your OneTrust category groups to the open standard format.",
+    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+  },
+  {
+    href: "/guide/cookiebot",
+    title: "Cookiebot",
+    time: "10 min",
+    description: "Map Cookiebot consent categories and selectors to the standard.",
+    icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
+  },
+  {
+    href: "/guide/wordpress",
+    title: "WordPress",
+    time: "10 min",
+    description: "Add the standard to WordPress sites using Complianz or CookieYes.",
+    icon: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z",
+  },
+  {
+    href: "/guide/ai",
+    title: "AI Agents",
+    time: "15 min",
+    description: "Instructions for AI coding agents to implement the standard automatically.",
+    icon: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+  },
+];
+---
+
+<Base title="Implementation Guides - NoCookie" description="Step-by-step guides for adding the Cookie Consent Standard to your website.">
+  <section class="py-20 sm:py-28 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold leading-tight tracking-tight">
+        Implementation <span class="text-primary">Guides</span>
+      </h1>
+      <p class="mt-6 text-lg text-muted max-w-2xl mx-auto">
+        Step-by-step instructions for adding the Cookie Consent Standard
+        to your website, regardless of your current CMP setup.
+      </p>
+    </div>
+  </section>
+
+  <section class="pb-20 px-4">
+    <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {guides.map((guide) => (
+        <a
+          href={guide.href}
+          class="rounded-xl border border-white/10 bg-surface-light p-6 hover:border-primary/50 transition-colors group"
+        >
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={guide.icon} />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <h2 class="text-lg font-semibold text-white group-hover:text-primary transition-colors">
+                  {guide.title}
+                </h2>
+                <span class="text-xs text-muted bg-surface px-2 py-0.5 rounded-full">{guide.time}</span>
+              </div>
+              <p class="text-sm text-muted">{guide.description}</p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

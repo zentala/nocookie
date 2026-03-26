@@ -1,0 +1,160 @@
+---
+/**
+ * Guide for AI agents implementing the Cookie Consent Standard on websites.
+ */
+import Base from "@/layouts/Base.astro";
+
+const discoveryMethods = `# Discovery methods (in priority order)
+1. GET /.well-known/cookie-consent.json
+2. <meta name="cookie-consent" content="/path/to/consent.json">
+3. robots.txt: Cookie-consent: /path/to/consent.json
+4. llms.txt: mention of cookie-consent.json location`;
+
+const templateExample = `# Cookie Consent Implementation Instructions
+
+## Site info
+- Domain: example.com
+- CMP: OneTrust / Cookiebot / none
+- Categories used: essential, analytics, marketing
+
+## Tasks
+1. Create /.well-known/cookie-consent.json
+2. Populate version, categories, and purposes
+3. If CMP present: add cmp.selectors and cmp.js_api
+4. Validate at nocookie.zentala.io/validator
+5. Add meta tag: <meta name="cookie-consent"
+     content="/.well-known/cookie-consent.json">
+
+## Standard reference
+- Spec: nocookie.zentala.io/standard/v1
+- Schema: nocookie.zentala.io/standard/v1/schema.json
+- Template: nocookie.zentala.io/cookie-consent-instructions.md`;
+
+const detectionSnippet = `// Pseudo-code: detect existing CMP
+const cmpSignals = {
+  onetrust: () => !!document.querySelector('#onetrust-consent-sdk'),
+  cookiebot: () => typeof Cookiebot !== 'undefined',
+  complianz: () => !!document.querySelector('#cmplz-cookiebanner-container'),
+  cookieyes: () => !!document.querySelector('.cky-consent-container'),
+};
+
+function detectCMP() {
+  for (const [name, check] of Object.entries(cmpSignals)) {
+    if (check()) return name;
+  }
+  return null;
+}`;
+
+const generatedExample = `{
+  "version": "1.0",
+  "categories": ["essential", "analytics"],
+  "purposes": {
+    "analytics": {
+      "tool": "Google Analytics",
+      "retention": "26mo"
+    }
+  },
+  "cmp": {
+    "name": "onetrust",
+    "selectors": {
+      "dialog": "#onetrust-consent-sdk",
+      "accept_all": "#onetrust-accept-btn-handler",
+      "reject_all": "#onetrust-reject-all-handler"
+    }
+  }
+}`;
+---
+
+<Base title="AI Agent Guide - NoCookie" description="Instructions for AI coding agents to implement the Cookie Consent Standard automatically.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/guide" class="text-sm text-muted hover:text-white transition-colors">&larr; All Guides</a>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mt-4">
+        AI Agent <span class="text-primary">Guide</span>
+      </h1>
+      <p class="mt-4 text-lg text-muted">
+        Instructions for AI coding agents (Cursor, Copilot, Claude, etc.) to implement the Cookie Consent Standard on any website automatically.
+      </p>
+
+      {/* What is the standard */}
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-white">What is the standard?</h2>
+        <p class="mt-3 text-muted">
+          The Cookie Consent Standard is a machine-readable JSON file served at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code>. It declares what cookie categories a site uses, what tools set them, and how to interact with the site's consent banner programmatically. Think of it as <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">robots.txt</code> for cookie consent.
+        </p>
+      </div>
+
+      {/* How to detect CMP */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">Detect existing CMP</h2>
+        <p class="mt-3 text-muted">
+          Before generating the file, detect whether the site already uses a Consent Management Platform. Check for known DOM elements and global JavaScript objects.
+        </p>
+        <div class="mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{detectionSnippet}</code></pre>
+        </div>
+      </div>
+
+      {/* How to generate */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">Generate cookie-consent.json</h2>
+        <p class="mt-3 text-muted">
+          Based on the detected CMP (or manual inspection), generate the declaration file. Include all categories the site actually uses, purpose metadata where available, and CMP selectors for automated consent handling.
+        </p>
+        <div class="mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{generatedExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Discovery methods */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">Discovery methods</h2>
+        <p class="mt-3 text-muted">
+          Extensions and agents discover the declaration file using these methods, in priority order:
+        </p>
+        <div class="mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{discoveryMethods}</code></pre>
+        </div>
+      </div>
+
+      {/* Template for instructions file */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">cookie-consent-instructions.md</h2>
+        <p class="mt-3 text-muted">
+          Website owners can include a <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">cookie-consent-instructions.md</code> file in their repository root for AI agents to read. This file tells the agent exactly how to generate the consent declaration for that specific site.
+        </p>
+        <p class="mt-2 text-sm text-muted">
+          Download the <a href="/cookie-consent-instructions.md" class="text-primary hover:text-primary-dark">template file</a> or copy the structure below:
+        </p>
+        <div class="mt-4 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{templateExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Agent workflow */}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold text-white">Recommended agent workflow</h2>
+        <ol class="mt-4 space-y-3 text-muted ml-4">
+          <li><strong class="text-white">1.</strong> Check if <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">cookie-consent-instructions.md</code> exists in the repo</li>
+          <li><strong class="text-white">2.</strong> Detect the CMP by inspecting the site's HTML and JavaScript</li>
+          <li><strong class="text-white">3.</strong> Identify cookie categories from CMP config or privacy policy</li>
+          <li><strong class="text-white">4.</strong> Generate <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">/.well-known/cookie-consent.json</code></li>
+          <li><strong class="text-white">5.</strong> Validate against the <a href="/standard/v1/schema.json" class="text-primary hover:text-primary-dark">JSON schema</a></li>
+          <li><strong class="text-white">6.</strong> Add discovery meta tag to the HTML head</li>
+          <li><strong class="text-white">7.</strong> Commit and deploy</li>
+        </ol>
+      </div>
+
+      {/* Links */}
+      <div class="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6">
+        <h3 class="text-lg font-semibold text-white mb-3">Resources</h3>
+        <ul class="space-y-2 text-sm text-muted">
+          <li><a href="/standard/v1" class="text-primary hover:text-primary-dark">Full v1 specification</a> - all fields and their meanings</li>
+          <li><a href="/standard/v1/schema.json" class="text-primary hover:text-primary-dark">JSON Schema</a> - for programmatic validation</li>
+          <li><a href="/cookie-consent-instructions.md" class="text-primary hover:text-primary-dark">Instructions template</a> - drop into any repo for AI agents</li>
+          <li><a href="/validator" class="text-primary hover:text-primary-dark">Online validator</a> - validate generated files</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>

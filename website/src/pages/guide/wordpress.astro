@@ -1,0 +1,124 @@
+---
+/**
+ * WordPress-specific implementation guide for the Cookie Consent Standard.
+ */
+import Base from "@/layouts/Base.astro";
+
+const complianzExample = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "purposes": {
+    "analytics": {
+      "tool": "Google Analytics",
+      "retention": "26mo"
+    }
+  },
+  "cmp": {
+    "name": "complianz",
+    "selectors": {
+      "dialog": "#cmplz-cookiebanner-container",
+      "accept_all": ".cmplz-btn.cmplz-accept",
+      "reject_all": ".cmplz-btn.cmplz-deny",
+      "settings": ".cmplz-btn.cmplz-manage-options"
+    },
+    "js_api": {
+      "accept_all": "cmplz_accept_all()",
+      "reject_all": "cmplz_deny_all()"
+    }
+  }
+}`;
+
+const cookieyesExample = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "purposes": {
+    "analytics": {
+      "tool": "Matomo",
+      "retention": "13mo"
+    }
+  },
+  "cmp": {
+    "name": "cookieyes",
+    "selectors": {
+      "dialog": ".cky-consent-container",
+      "accept_all": ".cky-btn-accept",
+      "reject_all": ".cky-btn-reject",
+      "settings": ".cky-btn-customize"
+    }
+  }
+}`;
+---
+
+<Base title="WordPress Guide - NoCookie" description="Add the Cookie Consent Standard to WordPress sites using Complianz or CookieYes.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/guide" class="text-sm text-muted hover:text-white transition-colors">&larr; All Guides</a>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mt-4">
+        WordPress <span class="text-primary">Guide</span>
+      </h1>
+      <p class="mt-4 text-lg text-muted">
+        Add the Cookie Consent Standard to your WordPress site, whether you use Complianz, CookieYes, or another consent plugin.
+      </p>
+
+      {/* File placement */}
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-white">Where to place the file</h2>
+        <p class="mt-3 text-muted">
+          The JSON file must be accessible at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">yourdomain.com/.well-known/cookie-consent.json</code>. In WordPress, create the directory and file at:
+        </p>
+        <div class="mt-3 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">/var/www/html/.well-known/cookie-consent.json</code></pre>
+        </div>
+        <p class="mt-3 text-sm text-muted">
+          This is the WordPress installation root (same level as <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">wp-config.php</code>). If your host uses a different document root, adjust accordingly.
+        </p>
+      </div>
+
+      {/* Complianz */}
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-3">Complianz</h2>
+        <p class="mt-4 text-muted">
+          <a href="https://complianz.io" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark">Complianz</a> is one of the most popular WordPress cookie plugins. It manages consent categories that map well to the standard.
+        </p>
+        <h3 class="text-lg font-semibold text-white mt-6">Category mapping</h3>
+        <ul class="mt-3 space-y-1 text-sm text-muted ml-4">
+          <li><strong class="text-white">Functional</strong> (always on) &rarr; <code class="text-primary text-xs">essential</code></li>
+          <li><strong class="text-white">Statistics</strong> &rarr; <code class="text-primary text-xs">analytics</code></li>
+          <li><strong class="text-white">Marketing</strong> &rarr; <code class="text-primary text-xs">marketing</code></li>
+          <li><strong class="text-white">Preferences</strong> &rarr; <code class="text-primary text-xs">functional</code></li>
+        </ul>
+        <h3 class="text-lg font-semibold text-white mt-6">Example file</h3>
+        <div class="mt-3 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{complianzExample}</code></pre>
+        </div>
+      </div>
+
+      {/* CookieYes */}
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-3">CookieYes</h2>
+        <p class="mt-4 text-muted">
+          <a href="https://www.cookieyes.com" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark">CookieYes</a> uses similar categories. Map them the same way.
+        </p>
+        <h3 class="text-lg font-semibold text-white mt-6">Category mapping</h3>
+        <ul class="mt-3 space-y-1 text-sm text-muted ml-4">
+          <li><strong class="text-white">Necessary</strong> &rarr; <code class="text-primary text-xs">essential</code></li>
+          <li><strong class="text-white">Functional</strong> &rarr; <code class="text-primary text-xs">functional</code></li>
+          <li><strong class="text-white">Analytics</strong> &rarr; <code class="text-primary text-xs">analytics</code></li>
+          <li><strong class="text-white">Advertisement</strong> &rarr; <code class="text-primary text-xs">marketing</code></li>
+        </ul>
+        <h3 class="text-lg font-semibold text-white mt-6">Example file</h3>
+        <div class="mt-3 rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{cookieyesExample}</code></pre>
+        </div>
+      </div>
+
+      {/* Future */}
+      <div class="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6">
+        <h3 class="text-lg font-semibold text-white mb-2">Coming soon</h3>
+        <p class="text-sm text-muted">
+          A WordPress plugin that auto-generates <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-xs">cookie-consent.json</code> from your existing consent plugin configuration. Follow the <a href="https://github.com/zentala/cookies-accepter" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark">GitHub repo</a> for updates.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
