@@ -24,3 +24,5 @@ export {
 export type { IconSize, PrivacyLevel, ComplianceBadgeType } from "./icons";
 
 export { PreferenceCenter } from "./preference-center";
+
+export { PolicyPageGenerator } from "./policy-page";
