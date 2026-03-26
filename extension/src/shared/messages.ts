@@ -48,6 +48,12 @@ export interface Message<T extends MessageType = MessageType> {
   payload: MessagePayloadMap[T];
 }
 
+/** Notification sent to popup when tab state changes (not part of request/response protocol). */
+export interface TabStateChangedNotification {
+  type: "TAB_STATE_CHANGED";
+  payload: { tabId: number; state: BadgeState };
+}
+
 /**
  * Creates a typed message object.
  * Convenience helper to ensure type safety when sending messages.

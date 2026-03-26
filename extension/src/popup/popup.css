@@ -96,6 +96,9 @@ body {
   padding: 10px 12px;
   border-radius: var(--r);
   margin-bottom: 12px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .status-icon {
@@ -113,6 +116,7 @@ body {
 .status-label {
   font-weight: 600;
   display: block;
+  transition: color 0.3s ease;
 }
 .status-detail {
   font-size: 12px;

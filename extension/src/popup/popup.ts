@@ -5,7 +5,7 @@
  * category breakdown, profile quick-switch, and navigation links.
  */
 
-import type { BadgeState } from "@/shared/messages";
+import type { BadgeState, TabStateChangedNotification } from "@/shared/messages";
 import type { ConsentResult } from "@/shared/types";
 import type { ProfileName, CategoryId } from "@/shared/categories";
 import { CATEGORY_META, PROFILE_LABELS } from "@/shared/categories";
@@ -210,6 +210,18 @@ async function loadTabState(el: PopupElements): Promise<void> {
   }
 }
 
+/**
+ * Listen for TAB_STATE_CHANGED notifications from the background service worker.
+ * When the active tab's state changes, re-fetch and re-render the popup.
+ */
+export function listenForStateChanges(el: PopupElements): void {
+  chrome.runtime.onMessage.addListener((message: TabStateChangedNotification) => {
+    if (message.type === "TAB_STATE_CHANGED") {
+      void loadTabState(el);
+    }
+  });
+}
+
 /** Initialize popup when DOM is ready. */
 async function init(): Promise<void> {
   const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
@@ -240,6 +252,7 @@ async function init(): Promise<void> {
     void onProfileChange(profileSelect.value as ProfileName);
   });
 
+  listenForStateChanges(el);
   await loadTabState(el);
 }
 

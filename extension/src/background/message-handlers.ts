@@ -19,6 +19,13 @@ import {
 import { updateBadge } from "./badge";
 import { getTabState, updateTabState } from "./tab-state";
 
+/** Notify the popup (if open) that a tab's state has changed. */
+export function broadcastTabStateChange(tabId: number, state: BadgeState): void {
+  chrome.runtime.sendMessage({ type: "TAB_STATE_CHANGED", payload: { tabId, state } }).catch(() => {
+    // Popup not open — ignore
+  });
+}
+
 /** Response for GET_PREFERENCES message. */
 export interface PreferencesResponse {
   preferences: UserPreferences;
@@ -46,6 +53,7 @@ export async function handleCmpDetected(
   });
 
   await updateBadge(tabId, "attention");
+  broadcastTabStateChange(tabId, "attention");
 
   const override = await getDomainOverride(payload.domain);
   if (override?.preferences) {
@@ -87,6 +95,7 @@ export async function handleConsentExecuted(
   });
 
   await updateBadge(tabId, badgeState);
+  broadcastTabStateChange(tabId, badgeState);
 
   if (settings.logConsent) {
     await setConsentLog(payload.domain, payload);
@@ -104,12 +113,14 @@ export async function handleUpdateBadge(
 ): Promise<void> {
   updateTabState(tabId, { state: payload.state });
   await updateBadge(tabId, payload.state);
+  broadcastTabStateChange(tabId, payload.state);
 }
 
 /** Handle SCAN_STARTED: mark tab as scanning. */
 export async function handleScanStarted(tabId: number): Promise<void> {
   updateTabState(tabId, { state: "scanning" });
   await updateBadge(tabId, "scanning");
+  broadcastTabStateChange(tabId, "scanning");
 }
 
 /** Handle SCAN_COMPLETE: update tab state based on scan result. */
@@ -120,6 +131,7 @@ export async function handleScanComplete(
   if (!payload.cmpFound) {
     updateTabState(tabId, { state: "default" });
     await updateBadge(tabId, "default");
+    broadcastTabStateChange(tabId, "default");
   }
   // If CMP was found, CMP_DETECTED will handle the state update
 }

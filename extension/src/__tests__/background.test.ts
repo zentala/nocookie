@@ -38,6 +38,7 @@ function installFullChromeMock(): { syncMock: StorageAreaMock; localMock: Storag
     runtime: {
       onMessage: { addListener: vi.fn() },
       onInstalled: { addListener: vi.fn() },
+      sendMessage: vi.fn(() => Promise.resolve()),
     },
     scripting: {
       executeScript: vi.fn(() => Promise.resolve()),
