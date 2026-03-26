@@ -43,3 +43,28 @@ export {
   DEFAULT_SETTINGS,
   DEFAULT_SYNC_STORAGE,
 } from "./storage";
+
+export {
+  CURRENT_SCHEMA_VERSION,
+  clearConsentLogs,
+  getAllConsentLogs,
+  getAllDomainOverrides,
+  getConsentLog,
+  getDomainOverride,
+  getPreferences,
+  getProfile,
+  getSettings,
+  getStats,
+  getWellKnownCache,
+  incrementStat,
+  isOnboardingCompleted,
+  migrateStorageIfNeeded,
+  removeDomainOverride,
+  setConsentLog,
+  setDomainOverride,
+  setOnboardingCompleted,
+  setPreferences,
+  setProfile,
+  setWellKnownCache,
+  updateSettings,
+} from "./storage-api";
