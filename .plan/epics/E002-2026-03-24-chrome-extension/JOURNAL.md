@@ -26,3 +26,8 @@
 - **Next**:
   - E002-T33: Decide project name + create GitHub repo
   - E002 Wave 1: scaffolding (T01), types (T02), storage (T03), service worker (T04), content scripts (T05)
+
+## Session 2026-03-26 (auto — session ended without done.)
+- **Note**: Session ended without `done.` command. No journal was written.
+- **State at exit**: see STATE.md for last known state
+- **Action needed**: next session should review what happened and write proper journal
