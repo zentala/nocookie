@@ -15,6 +15,7 @@ import {
 } from "@/shared/categories";
 import type { UserPreferences } from "@/shared/types";
 import { setOnboardingCompleted, setPreferences, setProfile } from "@/shared/storage-api";
+import { safeAsync } from "@/shared/ui-error-handler";
 
 /** Profile definitions for the card UI in step 2. */
 const ONBOARDING_PROFILES: {
@@ -298,7 +299,7 @@ export function initOnboarding(): void {
     cardsContainer.addEventListener("click", (e) => {
       const card = (e.target as HTMLElement).closest(".profile-card") as HTMLElement;
       if (card?.dataset.profile) {
-        selectProfile(card.dataset.profile, cardsContainer);
+        safeAsync(() => selectProfile(card.dataset.profile!, cardsContainer), "profile card click");
       }
     });
 
@@ -308,7 +309,10 @@ export function initOnboarding(): void {
       if (!card?.dataset.profile) return;
       if (kbEvent.key === "Enter" || kbEvent.key === " ") {
         kbEvent.preventDefault();
-        selectProfile(card.dataset.profile, cardsContainer);
+        safeAsync(
+          () => selectProfile(card.dataset.profile!, cardsContainer),
+          "profile card keydown",
+        );
       }
     });
   }
@@ -327,14 +331,14 @@ export function initOnboarding(): void {
 
   document.getElementById("btn-back-3")?.addEventListener("click", () => goToStep(2));
   document.getElementById("btn-save-custom")?.addEventListener("click", () => {
-    saveCustomPreferences();
+    safeAsync(() => saveCustomPreferences(), "save custom preferences");
   });
 
   document.getElementById("btn-back-4")?.addEventListener("click", () => {
     goToStep(state.cameFromCustomize ? 3 : 2);
   });
   document.getElementById("btn-start-browsing")?.addEventListener("click", () => {
-    finishOnboarding();
+    safeAsync(() => finishOnboarding(), "finish onboarding");
   });
 
   if (categoriesList) {

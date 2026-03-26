@@ -13,6 +13,7 @@ import {
 } from "@/shared/categories";
 import { getPreferences, getProfile, setPreferences, setProfile } from "@/shared/storage-api";
 import type { UserPreferences } from "@/shared/types";
+import { safeAsync } from "@/shared/ui-error-handler";
 import { initAbout } from "./options-about";
 import { initAdvanced } from "./options-advanced";
 import { initOverrides } from "./options-overrides";
@@ -228,43 +229,49 @@ export async function initOptions(): Promise<void> {
   await initStats();
   initAbout();
 
-  profileSelect.addEventListener("change", async () => {
-    const selected = profileSelect.value as ProfileName;
-    if (selected === "custom") return;
-    const preset = PROFILE_PRESETS[selected];
-    preferences = { ...preset };
-    await setPreferences(preferences);
-    await setProfile(selected);
-    syncToggles(preferences);
+  profileSelect.addEventListener("change", () => {
+    safeAsync(async () => {
+      const selected = profileSelect.value as ProfileName;
+      if (selected === "custom") return;
+      const preset = PROFILE_PRESETS[selected];
+      preferences = { ...preset };
+      await setPreferences(preferences);
+      await setProfile(selected);
+      syncToggles(preferences);
+    }, "profile change");
   });
 
-  categoriesList.addEventListener("click", async (e) => {
+  categoriesList.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("toggle-switch")) {
-      const item = target.closest(".category-item") as HTMLElement;
-      const categoryId = item?.dataset.categoryId as CategoryId;
-      if (categoryId) {
-        preferences = await handleToggle(categoryId, preferences, profileSelect);
-        syncToggles(preferences);
-      }
+      safeAsync(async () => {
+        const item = target.closest(".category-item") as HTMLElement;
+        const categoryId = item?.dataset.categoryId as CategoryId;
+        if (categoryId) {
+          preferences = await handleToggle(categoryId, preferences, profileSelect);
+          syncToggles(preferences);
+        }
+      }, "toggle click");
     }
     if (target.classList.contains("info-btn")) {
       handleInfoToggle(target as HTMLButtonElement);
     }
   });
 
-  categoriesList.addEventListener("keydown", async (e) => {
+  categoriesList.addEventListener("keydown", (e) => {
     const kbEvent = e as KeyboardEvent;
     const target = kbEvent.target as HTMLElement;
     if (kbEvent.key !== "Enter" && kbEvent.key !== " ") return;
     if (target.classList.contains("toggle-switch")) {
       kbEvent.preventDefault();
-      const item = target.closest(".category-item") as HTMLElement;
-      const categoryId = item?.dataset.categoryId as CategoryId;
-      if (categoryId) {
-        preferences = await handleToggle(categoryId, preferences, profileSelect);
-        syncToggles(preferences);
-      }
+      safeAsync(async () => {
+        const item = target.closest(".category-item") as HTMLElement;
+        const categoryId = item?.dataset.categoryId as CategoryId;
+        if (categoryId) {
+          preferences = await handleToggle(categoryId, preferences, profileSelect);
+          syncToggles(preferences);
+        }
+      }, "toggle keydown");
     }
     if (target.classList.contains("info-btn")) {
       kbEvent.preventDefault();

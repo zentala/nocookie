@@ -8,6 +8,7 @@
 
 import type { ConsentResult, DomainOverride } from "@/shared/types";
 import { getAllConsentLogs, setDomainOverride } from "@/shared/storage-api";
+import { safeAsync } from "@/shared/ui-error-handler";
 
 /** Number of entries displayed per page. */
 export const PAGE_SIZE = 20;
@@ -337,7 +338,7 @@ class DashboardController {
 
     this.$("override-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      void this.saveOverride();
+      safeAsync(() => this.saveOverride(), "dashboard save override");
     });
   }
 
@@ -424,6 +425,6 @@ class DashboardController {
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
     const ctrl = new DashboardController();
-    void ctrl.init();
+    safeAsync(() => ctrl.init(), "dashboard init");
   });
 }

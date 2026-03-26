@@ -21,9 +21,11 @@ import { getTabState, updateTabState } from "./tab-state";
 
 /** Notify the popup (if open) that a tab's state has changed. */
 export function broadcastTabStateChange(tabId: number, state: BadgeState): void {
-  chrome.runtime.sendMessage({ type: "TAB_STATE_CHANGED", payload: { tabId, state } }).catch(() => {
-    // Popup not open — ignore
-  });
+  chrome.runtime
+    .sendMessage({ type: "TAB_STATE_CHANGED", payload: { tabId, state } })
+    .catch((err) => {
+      console.debug("[NoCookie] broadcastTabStateChange failed:", err);
+    });
 }
 
 /** Response for GET_PREFERENCES message. */

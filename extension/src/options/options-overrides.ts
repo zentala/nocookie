@@ -12,6 +12,7 @@ import {
   setDomainOverride,
 } from "@/shared/storage-api";
 import type { DomainOverride, UserPreferences } from "@/shared/types";
+import { safeAsync } from "@/shared/ui-error-handler";
 
 /** Currently editing domain (null = adding new). */
 let editingDomain: string | null = null;
@@ -72,7 +73,9 @@ export async function renderOverridesTable(): Promise<void> {
     deleteBtn.textContent = "Delete";
     deleteBtn.setAttribute("aria-label", `Delete override for ${domain}`);
     deleteBtn.dataset.domain = domain;
-    deleteBtn.addEventListener("click", () => deleteOverride(domain));
+    deleteBtn.addEventListener("click", () => {
+      safeAsync(() => deleteOverride(domain), "delete override");
+    });
 
     actionsCell.append(editBtn, deleteBtn);
     row.append(domainCell, modeCell, actionsCell);
@@ -242,7 +245,7 @@ export async function initOverrides(): Promise<void> {
   const form = document.querySelector("#override-modal form");
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
-    saveOverride();
+    safeAsync(() => saveOverride(), "save override");
   });
 
   await renderOverridesTable();

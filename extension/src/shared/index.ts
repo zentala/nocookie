@@ -44,6 +44,8 @@ export {
   DEFAULT_SYNC_STORAGE,
 } from "./storage";
 
+export { safeAsync } from "./ui-error-handler";
+
 export {
   CURRENT_SCHEMA_VERSION,
   clearConsentLogs,

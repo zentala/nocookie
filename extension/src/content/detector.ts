@@ -77,8 +77,8 @@ function notifyCmpDetected(cmp: string, confidence: ConfidenceLevel): void {
     confidence,
     layer: 1,
   });
-  chrome.runtime.sendMessage(message).catch(() => {
-    /* Extension context may be invalidated */
+  chrome.runtime.sendMessage(message).catch((err) => {
+    console.debug("[NoCookie] sendMessage failed:", err);
   });
 }
 
@@ -90,8 +90,8 @@ function notifyScanComplete(cmpFound: boolean): void {
     tabId: 0, // Background will use sender.tab.id
     cmpFound,
   });
-  chrome.runtime.sendMessage(message).catch(() => {
-    /* Extension context may be invalidated */
+  chrome.runtime.sendMessage(message).catch((err) => {
+    console.debug("[NoCookie] sendMessage failed:", err);
   });
 }
 
@@ -123,7 +123,9 @@ export function runDetection(): void {
 
   // Notify background that scan started
   const scanMsg = createMessage("SCAN_STARTED", { tabId: 0 });
-  chrome.runtime.sendMessage(scanMsg).catch(() => {});
+  chrome.runtime.sendMessage(scanMsg).catch((err) => {
+    console.debug("[NoCookie] sendMessage failed:", err);
+  });
 
   // Step 0: Check well-known file (async, does not block other detection)
   checkWellKnown()
@@ -222,8 +224,8 @@ function onExecutorMessage(event: MessageEvent): void {
 
   const result = event.data.payload as ConsentResult;
   const message = createMessage("CONSENT_EXECUTED", result);
-  chrome.runtime.sendMessage(message).catch(() => {
-    /* Extension context may be invalidated */
+  chrome.runtime.sendMessage(message).catch((err) => {
+    console.debug("[NoCookie] sendMessage failed:", err);
   });
 }
 

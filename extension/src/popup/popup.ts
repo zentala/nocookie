@@ -12,6 +12,7 @@ import { CATEGORY_META, PROFILE_LABELS } from "@/shared/categories";
 import { createMessage } from "@/shared/messages";
 import { getProfile, setProfile, setPreferences } from "@/shared/storage-api";
 import { getPreferencesForProfile } from "@/shared/categories";
+import { safeAsync } from "@/shared/ui-error-handler";
 
 /** Subset of TabState needed by the popup. */
 export interface PopupTabState {
@@ -217,7 +218,7 @@ async function loadTabState(el: PopupElements): Promise<void> {
 export function listenForStateChanges(el: PopupElements): void {
   chrome.runtime.onMessage.addListener((message: TabStateChangedNotification) => {
     if (message.type === "TAB_STATE_CHANGED") {
-      void loadTabState(el);
+      safeAsync(() => loadTabState(el), "state change listener");
     }
   });
 }
@@ -249,7 +250,7 @@ async function init(): Promise<void> {
   const currentProfile = await getProfile();
   populateProfileSelect(profileSelect, currentProfile);
   profileSelect.addEventListener("change", () => {
-    void onProfileChange(profileSelect.value as ProfileName);
+    safeAsync(() => onProfileChange(profileSelect.value as ProfileName), "popup profile change");
   });
 
   listenForStateChanges(el);

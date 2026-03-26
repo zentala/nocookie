@@ -7,6 +7,7 @@
 
 import { getSettings, updateSettings } from "@/shared/storage-api";
 import type { ExtensionSettings } from "@/shared/types";
+import { safeAsync } from "@/shared/ui-error-handler";
 
 /** Metadata for each advanced setting toggle. */
 interface SettingDef {
@@ -132,7 +133,7 @@ export async function initAdvanced(): Promise<void> {
   buildAdvancedPanel(container, settings);
 
   // Toggle click handler (event delegation)
-  container.addEventListener("click", async (e) => {
+  container.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     if (!target.classList.contains("toggle-switch")) return;
 
@@ -140,17 +141,17 @@ export async function initAdvanced(): Promise<void> {
     const current = target.getAttribute("aria-checked") === "true";
     const newValue = !current;
     target.setAttribute("aria-checked", String(newValue));
-    await updateSettings({ [key]: newValue });
+    safeAsync(() => updateSettings({ [key]: newValue }), "advanced toggle");
   });
 
   // Slider input handler
   const slider = document.getElementById("setting-consentDelay") as HTMLInputElement | null;
   const delayValue = document.getElementById("delay-value");
-  slider?.addEventListener("input", async () => {
+  slider?.addEventListener("input", () => {
     const value = Number(slider.value);
     if (delayValue) delayValue.textContent = `${value}ms`;
     slider.setAttribute("aria-valuenow", String(value));
     slider.setAttribute("aria-valuetext", `${value} milliseconds`);
-    await updateSettings({ consentDelay: value });
+    safeAsync(() => updateSettings({ consentDelay: value }), "consent delay");
   });
 }
