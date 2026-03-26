@@ -3,7 +3,7 @@
   "name": "NoCookie",
   "version": "0.1.0",
   "description": "Set cookie preferences once. Auto-apply everywhere.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "src/background/service-worker.ts",

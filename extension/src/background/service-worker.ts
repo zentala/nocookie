@@ -7,6 +7,7 @@
 
 import type { Message, MessageType } from "@/shared/messages";
 import { isOnboardingCompleted, migrateStorageIfNeeded } from "@/shared/storage-api";
+import { injectGpcScript, syncGpcState } from "./gpc";
 import {
   handleCmpDetected,
   handleConsentExecuted,
@@ -73,6 +74,7 @@ chrome.runtime.onMessage.addListener(
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   await migrateStorageIfNeeded();
+  await syncGpcState();
 
   if (details.reason === "install") {
     const completed = await isOnboardingCompleted();
@@ -82,7 +84,17 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 });
 
-/** Clear tab state when the tab navigates to a new URL. */
+/** Re-sync GPC state when preferences or settings change in storage. */
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "sync") {
+    return;
+  }
+  if (changes.preferences || changes.settings) {
+    syncGpcState();
+  }
+});
+
+/** Clear tab state and inject GPC script when the tab navigates to a new URL. */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.status === "loading" && changeInfo.url) {
     updateTabState(tabId, {
@@ -91,6 +103,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
       domain: undefined,
       result: undefined,
     });
+    injectGpcScript(tabId);
   }
 });
 
