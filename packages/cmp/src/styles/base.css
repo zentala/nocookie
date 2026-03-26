@@ -1,0 +1,27 @@
+/**
+ * Base styles for the NoCookie CMP Shadow DOM host.
+ * All styles are scoped via Shadow DOM encapsulation.
+ */
+
+:host {
+  display: block;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: inherit;
+}
+
+:host([hidden]) {
+  display: none;
+}

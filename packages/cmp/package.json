@@ -1,0 +1,42 @@
+{
+  "name": "@nocookie/cmp",
+  "version": "0.1.0",
+  "description": "Open-source CMP plugin with Shadow DOM UI for automatic cookie consent management",
+  "type": "module",
+  "main": "dist/nocookie-cmp.umd.cjs",
+  "module": "dist/nocookie-cmp.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/nocookie-cmp.esm.js",
+      "require": "./dist/nocookie-cmp.umd.cjs"
+    },
+    "./style.css": "./dist/nocookie-cmp.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.0.0",
+    "vitest": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@nocookie/schema": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@nocookie/schema": {
+      "optional": true
+    }
+  }
+}
