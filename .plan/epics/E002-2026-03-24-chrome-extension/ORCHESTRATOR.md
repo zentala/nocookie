@@ -264,6 +264,18 @@ Chrome Web Store submission and launch preparation.
   - **Complexity**: M
   - **Output**: Extension published on Chrome Web Store (or submitted for review)
 
+- [ ] **E002-T32** — Integrate website articles into site structure
+  - **Description**: The article "Approaches to Automating Cookie Consent" already exists at `website-content/articles/`. Add a blog/articles section to the Astro website. Integrate existing article, ensure it's linked from landing page and standard spec page. Add article listing page with metadata (date, author, tags).
+  - **Dependencies**: E002-T20
+  - **Complexity**: S
+  - **Output**: Article published on website, linked from landing page
+
+- [ ] **E002-T33** — Project naming brainstorm and branding
+  - **Description**: Brainstorm and decide on the final project name. Current working name "Cookies Accepter" may not be optimal. Consider: domain availability, Chrome Web Store name, npm scope, memorability, SEO, international appeal. Propose 10+ alternatives. Once decided: update all references (README, CLAUDE.md, manifests, mockups, standard spec). Create GitHub repo with chosen name.
+  - **Dependencies**: None (can run anytime, but should be decided before T24)
+  - **Complexity**: S
+  - **Output**: Final name decided, all references updated, GitHub repo created
+
 ---
 
 ## Dependency Graph
