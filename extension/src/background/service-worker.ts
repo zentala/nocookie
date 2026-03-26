@@ -8,6 +8,17 @@
 import type { Message, MessageType } from "@/shared/messages";
 import { isOnboardingCompleted, migrateStorageIfNeeded } from "@/shared/storage-api";
 import { injectGpcScript, syncGpcState } from "./gpc";
+
+/** Debounce timer for GPC sync to prevent race conditions from rapid preference changes. */
+let gpcSyncTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Debounced wrapper around syncGpcState to coalesce rapid storage changes. */
+function debouncedGpcSync(): void {
+  if (gpcSyncTimer) clearTimeout(gpcSyncTimer);
+  gpcSyncTimer = setTimeout(() => {
+    syncGpcState().catch((err) => console.error("[NoCookie] GPC sync failed:", err));
+  }, 100);
+}
 import { AutoconsentAdapter } from "./autoconsent-adapter";
 import { registerRuleSource } from "./rule-engine";
 import {
@@ -98,7 +109,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     return;
   }
   if (changes.preferences || changes.settings) {
-    syncGpcState();
+    debouncedGpcSync();
   }
 });
 
