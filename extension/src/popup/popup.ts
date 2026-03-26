@@ -243,7 +243,7 @@ async function init(): Promise<void> {
   });
   $("history-link").addEventListener("click", (e) => {
     e.preventDefault();
-    chrome.runtime.openOptionsPage();
+    void chrome.tabs.create({ url: chrome.runtime.getURL("src/dashboard/dashboard.html") });
   });
 
   const currentProfile = await getProfile();

@@ -17,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         onboarding: resolve(__dirname, "src/onboarding/onboarding.html"),
+        dashboard: resolve(__dirname, "src/dashboard/dashboard.html"),
       },
     },
   },

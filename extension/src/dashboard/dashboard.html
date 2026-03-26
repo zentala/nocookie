@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consent Dashboard - NoCookie</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="dashboard-header">
+        <h1>Consent Dashboard</h1>
+        <div class="header-actions">
+          <button id="export-btn" class="btn-secondary" aria-haspopup="true" aria-expanded="false">
+            Export &#x25BE;
+          </button>
+          <div id="export-menu" class="export-menu hidden" role="menu">
+            <button role="menuitem" data-format="json">Export as JSON</button>
+            <button role="menuitem" data-format="csv">Export as CSV</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="summary" aria-live="polite">
+        <span id="summary-total">0 popups handled across 0 sites</span>
+      </div>
+
+      <div class="filters" role="search" aria-label="Filter consent entries">
+        <input
+          type="search"
+          id="search-domain"
+          placeholder="Filter by domain..."
+          aria-label="Filter by domain"
+        />
+        <select id="filter-cmp" aria-label="Filter by CMP">
+          <option value="">All CMPs</option>
+        </select>
+        <select id="filter-method" aria-label="Filter by method">
+          <option value="">All Methods</option>
+        </select>
+        <select id="filter-confidence" aria-label="Filter by confidence">
+          <option value="">All Confidence</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <div id="consent-list" role="list" aria-label="Consent entries"></div>
+
+      <div class="pagination" aria-label="Pagination">
+        <button id="prev-page" disabled>&#x2190; Previous</button>
+        <span id="page-info" aria-live="polite">Page 1 of 1</span>
+        <button id="next-page" disabled>Next &#x2192;</button>
+      </div>
+
+      <dialog id="override-dialog" aria-labelledby="override-dialog-title">
+        <h2 id="override-dialog-title">
+          Override preferences for <span id="override-domain"></span>
+        </h2>
+        <form id="override-form" method="dialog">
+          <label>
+            <span>Mode</span>
+            <select id="override-mode">
+              <option value="custom">Custom</option>
+              <option value="whitelist">Whitelist (accept all)</option>
+              <option value="blacklist">Blacklist (reject all)</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </label>
+          <fieldset id="override-categories">
+            <legend>Categories</legend>
+            <label><input type="checkbox" checked disabled /> Essential</label>
+            <label><input type="checkbox" data-cat="functional" /> Functional</label>
+            <label><input type="checkbox" data-cat="analytics" /> Analytics</label>
+            <label><input type="checkbox" data-cat="marketing" /> Marketing</label>
+            <label><input type="checkbox" data-cat="socialMedia" /> Social Media</label>
+          </fieldset>
+          <div class="dialog-actions">
+            <button type="button" id="override-cancel">Cancel</button>
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+        </form>
+      </dialog>
+    </div>
+    <script type="module" src="dashboard.ts"></script>
+  </body>
+</html>

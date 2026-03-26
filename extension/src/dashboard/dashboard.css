@@ -1,0 +1,357 @@
+/**
+ * Consent dashboard styles.
+ * Full-page layout with search, filters, paginated list, and export menu.
+ */
+
+:root {
+  --c-bg: #fff;
+  --c-text: #1a1a1a;
+  --c-muted: #666;
+  --c-border: #e5e5e5;
+  --c-accent: #2563eb;
+  --c-accent-hover: #1d4ed8;
+  --c-success: #16a34a;
+  --c-error: #dc2626;
+  --c-high: #16a34a;
+  --c-medium: #ca8a04;
+  --c-low: #dc2626;
+  --r: 8px;
+  --r-sm: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 14px;
+  color: var(--c-text);
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.dashboard-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.header-actions {
+  position: relative;
+}
+
+.btn-secondary {
+  padding: 6px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.export-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.export-menu.hidden {
+  display: none;
+}
+
+.export-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.export-menu button:hover {
+  background: #f5f5f5;
+}
+
+.export-menu button:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -2px;
+}
+
+.summary {
+  font-size: 15px;
+  color: var(--c-muted);
+  margin-bottom: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 6px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.filters input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.filters input:focus-visible,
+.filters select:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+}
+
+.consent-entry {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.domain {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: var(--c-muted);
+}
+
+.entry-details {
+  font-size: 12px;
+  color: var(--c-muted);
+  margin-bottom: 4px;
+}
+
+.entry-categories {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.entry-categories .accepted {
+  color: var(--c-success);
+}
+
+.entry-categories .rejected {
+  color: var(--c-error);
+}
+
+.confidence-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.confidence-high {
+  background: #f0fdf4;
+  color: var(--c-high);
+}
+
+.confidence-medium {
+  background: #fefce8;
+  color: var(--c-medium);
+}
+
+.confidence-low {
+  background: #fef2f2;
+  color: var(--c-low);
+}
+
+.override-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: none;
+  font-size: 12px;
+  color: var(--c-accent);
+  cursor: pointer;
+}
+
+.override-btn:hover {
+  background: #eff6ff;
+}
+
+.override-btn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-bg);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pagination button:not(:disabled):hover {
+  background: #f5f5f5;
+}
+
+.pagination button:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+#page-info {
+  font-size: 13px;
+  color: var(--c-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--c-muted);
+}
+
+/* Dialog styles */
+dialog {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+dialog h2 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+dialog label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+dialog select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+dialog fieldset {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  margin: 12px 0;
+}
+
+dialog legend {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 0 4px;
+}
+
+dialog fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dialog-actions button {
+  padding: 6px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-bg);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--c-accent);
+  color: #fff;
+  border-color: var(--c-accent);
+}
+
+.btn-primary:hover {
+  background: var(--c-accent-hover);
+}
