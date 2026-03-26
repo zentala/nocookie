@@ -27,11 +27,13 @@ function installFullChromeMock(): { syncMock: StorageAreaMock; localMock: Storag
     action: {
       setBadgeText: vi.fn(() => Promise.resolve()),
       setBadgeBackgroundColor: vi.fn(() => Promise.resolve()),
+      setIcon: vi.fn(() => Promise.resolve()),
     },
     tabs: {
       create: vi.fn(() => Promise.resolve({ id: 99 })),
       onUpdated: { addListener: vi.fn() },
       onRemoved: { addListener: vi.fn() },
+      onActivated: { addListener: vi.fn() },
     },
     runtime: {
       onMessage: { addListener: vi.fn() },

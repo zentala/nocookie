@@ -20,7 +20,8 @@ import {
   handleScanStarted,
   handleUpdateBadge,
 } from "./message-handlers";
-import { clearTabState, updateTabState } from "./tab-state";
+import { clearTabState, getTabState, updateTabState } from "./tab-state";
+import { clearBadge, setBadgeState } from "./badge";
 
 /**
  * Route an incoming message to the correct handler.
@@ -101,7 +102,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
-/** Clear tab state and inject GPC script when the tab navigates to a new URL. */
+/** Clear tab state, badge, and inject GPC script when the tab navigates to a new URL. */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.status === "loading" && changeInfo.url) {
     updateTabState(tabId, {
@@ -110,8 +111,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
       domain: undefined,
       result: undefined,
     });
+    clearBadge(tabId);
     injectGpcScript(tabId);
   }
+});
+
+/** Show the correct badge when the user switches to a different tab. */
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  const { state } = getTabState(activeInfo.tabId);
+  setBadgeState(activeInfo.tabId, state);
 });
 
 /** Clean up tab state when a tab is closed. */
