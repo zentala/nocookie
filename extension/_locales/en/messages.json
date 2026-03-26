@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "NoCookie",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "Set cookie preferences once. Auto-apply everywhere.",
+    "description": "Extension description shown in Chrome Web Store"
+  }
+}
