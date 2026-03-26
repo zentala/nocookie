@@ -1,4 +1,4 @@
-# Cookies Accepter
+# NoCookie
 
 ## Who is the target user?
 - **End users**: people tired of cookie popups who want to set preferences once
@@ -11,7 +11,7 @@ An open standard + Chrome extension + CMP plugin for automatic cookie consent ma
 ## Project Type
 Monorepo with:
 - Chrome extension (TypeScript, Manifest V3)
-- CMP plugin (`@cookies-accepter/cmp`, Shadow DOM, CDN + npm)
+- CMP plugin (`@nocookie/cmp`, Shadow DOM, CDN + npm)
 - Website (Astro, Cloudflare Pages)
 - Open standard specification (`/.well-known/cookie-consent.json`)
 

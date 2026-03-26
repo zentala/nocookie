@@ -1,6 +1,6 @@
 ---
 id: E003
-title: Cookies Accepter CMP — Task Breakdown & Execution Plan
+title: NoCookie CMP — Task Breakdown & Execution Plan
 status: planned
 created: 2026-03-24
 ---
@@ -45,7 +45,7 @@ All four tasks are independent and can run in parallel.
 ### E003-T01: Project Scaffolding & Build Setup
 **Complexity**: Medium | **Estimate**: 4h
 
-- [ ] Initialize `@cookies-accepter/cmp` package with `pnpm init`
+- [ ] Initialize `@nocookie/cmp` package with `pnpm init`
 - [ ] Configure Vite in library mode (UMD + ESM outputs)
 - [ ] Set up TypeScript (strict mode, path aliases)
 - [ ] Configure ESLint, Prettier, Vitest
@@ -57,7 +57,7 @@ All four tasks are independent and can run in parallel.
 - [ ] Create `.gitattributes` with LF line endings
 - [ ] Verify `pnpm build` produces `dist/` with UMD, ESM, and CSS outputs
 
-**Output**: Build system that produces `cookies-accepter-cmp.min.js`, `.esm.js`, and `.css`.
+**Output**: Build system that produces `nocookie-cmp.min.js`, `.esm.js`, and `.css`.
 
 ### E003-T02: Core Types & Config Schema
 **Complexity**: Medium | **Estimate**: 3h
@@ -223,7 +223,7 @@ T09, T10, T11, T12 are all independent of each other. All four can run in parall
 - [ ] Generate `/.well-known/cookie-consent.json` from CMP config
 - [ ] Include: version, categories, CMP name/version
 - [ ] Include: selectors (banner, acceptAll, rejectAll, preferences, save)
-- [ ] Include: API endpoints (`CookiesAccepterCMP.acceptAll()`, etc.)
+- [ ] Include: API endpoints (`NoCookieCMP.acceptAll()`, etc.)
 - [ ] Include: categorySelectors (toggle selectors per category)
 - [ ] Include: GPC/TCF flags from behavior config
 - [ ] Include: contact and policyUrl from config
@@ -308,13 +308,13 @@ T13, T14, T15, T16, T20, T21 are all independent. All six can run in parallel. T
 ### E003-T15: CDN Bundle & npm Package Publishing
 **Complexity**: Medium | **Estimate**: 4h
 
-- [ ] Configure Vite to produce UMD bundle with global `CookiesAccepterCMP`
-- [ ] Configure ESM bundle for `import { CookiesAccepterCMP } from '@cookies-accepter/cmp'`
+- [ ] Configure Vite to produce UMD bundle with global `NoCookieCMP`
+- [ ] Configure ESM bundle for `import { NoCookieCMP } from '@nocookie/cmp'`
 - [ ] Extract CSS into separate file
 - [ ] Generate source maps
 - [ ] Set up `package.json` fields: main, module, types, exports, files
 - [ ] Create CDN hosting on Cloudflare R2 or Pages
-- [ ] Set up versioned CDN URLs: `cdn.cookies-accepter.org/cmp/v1/cookies-accepter-cmp.min.js`
+- [ ] Set up versioned CDN URLs: `cdn.nocookie.zentala.io/cmp/v1/nocookie-cmp.min.js`
 - [ ] Set up npm publishing pipeline (GitHub Actions)
 - [ ] Set up SRI (Subresource Integrity) hashes for CDN scripts
 - [ ] Create `CHANGELOG.md` for version tracking
@@ -357,7 +357,7 @@ T13, T14, T15, T16, T20, T21 are all independent. All six can run in parallel. T
 - [ ] Package all compliance badges as standalone SVGs
 - [ ] Create a CSS file with badge classes for direct HTML embedding
 - [ ] Create downloadable ZIP archive with all icons, badges, and CSS
-- [ ] Publish badge kit on cookies-accepter.org as a downloadable resource
+- [ ] Publish badge kit on nocookie.zentala.io as a downloadable resource
 - [ ] Create usage guide: how to embed badges in site footer, README, documentation
 - [ ] Ensure all SVGs are optimized (SVGO) and accessible (aria-labels, title elements)
 
@@ -393,7 +393,7 @@ T17, T18, and T22 are independent and can run in parallel. T22 depends on T08 (i
 - [ ] Create migration guide from Cookiebot/OneTrust (what to put in config)
 - [ ] Write "How it works" architecture overview
 - [ ] Write "Extension integration" guide for advanced users
-- [ ] Create demo page on cookies-accepter.org showing the CMP in action
+- [ ] Create demo page on nocookie.zentala.io showing the CMP in action
 - [ ] TSDocs on all public interfaces and methods
 
 **Output**: Complete documentation set and live demo.
@@ -401,12 +401,12 @@ T17, T18, and T22 are independent and can run in parallel. T22 depends on T08 (i
 ### E003-T18: Extension-Side Integration (E002 Update)
 **Complexity**: Medium | **Estimate**: 4h
 
-- [ ] Add `cookies-accepter` to extension's CMP detection rules (Layer 3: `#ca-cmp-root`)
+- [ ] Add `nocookie` to extension's CMP detection rules (Layer 3: `#ca-cmp-root`)
 - [ ] Implement `CA_EXTENSION_HELLO` message sending in `executor.ts`
 - [ ] Implement `CA_EXTENSION_ACK` response handling
 - [ ] Set consent method to `'extension-native'` in consent log
 - [ ] Set confidence to `'high'` for native CMP detection
-- [ ] Update popup to show "Cookies Accepter CMP" as detected CMP name
+- [ ] Update popup to show "NoCookie CMP" as detected CMP name
 - [ ] Add special icon/badge in popup for native CMP sites
 - [ ] Integration test: extension + CMP on same test page
 - [ ] Update extension's `well-known-reader.ts` to recognize our CMP in well-known file
@@ -416,7 +416,7 @@ T17, T18, and T22 are independent and can run in parallel. T22 depends on T08 (i
 ### E003-T22: Visual Preview / Configurator Tool
 **Complexity**: High | **Estimate**: 12h
 
-- [ ] Create web page at cookies-accepter.org/configurator
+- [ ] Create web page at nocookie.zentala.io/configurator
 - [ ] Implement Step 1: Basic Info form (site name, contact, policy URL, language)
 - [ ] Implement Step 2: Cookie Categories configurator
   - [ ] Toggle categories on/off (essential always on)
@@ -445,7 +445,7 @@ T17, T18, and T22 are independent and can run in parallel. T22 depends on T08 (i
 - [ ] Responsive layout for the configurator itself
 - [ ] Unit tests for config generation; E2E tests for the full configurator flow
 
-**Output**: Hosted configurator tool at cookies-accepter.org/configurator — the primary conversion funnel for CMP adoption.
+**Output**: Hosted configurator tool at nocookie.zentala.io/configurator — the primary conversion funnel for CMP adoption.
 
 ---
 

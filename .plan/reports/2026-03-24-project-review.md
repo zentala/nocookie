@@ -1,4 +1,4 @@
-# Project Review — Cookies Accepter
+# Project Review — NoCookie
 
 **Reviewer**: Senior Technical Reviewer (Claude Opus 4.6)
 **Date**: 2026-03-24
@@ -20,7 +20,7 @@
 
 - **ARCHITECTURE.md vs. PLAN.md**: ARCHITECTURE.md (line 28) describes the standard as "HTML metadata tags for machine-readable cookie consent UI" while PLAN.md section 4 defines it as `/.well-known/cookie-consent.json` (a JSON file, not HTML meta tags). The ARCHITECTURE.md is outdated and contradicts the actual design. **Must be updated.**
 
-- **ARCHITECTURE.md vs. PLAN.md directory structure**: ARCHITECTURE.md shows `packages/` as "Shared code (if needed)" but PLAN.md section 2.1 defines the extension structure under `cookies-accepter-extension/` (flat). The PLAN.md also introduces `packages/schema/` in T17. These two visions of the repo layout are inconsistent.
+- **ARCHITECTURE.md vs. PLAN.md directory structure**: ARCHITECTURE.md shows `packages/` as "Shared code (if needed)" but PLAN.md section 2.1 defines the extension structure under `nocookie-extension/` (flat). The PLAN.md also introduces `packages/schema/` in T17. These two visions of the repo layout are inconsistent.
 
 - **README.md vs. PLAN.md**: README.md (line 16) says "Open Standard -- a set of HTML metadata tags" but the actual standard design in PLAN.md is a `.well-known` JSON file. README needs updating.
 
@@ -310,7 +310,7 @@ These can be fixed in the current session with minimal effort:
 
 ## Summary
 
-The Cookies Accepter project has exceptionally thorough research, strong legal grounding, and a well-reasoned strategic position. The research reports are among the best I have seen for a project at this stage -- comprehensive, well-sourced, and actionable.
+The NoCookie project has exceptionally thorough research, strong legal grounding, and a well-reasoned strategic position. The research reports are among the best I have seen for a project at this stage -- comprehensive, well-sourced, and actionable.
 
 The main risks are:
 1. **Scope creep**: Three deliverables (extension + standard + website) in one epic, 24 tasks, 27-39 days. Ship the extension first.

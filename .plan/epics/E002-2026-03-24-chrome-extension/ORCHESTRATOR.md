@@ -271,7 +271,7 @@ Chrome Web Store submission and launch preparation.
   - **Output**: Article published on website, linked from landing page
 
 - [ ] **E002-T33** — Project naming brainstorm and branding
-  - **Description**: Brainstorm and decide on the final project name. Current working name "Cookies Accepter" may not be optimal. Consider: domain availability, Chrome Web Store name, npm scope, memorability, SEO, international appeal. Propose 10+ alternatives. Once decided: update all references (README, CLAUDE.md, manifests, mockups, standard spec). Create GitHub repo with chosen name.
+  - **Description**: Brainstorm and decide on the final project name. Current working name "NoCookie" may not be optimal. Consider: domain availability, Chrome Web Store name, npm scope, memorability, SEO, international appeal. Propose 10+ alternatives. Once decided: update all references (README, CLAUDE.md, manifests, mockups, standard spec). Create GitHub repo with chosen name.
   - **Dependencies**: None (can run anytime, but should be decided before T24)
   - **Complexity**: S
   - **Output**: Final name decided, all references updated, GitHub repo created

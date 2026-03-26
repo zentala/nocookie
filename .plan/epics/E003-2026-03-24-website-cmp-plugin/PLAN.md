@@ -1,12 +1,12 @@
 ---
 id: E003
-title: Cookies Accepter CMP — Open Source Website Consent Plugin
+title: NoCookie CMP — Open Source Website Consent Plugin
 status: planned
 created: 2026-03-24
 depends_on: E002
 ---
 
-# E003: Cookies Accepter CMP — Website Consent Management Plugin
+# E003: NoCookie CMP — Website Consent Management Plugin
 
 ## 1. Problem Statement
 
@@ -77,9 +77,9 @@ Three installation methods, same core package:
 
 **Method 1 — CDN Script Tag (simplest)**:
 ```html
-<script src="https://cdn.cookies-accepter.org/cmp/v1/cookies-accepter-cmp.min.js"></script>
+<script src="https://cdn.nocookie.zentala.io/cmp/v1/nocookie-cmp.min.js"></script>
 <script>
-  CookiesAccepterCMP.init({
+  NoCookieCMP.init({
     siteName: "My Website",
     categories: ["essential", "analytics"]
   });
@@ -88,12 +88,12 @@ Three installation methods, same core package:
 
 **Method 2 — npm Package (for build systems)**:
 ```bash
-pnpm add @cookies-accepter/cmp
+pnpm add @nocookie/cmp
 ```
 ```typescript
-import { CookiesAccepterCMP } from '@cookies-accepter/cmp';
+import { NoCookieCMP } from '@nocookie/cmp';
 
-CookiesAccepterCMP.init({
+NoCookieCMP.init({
   siteName: "My Website",
   categories: ["essential", "analytics", "marketing"]
 });
@@ -105,7 +105,7 @@ WordPress admin panel wrapping the core JS library with a settings page.
 ### 3.2 Package Structure
 
 ```
-@cookies-accepter/cmp/
+@nocookie/cmp/
   src/
     core/
       config.ts              -- config parsing, validation, defaults
@@ -136,18 +136,18 @@ WordPress admin panel wrapping the core JS library with a settings page.
   assets/
     icons/                   -- SVG icon set for categories and badges
   dist/
-    cookies-accepter-cmp.min.js     -- UMD bundle (CDN)
-    cookies-accepter-cmp.esm.js     -- ESM bundle (npm)
-    cookies-accepter-cmp.css        -- extracted CSS
+    nocookie-cmp.min.js     -- UMD bundle (CDN)
+    nocookie-cmp.esm.js     -- ESM bundle (npm)
+    nocookie-cmp.css        -- extracted CSS
 ```
 
 ### 3.3 JavaScript API
 
-The CMP exposes a global `CookiesAccepterCMP` object (or ES module export):
+The CMP exposes a global `NoCookieCMP` object (or ES module export):
 
 ```typescript
 /** Core CMP interface exposed to website owners and the extension */
-interface CookiesAccepterCMPAPI {
+interface NoCookieCMPAPI {
   /** Initialize the CMP with configuration */
   init(config: CMPConfig): void;
 
@@ -316,14 +316,14 @@ The event bus supports both internal communication and external hooks:
 
 ```typescript
 // Website owner hooks into consent changes
-CookiesAccepterCMP.on('consent:updated', (state) => {
+NoCookieCMP.on('consent:updated', (state) => {
   if (state.analytics) {
     loadGoogleAnalytics();
   }
 });
 
 // Conditional script loading pattern
-CookiesAccepterCMP.on('consent:granted', ({ category }) => {
+NoCookieCMP.on('consent:granted', ({ category }) => {
   if (category === 'marketing') {
     loadFacebookPixel();
   }
@@ -411,7 +411,7 @@ This is enough. The CMP will:
 
 ```json
 {
-  "$schema": "https://cdn.cookies-accepter.org/cmp/v1/config-schema.json",
+  "$schema": "https://cdn.nocookie.zentala.io/cmp/v1/config-schema.json",
   "version": "1.0",
   "siteName": "Acme Corp",
   "siteUrl": "https://acme.com",
@@ -539,7 +539,7 @@ This is enough. The CMP will:
     "savePreferences": "Save Preferences",
     "learnMore": "Learn more",
     "cookiePolicy": "Cookie Policy",
-    "poweredBy": "Powered by Cookies Accepter"
+    "poweredBy": "Powered by NoCookie"
   },
 
   "wellKnown": {
@@ -701,7 +701,7 @@ Small badges indicating specific compliance features:
 | **GDPR Compliant** | EU flag star circle + checkmark | Meets GDPR consent requirements |
 | **GPC Respected** | Shield with "GPC" text | Honors Global Privacy Control signal |
 | **Standard Compliant** | Our logo + "v1" | Publishes `/.well-known/cookie-consent.json` |
-| **Extension Ready** | Our extension icon + lightning bolt | Native integration with Cookies Accepter extension |
+| **Extension Ready** | Our extension icon + lightning bolt | Native integration with NoCookie extension |
 
 ### 5.5 Visual Language Rules
 
@@ -812,8 +812,8 @@ You can change your preferences at any time:
 
 You can also:
 - Clear all cookies by clearing your browser data
-- Use the Cookies Accepter browser extension to manage
-  preferences across all websites: cookies-accepter.org
+- Use the NoCookie browser extension to manage
+  preferences across all websites: nocookie.zentala.io
 
 ----------------------------------------------------------------
 WHAT ARE COOKIES?
@@ -850,9 +850,9 @@ Website: https://acme.com/imprint
 POWERED BY
 ----------------------------------------------------------------
 
-This cookie policy is managed by Cookies Accepter CMP,
+This cookie policy is managed by NoCookie CMP,
 an open-source consent management platform.
-https://cookies-accepter.org
+https://nocookie.zentala.io
 
 ================================================================
 ```
@@ -874,10 +874,10 @@ The generated policy page includes:
 
 The extension detects our CMP via multiple signals (highest priority first):
 
-1. **Well-known file**: `/.well-known/cookie-consent.json` with `"cmp": { "name": "cookies-accepter" }`
+1. **Well-known file**: `/.well-known/cookie-consent.json` with `"cmp": { "name": "nocookie" }`
 2. **DOM marker**: The CMP root element `#ca-cmp-root` with `data-ca-version="1.0"`
 3. **Global object**: `window.__cookiesAccepterCMP` is defined (set by our CMP script)
-4. **Meta tag**: `<meta name="cmp" content="cookies-accepter">`
+4. **Meta tag**: `<meta name="cmp" content="nocookie">`
 
 The extension's `detector.ts` checks for `#ca-cmp-root` in its DOM selector scan (Layer 3). This is the fastest detection path — no network request needed.
 
@@ -1147,8 +1147,8 @@ Full-width page content, designed to be injected into the site's existing layout
   [DPO info, email]
 
   ============================================================
-  Powered by Cookies Accepter CMP (open source)
-  cookies-accepter.org
+  Powered by NoCookie CMP (open source)
+  nocookie.zentala.io
 ================================================================
 ```
 
@@ -1345,9 +1345,9 @@ A web-based tool where website owners can configure their CMP and see a live pre
 
 ### 12.3 Technical Implementation
 
-- Built as a standalone page on cookies-accepter.org
+- Built as a standalone page on nocookie.zentala.io
 - Uses the actual CMP library for preview rendering (not a mockup)
-- Config state managed in URL hash for shareability (e.g., `cookies-accepter.org/configurator#config=base64...`)
+- Config state managed in URL hash for shareability (e.g., `nocookie.zentala.io/configurator#config=base64...`)
 - No server required — all client-side
 - Export generates downloadable files via Blob URLs
 

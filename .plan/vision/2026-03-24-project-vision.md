@@ -1,4 +1,4 @@
-# Cookies Accepter — Project Vision
+# NoCookie — Project Vision
 
 ## Mission
 Give users real control over cookie consent — the way the EU intended — without the friction of clicking through popups on every website.

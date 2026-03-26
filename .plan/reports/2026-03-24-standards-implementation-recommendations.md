@@ -1,4 +1,4 @@
-# Standards Implementation Recommendations for Cookies Accepter
+# Standards Implementation Recommendations for NoCookie
 
 **Date**: 2026-03-24
 **Type**: Implementation recommendations
@@ -8,7 +8,7 @@
 
 ## Purpose
 
-This document translates findings from the consent standards analysis into concrete implementation decisions for the Cookies Accepter extension and open standard. Each recommendation identifies what concept to borrow, which standard it comes from, how to implement it, and its priority.
+This document translates findings from the consent standards analysis into concrete implementation decisions for the NoCookie extension and open standard. Each recommendation identifies what concept to borrow, which standard it comes from, how to implement it, and its priority.
 
 ---
 

@@ -1,6 +1,6 @@
-# Domain Definitions — Cookies Accepter
+# Domain Definitions — NoCookie
 
-Ubiquitous language for the Cookies Accepter project. All team members, agents, and documentation use these terms consistently.
+Ubiquitous language for the NoCookie project. All team members, agents, and documentation use these terms consistently.
 
 ---
 

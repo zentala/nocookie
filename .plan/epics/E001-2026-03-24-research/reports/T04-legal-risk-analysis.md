@@ -1,4 +1,4 @@
-# T04: Legal Risk Analysis — Cookies Accepter Extension
+# T04: Legal Risk Analysis — NoCookie Extension
 
 **Date**: 2026-03-24
 **Epic**: E001 - Research
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This report analyzes the legal risks and threats facing a Chrome extension ("Cookies Accepter") that automatically handles cookie consent popups based on user-configured preferences, and proposes an open standard for machine-readable cookie consent metadata.
+This report analyzes the legal risks and threats facing a Chrome extension ("NoCookie") that automatically handles cookie consent popups based on user-configured preferences, and proposes an open standard for machine-readable cookie consent metadata.
 
 The overall legal risk profile is **moderate-to-low for privacy-enhancing operation** (auto-rejecting non-essential cookies) and **moderate for auto-accepting operation**. No cookie consent browser extension has faced a successful lawsuit to date. The regulatory trend strongly favors automated consent tools — the EU's Digital Omnibus Proposal (November 2025) would legally mandate browser-based consent signals, and California's AB 566 already requires browsers to include opt-out signals by January 2027.
 

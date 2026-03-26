@@ -1,7 +1,7 @@
 # E002 Journal
 
 ## Session 2026-03-24 — 2026-03-26 (multi-day planning session)
-- **Goal**: Design the complete Cookies Accepter ecosystem — research, architecture, mockups, reviews
+- **Goal**: Design the complete NoCookie ecosystem — research, architecture, mockups, reviews
 - **Done**:
   - E001 research: 5 reports (extensions, GDPR, CMP patterns, legal, EU direction) — commits 8785402, 711e480, 7db5e8e
   - E002 solution design: 31 tasks across 7 waves — commit 711e480, expanded 4210ed5

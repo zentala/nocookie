@@ -1,4 +1,4 @@
-# CEO Strategic Review -- Cookies Accepter
+# CEO Strategic Review -- NoCookie
 
 **Reviewer**: CEO / Founder
 **Date**: 2026-03-26
@@ -261,7 +261,7 @@ The second "holy shit" moment: the statistics page after a month. "You visited 4
 
 The personas report identifies an underexplored market that deserves a callout: **web scraping / QA / DevOps engineers** who fight cookie popups in automated pipelines. This is potentially a larger and more monetizable market than end-user privacy enthusiasts.
 
-A `@cookies-accepter/playwright` fixture that auto-handles consent in E2E tests would be immediately useful to thousands of engineering teams. It does not require the standard, does not require a website, and could be built as a standalone npm package wrapping the same rule engine.
+A `@nocookie/playwright` fixture that auto-handles consent in E2E tests would be immediately useful to thousands of engineering teams. It does not require the standard, does not require a website, and could be built as a standalone npm package wrapping the same rule engine.
 
 This is not a v1 priority but should be the first revenue opportunity we explore. A free Playwright plugin with a paid "enterprise rules" tier ($99/month for guaranteed SLA on rule updates) is a clean business model that funds the open-source work.
 

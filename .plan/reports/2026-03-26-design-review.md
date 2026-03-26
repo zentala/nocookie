@@ -1,4 +1,4 @@
-# Design Review: Cookies Accepter
+# Design Review: NoCookie
 
 **Date**: 2026-03-26
 **Reviewer**: Senior Product Designer
@@ -82,8 +82,8 @@
 
 **Issues**:
 - The spec page lacks a "Contributing" section. Developers who want to add rules for new CMPs have no guidance.
-- The JSON Schema section shows the full schema inline, but the schema URL at the bottom (`cookies-accepter.org/standard/v1/schema.json`) is not prominently featured. Developers need the schema URL upfront for IDE integration.
-- No API reference page exists. The E003 CMP exposes a rich JavaScript API (`CookiesAccepterCMP.init()`, `.on()`, `.getConsent()`, etc.) but there is no documentation mockup for it.
+- The JSON Schema section shows the full schema inline, but the schema URL at the bottom (`nocookie.zentala.io/standard/v1/schema.json`) is not prominently featured. Developers need the schema URL upfront for IDE integration.
+- No API reference page exists. The E003 CMP exposes a rich JavaScript API (`NoCookieCMP.init()`, `.on()`, `.getConsent()`, etc.) but there is no documentation mockup for it.
 
 **Priority**: P2 for contributing section, P3 for schema URL placement, P2 for API docs page.
 
@@ -413,7 +413,7 @@ Website owners implementing the CMP plugin should be able to preview their banne
 
 ## Summary
 
-The Cookies Accepter design is strong in its core surfaces (popup states, options page structure, spec documentation, landing page narrative). The visual language is cohesive and distinctive. The information architecture makes sense for its multiple audiences.
+The NoCookie design is strong in its core surfaces (popup states, options page structure, spec documentation, landing page narrative). The visual language is cohesive and distinctive. The information architecture makes sense for its multiple audiences.
 
 The critical gaps are:
 1. **No onboarding** -- the most important UX flow is missing entirely

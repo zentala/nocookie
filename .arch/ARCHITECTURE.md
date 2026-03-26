@@ -1,13 +1,13 @@
-# Architecture — Cookies Accepter
+# Architecture — NoCookie
 
 ## System Overview
 
 Four components in a monorepo, connected by an open standard:
 
 ```
-cookies-accepter/
+nocookie/
 ├── extension/      → Chrome Extension (Manifest V3, TypeScript)
-├── cmp-plugin/     → CMP widget for websites (@cookies-accepter/cmp)
+├── cmp-plugin/     → CMP widget for websites (@nocookie/cmp)
 ├── website/        → Project website (Astro, Cloudflare Pages)
 └── standard/       → Open standard specification
 ```
@@ -109,12 +109,12 @@ interface UserPreferences {
 
 ---
 
-## 2. CMP Plugin (@cookies-accepter/cmp)
+## 2. CMP Plugin (@nocookie/cmp)
 
 ### Distribution
 
 - CDN script tag (simplest)
-- npm package (`@cookies-accepter/cmp`)
+- npm package (`@nocookie/cmp`)
 - WordPress plugin (future)
 
 ### Architecture

@@ -6,7 +6,7 @@ created: 2026-03-24
 depends_on: E001
 ---
 
-# E002: Cookies Accepter — Solution Design
+# E002: NoCookie — Solution Design
 
 ## 1. Problem Statement
 
@@ -26,7 +26,7 @@ Every website shows a cookie consent popup. Users click through hundreds of thes
 ### 2.1 Manifest V3 Structure
 
 ```
-cookies-accepter-extension/
+nocookie-extension/
   manifest.json
   src/
     background/
@@ -73,7 +73,7 @@ cookies-accepter-extension/
 ```json
 {
   "manifest_version": 3,
-  "name": "Cookies Accepter",
+  "name": "NoCookie",
   "version": "0.1.0",
   "description": "Set cookie preferences once. Auto-apply everywhere.",
   "permissions": [
@@ -404,7 +404,7 @@ The popup is the primary interaction surface. It shows the current page's status
 
 ```
 +--------------------------------------+
-|  Cookies Accepter          [gear]    |
+|  NoCookie          [gear]    |
 +--------------------------------------+
 |  example.com                         |
 |  [green circle] Popup handled        |
@@ -605,7 +605,7 @@ The badge text can optionally show the number of categories accepted (e.g., "1" 
 Step 1: Welcome
 +--------------------------------------+
 |  [shield icon]                       |
-|  Welcome to Cookies Accepter         |
+|  Welcome to NoCookie         |
 |                                      |
 |  Cookie popups are about to become   |
 |  a thing of the past. Let's set up   |
@@ -917,7 +917,7 @@ This file helps AI agents implement the Cookie Consent Open Standard on this web
 2. Map the CMP's categories to the standard taxonomy
 3. Find the banner, accept, reject, preferences selectors
 4. Create /.well-known/cookie-consent.json following the schema at:
-   https://cookies-accepter.org/standard/v1/schema.json
+   https://nocookie.zentala.io/standard/v1/schema.json
 
 ## Quick Start
 Copy this template and fill in your site's values:
@@ -939,7 +939,7 @@ AI agents discover the spec via:
 ### 6.1 Site Map
 
 ```
-cookies-accepter.org/
+nocookie.zentala.io/
   /                           -- Landing page (hero, what/why/how)
   /extension                  -- Download page (Chrome Web Store link, screenshots)
   /standard                   -- Standard overview (why, quick start)
@@ -964,7 +964,7 @@ cookies-accepter.org/
 - **Styling**: Tailwind CSS
 - **Validator**: client-side JS (fetch URL, validate against schema, report)
 - **Analytics**: Plausible or Fathom (privacy-respecting, no cookie needed)
-- **Domain**: `cookies-accepter.org` or `cookie-consent.org` (TBD)
+- **Domain**: `nocookie.zentala.io` or `cookie-consent.org` (TBD)
 
 ### 6.3 Landing Page Structure
 
@@ -980,7 +980,7 @@ cookies-accepter.org/
 
 ### 6.4 Online Validator/Generator Tool
 
-**Location**: `cookies-accepter.org/validator`
+**Location**: `nocookie.zentala.io/validator`
 
 **Critical for adoption**: Website owners need a tool to create and validate `cookie-consent.json` files. Without this, the "For Website Owners" adoption story has no endpoint (design review finding). This is the conversion funnel for standard adoption.
 
@@ -1110,7 +1110,7 @@ Website owner decides to adopt standard
   Deploy to web server
          |
          v
-  Validate at cookies-accepter.org/validator
+  Validate at nocookie.zentala.io/validator
          |
          v
   Extension users get perfect consent handling on this site
@@ -1123,7 +1123,7 @@ AI agent (copilot, Claude, GPT, etc.) is asked:
   "Add cookie consent machine-readability to my site"
          |
          v
-  Agent reads spec at cookies-accepter.org/standard/v1
+  Agent reads spec at nocookie.zentala.io/standard/v1
   Agent reads /cookie-consent-instructions.md on the site
          |
          v

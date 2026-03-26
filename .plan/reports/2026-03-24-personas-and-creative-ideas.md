@@ -17,17 +17,17 @@
 **Their pain point**: Cookie consent popups are the single most common blocker for web scraping pipelines. A bot hits a site, a modal overlay covers the entire viewport, and every `page.click('.product-price')` fails because the element is obscured. Engineers spend hours writing fragile per-site consent dismissal logic. Worse, CMP vendors update their DOM quarterly, breaking all those scripts simultaneously. One OneTrust update can take down 200 scrapers overnight. Many engineers resort to injecting CSS to hide banners (`display: none`), which does not actually set cookies properly and causes downstream issues (missing analytics data, broken A/B tests on the target site, or the banner re-appearing on every page load because consent was never recorded).
 
 **What they'd want from our tool**:
-- An npm package (`@cookies-accepter/core`) they can import into Node.js scripts
+- An npm package (`@nocookie/core`) they can import into Node.js scripts
 - A Playwright plugin that auto-handles consent before any test assertion runs
 - Headless mode support (no UI, just the consent engine)
-- A CLI tool: `npx cookies-accepter handle --url https://example.com --profile reject-all`
+- A CLI tool: `npx nocookie handle --url https://example.com --profile reject-all`
 - Programmatic API: `await handleConsent(page, { marketing: false, analytics: true })`
 - Zero false positives (never clicks the wrong button in production pipelines)
 
 **Creative feature ideas**:
-1. **Playwright fixture**: `const page = await consentHandledPage(browser, { profile: 'reject-all' })` -- a drop-in fixture that wraps Playwright's `page` with automatic consent handling. Publish as `@cookies-accepter/playwright`.
-2. **Puppeteer plugin**: `await page.handleCookieConsent({ analytics: true })` -- monkey-patches the Page class. Publish as `@cookies-accepter/puppeteer`.
-3. **Docker image**: `docker run cookies-accepter/headless --url https://example.com` -- a self-contained headless browser that handles consent and returns the clean page HTML or a screenshot. Useful for CI pipelines.
+1. **Playwright fixture**: `const page = await consentHandledPage(browser, { profile: 'reject-all' })` -- a drop-in fixture that wraps Playwright's `page` with automatic consent handling. Publish as `@nocookie/playwright`.
+2. **Puppeteer plugin**: `await page.handleCookieConsent({ analytics: true })` -- monkey-patches the Page class. Publish as `@nocookie/puppeteer`.
+3. **Docker image**: `docker run nocookie/headless --url https://example.com` -- a self-contained headless browser that handles consent and returns the clean page HTML or a screenshot. Useful for CI pipelines.
 4. **Scrapy middleware**: Python middleware that intercepts responses, detects consent modals, and handles them before passing the response to the spider.
 5. **Webhook/callback API**: `onConsentHandled(result => log(result))` -- for monitoring pipelines that need to know what was consented to on each domain.
 
@@ -98,7 +98,7 @@
 1. **Accessibility score for cookie popups**: Rate each CMP/site's cookie popup on a 1-5 accessibility scale based on automated checks (focus trap, ARIA labels, contrast ratio, keyboard navigability). Display in the extension popup. Aggregate data could become a public "Cookie Popup Accessibility Index."
 2. **"Screen reader mode"**: If the extension cannot auto-handle a popup, it rewrites the popup's HTML to be accessible -- adds ARIA labels, fixes tab order, increases contrast -- before the user interacts with it.
 3. **European Accessibility Act compliance checker**: Since EAA (June 2025) requires accessible digital services, our extension could flag when a cookie popup violates EAA requirements and generate a complaint template for the user to send to the DPA.
-4. **Accessibility-first marketing**: Position Cookies Accepter as "the accessibility tool that also handles privacy" -- getting endorsement from organizations like IAAP, Deque, or WebAIM.
+4. **Accessibility-first marketing**: Position NoCookie as "the accessibility tool that also handles privacy" -- getting endorsement from organizations like IAAP, Deque, or WebAIM.
 5. **Partnership with screen reader vendors**: Work with JAWS, NVDA, and VoiceOver teams to ensure our extension interoperates perfectly. Could lead to bundling recommendations.
 
 **How to reach them**:
@@ -128,11 +128,11 @@
 - Zero UI (headless only)
 - Deterministic behavior (same input = same output, no randomness)
 - Sub-100ms execution time (monitoring budgets are tight)
-- Prometheus/Grafana metrics endpoint: `cookies_accepter_popups_handled_total`
+- Prometheus/Grafana metrics endpoint: `nocookie_popups_handled_total`
 - Structured logging (JSON) for integration with observability stacks
 
 **Creative feature ideas**:
-1. **Monitoring-as-Code integration**: Terraform/Pulumi provider that configures cookie consent handling as part of synthetic monitoring infrastructure. `resource "cookies_accepter_profile" "monitoring" { analytics = false }`.
+1. **Monitoring-as-Code integration**: Terraform/Pulumi provider that configures cookie consent handling as part of synthetic monitoring infrastructure. `resource "nocookie_profile" "monitoring" { analytics = false }`.
 2. **Performance impact dashboard**: Track the CLS (Cumulative Layout Shift) impact of cookie popups across monitored domains. Show which CMPs cause the worst performance degradation. Useful data for both SRE teams and web performance consultants.
 3. **Alert deduplication**: When a synthetic check fails, automatically determine if the failure was caused by a cookie popup. If yes, suppress the alert and log it as "cookie-related" instead of "outage." Integrates with PagerDuty/OpsGenie.
 4. **Cookie consent as infrastructure**: Publish a Helm chart or Docker compose that includes the consent engine as a sidecar for monitoring stacks.
@@ -397,7 +397,7 @@
 1. **Family plan with profiles**: Parent creates a family account. Each child gets a profile with age-appropriate defaults. Children under 13: essential only. Teens 13-16: essential + functional. Parents can customize per-child. Managed via a parent dashboard (web app or extension options page).
 2. **COPPA/GDPR-Kids compliance badge**: For website owners, a badge that says "This site respects children's cookie preferences via the Cookie Consent Open Standard." Creates competitive pressure among children's content providers (PBS Kids, Khan Academy, Duolingo).
 3. **School/district deployment**: School IT administrators can deploy the extension across all school Chromebooks with a strict "essential only" policy. Partnership with Google for Education.
-4. **"Kid-safe browsing" bundle**: Partner with parental control apps (Bark, Qustodio) to bundle our extension. "Bark blocks harmful content. Cookies Accepter blocks harmful tracking."
+4. **"Kid-safe browsing" bundle**: Partner with parental control apps (Bark, Qustodio) to bundle our extension. "Bark blocks harmful content. NoCookie blocks harmful tracking."
 5. **Privacy education mode**: For older children, instead of silently handling consent, briefly show what the extension did and why: "This site wanted to track you with marketing cookies. We said no because your family prefers privacy." Turns a nuisance into a learning moment.
 
 **How to reach them**:
@@ -538,8 +538,8 @@
 - Documentation on how Pi-hole/AdGuard users should configure alongside our extension
 
 **Creative feature ideas**:
-1. **VPN provider partnership bundle**: "NordVPN now includes automatic cookie consent handling. Download the Cookies Accepter extension, link it to your NordVPN account, and your privacy preferences follow you everywhere." VPN providers get a new feature without building it. We get distribution to millions of VPN users.
-2. **Pi-hole companion**: A Pi-hole/AdGuard integration guide and optional blocklist that works WITH our extension. "Let Pi-hole block trackers at DNS level. Let Cookies Accepter handle the consent UI at browser level. Together: complete cookie privacy."
+1. **VPN provider partnership bundle**: "NordVPN now includes automatic cookie consent handling. Download the NoCookie extension, link it to your NordVPN account, and your privacy preferences follow you everywhere." VPN providers get a new feature without building it. We get distribution to millions of VPN users.
+2. **Pi-hole companion**: A Pi-hole/AdGuard integration guide and optional blocklist that works WITH our extension. "Let Pi-hole block trackers at DNS level. Let NoCookie handle the consent UI at browser level. Together: complete cookie privacy."
 3. **Network-level consent proxy (experimental)**: A proxy server (deployed on corporate networks or as a Docker container) that intercepts cookie consent JavaScript and pre-applies user preferences at the network level. No browser extension needed. Works on all devices on the network, including mobile.
 4. **Router-level integration**: For advanced home users, a script that runs on OpenWrt/DD-WRT routers to inject consent preferences into HTTP responses. Extremely niche but beloved by the privacy enthusiast community.
 5. **"Privacy stack" recommendations**: Curated guides for building a complete privacy setup: "Level 1: Install our extension. Level 2: Add uBlock Origin. Level 3: Set up Pi-hole. Level 4: Use a VPN. Level 5: Tor for sensitive browsing." Each level includes our extension as a component.
@@ -565,7 +565,7 @@
 **Their pain point**: AI agents that browse the web hit cookie popups on virtually every site. The agent must either (a) learn to handle each popup individually (wasting tokens, unreliable, slow), (b) use a pre-built tool/library (none exist specifically for agents), or (c) ignore the popup and hope the page works anyway (often fails). For agents running at scale (checking hundreds of sites), cookie popups are a major source of failures and hallucinations (the agent "sees" the popup overlay and misinterprets it as page content). The problem will only grow as web agents become mainstream.
 
 **What they'd want from our tool**:
-- Python library (`pip install cookies-accepter`) for agent frameworks
+- Python library (`pip install nocookie`) for agent frameworks
 - Tool/function definition that agents can call: `handle_cookie_consent(browser_context, preferences)`
 - MCP (Model Context Protocol) server for consent handling
 - Support for headless Playwright/Puppeteer contexts (how most agents browse)
@@ -573,9 +573,9 @@
 - `.well-known/cookie-consent.json` that agents can read to understand a site's consent structure before interacting with it
 
 **Creative feature ideas**:
-1. **MCP server for cookie consent**: Build a Model Context Protocol server that AI agents (Claude, GPT, etc.) can call as a tool. `mcp__cookies_accepter__handle_consent(url, preferences)`. This integrates directly into the agent's tool ecosystem.
+1. **MCP server for cookie consent**: Build a Model Context Protocol server that AI agents (Claude, GPT, etc.) can call as a tool. `mcp__nocookie__handle_consent(url, preferences)`. This integrates directly into the agent's tool ecosystem.
 2. **Agent-readable consent documentation**: At `/.well-known/cookie-consent.json` on each implementing site, include an `agentInstructions` field with natural language instructions: "To reject marketing cookies, call `OneTrust.RejectAll()` or click the button with selector `#onetrust-reject-all-handler`." Agents can read this without needing to understand the full spec.
-3. **LangChain / LlamaIndex tool**: Pre-built tools for popular agent frameworks. `from cookies_accepter import CookieConsentTool; agent.add_tool(CookieConsentTool())`.
+3. **LangChain / LlamaIndex tool**: Pre-built tools for popular agent frameworks. `from nocookie import CookieConsentTool; agent.add_tool(CookieConsentTool())`.
 4. **"Cookie consent as a service" API**: A hosted API endpoint: `POST /api/consent { url, preferences }` returns the necessary actions (clicks, API calls) to handle consent on that URL. Agents call this instead of figuring it out themselves. Charged per-request.
 5. **Agent training dataset**: Publish a dataset of cookie popup screenshots, DOM structures, and correct actions. AI labs can use this to train their web agents to handle consent natively. Released under open license for maximum impact.
 6. **Browser-use / Playwright agent integration**: Pre-built integration with the `browser-use` library and similar Python frameworks for AI web agents. Drop-in middleware that handles consent before the agent starts its task.
@@ -770,7 +770,7 @@
 | Feature | Segments Served | Est. Effort |
 |---------|----------------|-------------|
 | **Playwright/Puppeteer plugin** | Scrapers, QA, DevOps, AI Agents, Researchers | Medium |
-| **npm package (`@cookies-accepter/core`)** | Scrapers, QA, DevOps, AI Agents, Monitoring | Medium |
+| **npm package (`@nocookie/core`)** | Scrapers, QA, DevOps, AI Agents, Monitoring | Medium |
 | **Zero-config default profile** | Mainstream users, Elderly, Parents, Non-EU users | Low |
 | **MCP server** | AI Agents, Automation Engineers | Medium |
 | **Enterprise managed deployment** | Enterprise IT, Schools, Corporate networks | High |
@@ -870,4 +870,4 @@
 
 ---
 
-*This report is a brainstorming document. Not all ideas are feasible or advisable. The goal is to map the full possibility space and identify the highest-value opportunities for the Cookies Accepter project.*
+*This report is a brainstorming document. Not all ideas are feasible or advisable. The goal is to map the full possibility space and identify the highest-value opportunities for the NoCookie project.*

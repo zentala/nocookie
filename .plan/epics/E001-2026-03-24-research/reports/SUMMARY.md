@@ -1,4 +1,4 @@
-# E001 Research Summary — Cookies Accepter
+# E001 Research Summary — NoCookie
 
 **Date**: 2026-03-24
 **Status**: Complete

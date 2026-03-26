@@ -1,4 +1,4 @@
-# History — Cookies Accepter
+# History — NoCookie
 
 ## 2026-03-24 — Project inception
 - Repository initialized

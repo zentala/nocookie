@@ -187,9 +187,9 @@ Across all eight approaches, several patterns emerge:
 
 ---
 
-## Our Approach: Cookies Accepter
+## Our Approach: NoCookie
 
-Cookies Accepter was designed by studying every approach above and asking: what would it look like if we combined the best of each while avoiding the mistakes?
+NoCookie was designed by studying every approach above and asking: what would it look like if we combined the best of each while avoiding the mistakes?
 
 **From GPC, we borrowed simplicity.** Our open standard -- `/.well-known/cookie-consent.json` -- is a single JSON file that website owners can write by hand in five minutes. No HTTP header negotiation. No browser API dependency. No multi-party coordination required. Like `robots.txt` for cookie consent.
 
@@ -231,13 +231,13 @@ By **2029**, the EU's Article 88b controller obligations will likely take effect
 
 By **2031**, browser manufacturers must provide native per-purpose consent management. The cookie banner, as we know it, becomes a relic on compliant sites -- though the media exemption and non-EU sites will keep it alive in some corners of the web.
 
-In this transition, tools like Cookies Accepter serve as the bridge: delivering the future experience today, for the millions of sites that have not caught up yet.
+In this transition, tools like NoCookie serve as the bridge: delivering the future experience today, for the millions of sites that have not caught up yet.
 
 Set your preferences once. We handle the rest.
 
 ---
 
-*Cookies Accepter is an open-source project. The extension, standard specification, and all documentation are available on [GitHub](https://github.com/cookies-accepter).*
+*NoCookie is an open-source project. The extension, standard specification, and all documentation are available on [GitHub](https://github.com/nocookie).*
 
 ---
 
