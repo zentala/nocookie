@@ -5,3 +5,35 @@
 - [x] [E001-T03 — CMP DOM patterns & detection](epics/E001-2026-03-24-research/reports/T03-cmp-dom-patterns.md) — E001, 2026-03-24
 - [x] [E001-T04 — Legal risk analysis](epics/E001-2026-03-24-research/reports/T04-legal-risk-analysis.md) — E001, 2026-03-24
 - [x] [E001-T05 — EU direction analysis](epics/E001-2026-03-24-research/reports/T05-eu-direction-analysis.md) — E001, 2026-03-24
+- [x] E002-T33 — Project naming (NoCookie) — E002, 2026-03-26
+- [x] E002-T01 — Project scaffolding and build system — E002, 2026-03-26
+- [x] E002-T02 — Shared types, constants, category taxonomy — E002, 2026-03-26
+- [x] E002-T03 — Chrome storage wrapper — E002, 2026-03-26
+- [x] E002-T04 — Background service worker + message passing — E002, 2026-03-26
+- [x] E002-T05 — Content script skeleton — E002, 2026-03-26
+- [x] E002-T06 — CMP rule engine — E002, 2026-03-26
+- [x] E002-T07 — MAIN world executor framework — E002, 2026-03-26
+- [x] E002-T25 — Autoconsent library integration — E002, 2026-03-26
+- [x] E002-T26 — GPC header emission — E002, 2026-03-26
+- [x] E002-T08 — OneTrust verification + per-category mapping — E002, 2026-03-26
+- [x] E002-T09 — Cookiebot verification + per-category mapping — E002, 2026-03-26
+- [x] E002-T10 — Didomi verification + per-category mapping — E002, 2026-03-26
+- [x] E002-T11 — Generic heuristic fallback detector — E002, 2026-03-26
+- [x] E002-T12 — Well-known standard reader — E002, 2026-03-26
+- [x] E002-T13 — Popup UI (6 states) — E002, 2026-03-26
+- [x] E002-T16 — Badge/icon state management — E002, 2026-03-26
+- [x] E002-T14 — Options page preferences + profiles — E002, 2026-03-26
+- [x] E002-T27 — First-run onboarding flow — E002, 2026-03-26
+- [x] E002-T15 — Options page site overrides + advanced + statistics — E002, 2026-03-26
+- [x] E002-T31 — Loading/detecting state in popup — E002, 2026-03-26
+- [x] E002-T17 — Open standard JSON schema + validator — E002, 2026-03-26
+- [x] E002-T18 — CMP verification (Quantcast, TrustArc, CookieYes) — E002, 2026-03-26
+- [x] E002-T19 — CMP verification (Complianz, Osano, consentmanager) — E002, 2026-03-26
+- [x] E002-T28 — Consent dashboard page — E002, 2026-03-26
+- [x] E002-T20 — Website scaffolding (Astro + Tailwind) — E002, 2026-03-26
+- [x] E002-T21 — Standard specification page — E002, 2026-03-26
+- [x] E002-T29 — Online validator/generator tool — E002, 2026-03-26
+- [x] E002-T22 — Implementation guides + AI agent instructions — E002, 2026-03-26
+- [x] E002-T30 — Accessibility audit and fixes — E002, 2026-03-26
+- [x] E002-T23 — Comprehensive test suite — E002, 2026-03-26
+- [x] E002-T32 — Website articles integration — E002, 2026-03-26

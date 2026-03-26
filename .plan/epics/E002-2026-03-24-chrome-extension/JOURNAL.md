@@ -41,6 +41,14 @@
 - **Decisions**: NoCookie as project name, @nocookie npm scope, nocookie.zentala.io domain
 - **Findings this session**: 1
   - autoconsent library has 2862 rules in JSON format, strictly binary opt-in/opt-out (no per-category)
-- **Stats**: 511 tests, 31 test files, 82.67% statement coverage, ~60 source files
+- **Impro fixes** (7 items):
+  - HIGH: social-media → socialMedia wire format mapping in well-known reader
+  - MEDIUM: safeAsync wrapper on ~15 async event listeners (silent failure prevention)
+  - MEDIUM: debug logging in empty .catch() blocks (detector, message-handlers)
+  - MEDIUM: GPC sync debounce (race condition fix)
+  - MEDIUM: shared chrome mock helper for tests
+  - MEDIUM: catalog-info.yaml created
+  - MEDIUM: ARCHITECTURE.md synced with actual implementation
+- **Stats**: 520 tests, 32 test files, 82.67% statement coverage, ~65 source files
 - **Deferred**: T24 (Chrome Web Store publishing) — needs $5 developer account
 - **Next**: E003 (CMP plugin), Cloudflare Pages deployment, Chrome Web Store submission
