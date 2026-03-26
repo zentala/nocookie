@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — Consent Dashboard</title>
+<style>
+  .mockup-nav{background:#1e1b4b;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-family:-apple-system,sans-serif;font-size:.85rem;position:sticky;top:0;z-index:9999}
+  .mockup-nav a{color:rgba(255,255,255,.7);text-decoration:none;padding:.35rem .75rem;border-radius:6px;transition:all .2s}
+  .mockup-nav a:hover{color:#fff;background:rgba(255,255,255,.15)}
+  .mockup-nav a.mn-active{color:#fff;background:#10b981;font-weight:600}
+  .mockup-nav .mn-logo{font-weight:700;font-size:1rem;margin-right:auto}
+</style>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --accent: #10b981; --accent-light: #d1fae5;
+    --accent-dark: #059669; --gray: #6b7280; --gray-light: #f3f4f6; --gray-200: #e5e7eb;
+    --white: #ffffff; --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --green: #10b981; --yellow: #f59e0b; --red: #ef4444; --blue: #3b82f6; --purple: #7c3aed;
+    --radius: 12px; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: var(--gray-light); min-height: 100vh; }
+
+  .dashboard { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .dash-header { margin-bottom: 2rem; }
+  .dash-header h1 { font-size: 1.75rem; color: var(--primary); margin-bottom: .25rem; }
+  .dash-header p { color: var(--text-muted); font-size: .95rem; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--white); border-radius: var(--radius); padding: 1.25rem;
+    border: 1px solid var(--border); display: flex; align-items: center; gap: 1rem;
+  }
+  .stat-icon {
+    width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .stat-icon svg { width: 24px; height: 24px; }
+  .stat-info h3 { font-size: 1.5rem; color: var(--text); font-weight: 700; }
+  .stat-info p { font-size: .8rem; color: var(--text-muted); }
+
+  .filter-bar {
+    background: var(--white); border-radius: var(--radius); padding: 1rem 1.25rem;
+    border: 1px solid var(--border); margin-bottom: 1rem;
+    display: flex; gap: .75rem; flex-wrap: wrap; align-items: center;
+  }
+  .filter-bar input[type="text"] {
+    flex: 1; min-width: 200px; padding: .5rem .75rem; border: 1px solid var(--border);
+    border-radius: 8px; font-size: .85rem; font-family: var(--font); outline: none;
+  }
+  .filter-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+  .filter-bar select {
+    padding: .5rem .75rem; border: 1px solid var(--border); border-radius: 8px;
+    font-size: .85rem; font-family: var(--font); background: var(--white); cursor: pointer;
+  }
+  .export-btns { display: flex; gap: .5rem; margin-left: auto; }
+  .btn-sm {
+    padding: .45rem .85rem; border-radius: 6px; font-size: .8rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); transition: all .2s;
+  }
+  .btn-export { background: var(--primary); color: var(--white); }
+  .btn-export:hover { background: var(--primary-light); }
+
+  .table-wrapper {
+    background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--gray-light); }
+  th {
+    text-align: left; padding: .75rem 1rem; font-size: .75rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .5px; font-weight: 600;
+  }
+  td { padding: .75rem 1rem; font-size: .85rem; color: var(--text); border-top: 1px solid var(--border); }
+  tr.row-clickable { cursor: pointer; transition: background .15s; }
+  tr.row-clickable:hover { background: #fafafe; }
+
+  .domain-cell { display: flex; align-items: center; gap: .5rem; font-weight: 600; }
+  .domain-favicon {
+    width: 20px; height: 20px; border-radius: 4px; background: var(--gray-200);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 700; color: var(--gray);
+  }
+  .badge-cat {
+    display: inline-block; padding: .15rem .45rem; border-radius: 4px; font-size: .7rem;
+    font-weight: 600; margin-right: .25rem; margin-bottom: .15rem;
+  }
+  .badge-on { background: var(--accent-light); color: #065f46; }
+  .badge-off { background: #f3f4f6; color: #6b7280; }
+  .badge-method {
+    display: inline-block; padding: .15rem .45rem; border-radius: 4px; font-size: .7rem; font-weight: 500;
+  }
+  .method-api { background: #dbeafe; color: #1d4ed8; }
+  .method-click { background: #fef3c7; color: #92400e; }
+  .method-heuristic { background: #fce7f3; color: #9d174d; }
+
+  .actions-cell { display: flex; gap: .25rem; }
+  .act-btn {
+    padding: .3rem .5rem; border-radius: 4px; font-size: .7rem; cursor: pointer;
+    border: 1px solid var(--border); background: var(--white); color: var(--text-muted);
+    font-family: var(--font); transition: all .15s;
+  }
+  .act-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .act-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+  .detail-row { display: none; }
+  .detail-row.open { display: table-row; }
+  .detail-row td { padding: 0; border-top: none; }
+  .detail-content {
+    padding: 1rem 1rem 1rem 3.5rem; background: #fafafe; border-top: 1px solid var(--border);
+  }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .detail-section h4 { font-size: .8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: .5rem; }
+  .detail-toggle-row {
+    display: flex; align-items: center; justify-content: space-between; padding: .35rem 0; font-size: .85rem;
+  }
+  .detail-toggle-row span { color: var(--text); }
+  .detail-meta { font-size: .75rem; color: var(--text-muted); margin-top: .75rem; }
+  .detail-meta strong { color: var(--text); }
+  .cookie-pill {
+    display: inline-block; background: var(--gray-light); padding: .2rem .5rem;
+    border-radius: 4px; font-size: .7rem; color: var(--text-muted); margin: .15rem .15rem 0 0;
+    font-family: 'SF Mono', Monaco, monospace;
+  }
+
+  .toggle-sm { position: relative; width: 34px; height: 18px; display: inline-block; vertical-align: middle; }
+  .toggle-sm input { opacity: 0; width: 0; height: 0; }
+  .toggle-sm .tsl {
+    position: absolute; inset: 0; background: var(--gray-200); border-radius: 9px; cursor: pointer; transition: .3s;
+  }
+  .toggle-sm .tsl::before {
+    content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--white); top: 2px; left: 2px; transition: .3s; box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+  .toggle-sm input:checked + .tsl { background: var(--accent); }
+  .toggle-sm input:checked + .tsl::before { transform: translateX(16px); }
+
+  @media (max-width: 768px) {
+    .filter-bar { flex-direction: column; }
+    .export-btns { margin-left: 0; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .table-wrapper { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html">Landing</a><a href="standard-spec.html">Spec</a><a href="onboarding.html">Onboarding</a><a href="consent-dashboard.html" class="mn-active">Dashboard</a><a href="cmp-plugin-demo.html">CMP Plugin</a><a href="visual-configurator.html">Configurator</a></div>
+
+<div class="dashboard">
+  <div class="dash-header">
+    <h1>Consent Dashboard</h1>
+    <p>Track and manage cookie consent across all websites you visit.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: var(--accent-light);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="stat-info"><h3>247</h3><p>Total sites handled</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #dbeafe;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+      <div class="stat-info"><h3>34</h3><p>Handled this week</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #ede9fe;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      </div>
+      <div class="stat-info"><h3>OneTrust</h3><p>Most common CMP</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #fef3c7;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="stat-info"><h3>0.8s</h3><p>Avg. handling time</p></div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" placeholder="Search by domain..." id="searchInput">
+    <select id="filterCmp">
+      <option value="">All CMPs</option>
+      <option>OneTrust</option>
+      <option>Cookiebot</option>
+      <option>Didomi</option>
+      <option>Quantcast</option>
+      <option>CookieYes</option>
+      <option>Custom</option>
+    </select>
+    <select id="filterMethod">
+      <option value="">All methods</option>
+      <option>API</option>
+      <option>Click</option>
+      <option>Heuristic</option>
+    </select>
+    <select>
+      <option value="">All time</option>
+      <option>Today</option>
+      <option>This week</option>
+      <option>This month</option>
+    </select>
+    <div class="export-btns">
+      <button class="btn-sm btn-export">Export JSON</button>
+      <button class="btn-sm btn-export">Export CSV</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>CMP</th>
+          <th>Categories</th>
+          <th>Method</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Row 1 -->
+        <tr class="row-clickable" onclick="toggleDetail('d0')">
+          <td><div class="domain-cell"><span class="domain-favicon">GH</span>github.com</div></td>
+          <td>OneTrust</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-26</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d0">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">__Host-user_session</span><span class="cookie-pill">_gh_sess</span><span class="cookie-pill">_octo</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> OneTrust &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-26 14:30:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 2 -->
+        <tr class="row-clickable" onclick="toggleDetail('d1')">
+          <td><div class="domain-cell"><span class="domain-favicon">SO</span>stackoverflow.com</div></td>
+          <td>OneTrust</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-on">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-26</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d1">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">prov</span><span class="cookie-pill">acct</span><span class="cookie-pill">_ga</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> OneTrust &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-26 14:31:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 3 -->
+        <tr class="row-clickable" onclick="toggleDetail('d2')">
+          <td><div class="domain-cell"><span class="domain-favicon">M</span>medium.com</div></td>
+          <td>Didomi</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-off">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-25</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d2">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">sid</span><span class="cookie-pill">uid</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> Didomi &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-25 10:15:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 4 -->
+        <tr class="row-clickable" onclick="toggleDetail('d3')">
+          <td><div class="domain-cell"><span class="domain-favicon">R</span>reddit.com</div></td>
+          <td>OneTrust</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-click">Click</span></td>
+          <td style="white-space:nowrap">2026-03-25</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d3">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">token_v2</span><span class="cookie-pill">session_tracker</span><span class="cookie-pill">csv</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> OneTrust &middot; <strong>Method:</strong> Click &middot; <strong>Last updated:</strong> 2026-03-25 09:22:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 5 -->
+        <tr class="row-clickable" onclick="toggleDetail('d4')">
+          <td><div class="domain-cell"><span class="domain-favicon">BB</span>bbc.com</div></td>
+          <td>Custom</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-on">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-click">Click</span></td>
+          <td style="white-space:nowrap">2026-03-25</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d4">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">ckns_policy</span><span class="cookie-pill">ckns_explicit</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> Custom &middot; <strong>Method:</strong> Click &middot; <strong>Last updated:</strong> 2026-03-25 16:45:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 6 -->
+        <tr class="row-clickable" onclick="toggleDetail('d5')">
+          <td><div class="domain-cell"><span class="domain-favicon">AZ</span>amazon.de</div></td>
+          <td>Custom</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-on">Analytics</span><span class="badge-cat badge-on">Marketing</span></td>
+          <td><span class="badge-method method-heuristic">Heuristic</span></td>
+          <td style="white-space:nowrap">2026-03-24</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d5">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">session-id</span><span class="cookie-pill">ubid-acbde</span><span class="cookie-pill">i18n-prefs</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> Custom &middot; <strong>Method:</strong> Heuristic &middot; <strong>Last updated:</strong> 2026-03-24 11:30:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 7 -->
+        <tr class="row-clickable" onclick="toggleDetail('d6')">
+          <td><div class="domain-cell"><span class="domain-favicon">NY</span>nytimes.com</div></td>
+          <td>OneTrust</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-off">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-24</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d6">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">nyt-a</span><span class="cookie-pill">nyt-purr</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> OneTrust &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-24 08:10:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 8 -->
+        <tr class="row-clickable" onclick="toggleDetail('d7')">
+          <td><div class="domain-cell"><span class="domain-favicon">SP</span>spotify.com</div></td>
+          <td>Cookiebot</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-23</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d7">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">sp_t</span><span class="cookie-pill">sp_dc</span><span class="cookie-pill">sp_key</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> Cookiebot &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-23 19:45:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 9 -->
+        <tr class="row-clickable" onclick="toggleDetail('d8')">
+          <td><div class="domain-cell"><span class="domain-favicon">BK</span>booking.com</div></td>
+          <td>Quantcast</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-on">Functional</span><span class="badge-cat badge-on">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-click">Click</span></td>
+          <td style="white-space:nowrap">2026-03-23</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d8">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox" checked><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">bkng</span><span class="cookie-pill">cors_js</span><span class="cookie-pill">BJS</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> Quantcast &middot; <strong>Method:</strong> Click &middot; <strong>Last updated:</strong> 2026-03-23 15:20:00 UTC</div></div></td>
+        </tr>
+
+        <!-- Row 10 -->
+        <tr class="row-clickable" onclick="toggleDetail('d9')">
+          <td><div class="domain-cell"><span class="domain-favicon">CF</span>cloudflare.com</div></td>
+          <td>CookieYes</td>
+          <td><span class="badge-cat badge-on">Essential</span><span class="badge-cat badge-off">Functional</span><span class="badge-cat badge-off">Analytics</span><span class="badge-cat badge-off">Marketing</span></td>
+          <td><span class="badge-method method-api">API</span></td>
+          <td style="white-space:nowrap">2026-03-22</td>
+          <td><div class="actions-cell"><button class="act-btn" onclick="event.stopPropagation()">Change</button><button class="act-btn" onclick="event.stopPropagation()">Reset</button><button class="act-btn danger" onclick="event.stopPropagation()">Block</button></div></td>
+        </tr>
+        <tr class="detail-row" id="d9">
+          <td colspan="6"><div class="detail-content"><div class="detail-grid"><div class="detail-section"><h4>Category Toggles</h4>
+            <div class="detail-toggle-row"><span>Essential</span><label class="toggle-sm"><input type="checkbox" checked disabled><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Functional</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Analytics</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+            <div class="detail-toggle-row"><span>Marketing</span><label class="toggle-sm"><input type="checkbox"><span class="tsl"></span></label></div>
+          </div><div class="detail-section"><h4>Cookies Found</h4><div><span class="cookie-pill">__cfruid</span><span class="cookie-pill">cf_bm</span></div></div></div>
+          <div class="detail-meta"><strong>CMP:</strong> CookieYes &middot; <strong>Method:</strong> API &middot; <strong>Last updated:</strong> 2026-03-22 12:05:00 UTC</div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function toggleDetail(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  document.getElementById('searchInput').addEventListener('input', filterTable);
+  document.getElementById('filterCmp').addEventListener('change', filterTable);
+  document.getElementById('filterMethod').addEventListener('change', filterTable);
+
+  function filterTable() {
+    var search = document.getElementById('searchInput').value.toLowerCase();
+    var cmp = document.getElementById('filterCmp').value;
+    var method = document.getElementById('filterMethod').value;
+    var rows = document.querySelectorAll('#tableBody > tr.row-clickable');
+    rows.forEach(function(row) {
+      var domain = row.querySelector('.domain-cell').textContent.toLowerCase();
+      var rowCmp = row.children[1].textContent.trim();
+      var rowMethod = row.querySelector('.badge-method').textContent.trim();
+      var show = true;
+      if (search && domain.indexOf(search) === -1) show = false;
+      if (cmp && rowCmp !== cmp) show = false;
+      if (method && rowMethod !== method) show = false;
+      row.style.display = show ? '' : 'none';
+      var detailId = row.getAttribute('onclick').match(/'([^']+)'/)[1];
+      document.getElementById(detailId).style.display = show ? '' : 'none';
+      if (!show) document.getElementById(detailId).classList.remove('open');
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — CMP Plugin Demo</title>
+<style>
+  .mockup-nav{background:#1e1b4b;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-family:-apple-system,sans-serif;font-size:.85rem;position:sticky;top:0;z-index:9999}
+  .mockup-nav a{color:rgba(255,255,255,.7);text-decoration:none;padding:.35rem .75rem;border-radius:6px;transition:all .2s}
+  .mockup-nav a:hover{color:#fff;background:rgba(255,255,255,.15)}
+  .mockup-nav a.mn-active{color:#fff;background:#10b981;font-weight:600}
+  .mockup-nav .mn-logo{font-weight:700;font-size:1rem;margin-right:auto}
+</style>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --accent: #10b981; --accent-light: #d1fae5;
+    --accent-dark: #059669; --gray: #6b7280; --gray-light: #f3f4f6; --gray-200: #e5e7eb;
+    --white: #ffffff; --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --radius: 12px; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: var(--gray-light); min-height: 100vh; }
+
+  .demo-header {
+    max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 0;
+  }
+  .demo-header h1 { font-size: 1.75rem; color: var(--primary); margin-bottom: .25rem; }
+  .demo-header p { color: var(--text-muted); font-size: .95rem; margin-bottom: 1.5rem; }
+
+  /* Layer switcher */
+  .layer-switcher {
+    display: flex; gap: .5rem; max-width: 1100px; margin: 0 auto; padding: 0 2rem 1.5rem;
+  }
+  .layer-btn {
+    padding: .6rem 1.25rem; border-radius: 8px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: 2px solid var(--border); background: var(--white);
+    font-family: var(--font); transition: all .2s; color: var(--text);
+  }
+  .layer-btn:hover { border-color: var(--primary); }
+  .layer-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+  /* Fake webpage */
+  .fake-page {
+    max-width: 1100px; margin: 0 auto; background: var(--white); border-radius: 12px 12px 0 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,.1); min-height: 600px; position: relative; overflow: hidden;
+  }
+  .fake-page-nav {
+    background: var(--white); padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .fake-page-nav .fp-logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+  .fake-page-nav a { color: var(--text-muted); text-decoration: none; font-size: .9rem; }
+  .fake-page-content { padding: 3rem 2rem; }
+  .fake-page-content h2 { font-size: 1.75rem; color: var(--text); margin-bottom: 1rem; }
+  .fake-page-content p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; max-width: 700px; }
+  .fake-placeholder {
+    height: 200px; background: var(--gray-light); border-radius: 8px; margin: 1.5rem 0;
+    display: flex; align-items: center; justify-content: center; color: var(--gray);
+  }
+
+  /* Layer 1: Banner */
+  .consent-banner {
+    position: absolute; bottom: 0; left: 0; right: 0; background: var(--white);
+    border-top: 1px solid var(--border); padding: 1.25rem 2rem;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.1); display: none;
+    animation: slideUp .3s ease;
+  }
+  .consent-banner.visible { display: block; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .banner-inner { display: flex; align-items: center; gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+  .banner-icons { display: flex; gap: .5rem; flex-shrink: 0; }
+  .banner-cat-icon {
+    width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; font-size: .75rem; font-weight: 700;
+  }
+  .banner-text { flex: 1; font-size: .85rem; color: var(--text); line-height: 1.5; }
+  .banner-text a { color: var(--accent-dark); text-decoration: underline; }
+  .banner-actions { display: flex; gap: .5rem; flex-shrink: 0; }
+  .b-btn {
+    padding: .55rem 1.25rem; border-radius: 8px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); transition: all .2s; white-space: nowrap;
+  }
+  .b-btn-accept { background: var(--accent); color: var(--white); }
+  .b-btn-accept:hover { background: var(--accent-dark); }
+  .b-btn-reject { background: none; border: 2px solid var(--border); color: var(--text); }
+  .b-btn-reject:hover { border-color: var(--text); }
+  .b-btn-customize { background: none; border: none; color: var(--primary-light); text-decoration: underline; cursor: pointer; font-size: .85rem; font-family: var(--font); }
+
+  /* Layer 2: Preference Center Modal */
+  .prefs-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,.4); display: none;
+    align-items: center; justify-content: center; z-index: 10;
+  }
+  .prefs-overlay.visible { display: flex; animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .prefs-modal {
+    background: var(--white); border-radius: 16px; width: 520px; max-height: 500px;
+    overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  }
+  .prefs-header {
+    display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .prefs-header h3 { font-size: 1.1rem; color: var(--primary); }
+  .prefs-close {
+    width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--gray-light);
+    font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); transition: all .15s;
+  }
+  .prefs-close:hover { background: var(--gray-200); color: var(--text); }
+
+  .prefs-categories { padding: 1rem 1.5rem; }
+  .p-cat {
+    border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: .75rem;
+    overflow: hidden; transition: all .2s;
+  }
+  .p-cat-header {
+    display: flex; align-items: center; gap: .75rem; padding: .85rem 1rem; cursor: pointer;
+  }
+  .p-cat-icon {
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: .85rem; flex-shrink: 0;
+  }
+  .p-cat-info { flex: 1; }
+  .p-cat-info h4 { font-size: .9rem; color: var(--text); }
+  .p-cat-info span { font-size: .75rem; color: var(--text-muted); }
+  .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--gray-200); border-radius: 12px; cursor: pointer; transition: .3s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--white); top: 3px; left: 3px; transition: .3s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+  .toggle input:disabled + .toggle-slider { background: var(--gray); opacity: .5; cursor: not-allowed; }
+
+  .p-cat-detail {
+    display: none; padding: 0 1rem .85rem; border-top: 1px solid var(--border);
+  }
+  .p-cat-detail.open { display: block; padding-top: .85rem; }
+  .p-cat-detail p { font-size: .8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: .5rem; }
+  .cookie-table { width: 100%; border-collapse: collapse; font-size: .75rem; }
+  .cookie-table th { text-align: left; padding: .4rem .5rem; background: var(--gray-light); color: var(--text-muted); font-weight: 600; }
+  .cookie-table td { padding: .4rem .5rem; border-top: 1px solid var(--border); color: var(--text); }
+  .cookie-table code { background: var(--gray-light); padding: .1rem .3rem; border-radius: 3px; font-size: .7rem; }
+
+  .prefs-footer {
+    padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; gap: .5rem;
+  }
+  .prefs-footer .b-btn { flex: 1; text-align: center; }
+
+  /* Layer 3: Cookie Policy Page */
+  .policy-page { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+  .policy-page.visible { display: block; animation: fadeIn .3s ease; }
+  .policy-page h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: .5rem; }
+  .policy-page .policy-meta { font-size: .85rem; color: var(--text-muted); margin-bottom: 2rem; }
+  .policy-section {
+    background: var(--white); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 1.5rem; margin-bottom: 1.25rem;
+  }
+  .policy-section-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+  .policy-section-header h3 { font-size: 1.1rem; color: var(--text); }
+  .policy-section-header .ps-icon {
+    width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+  .policy-section > p { font-size: .9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+  .policy-cookie-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .policy-cookie-table th {
+    text-align: left; padding: .6rem .75rem; background: var(--gray-light); color: var(--text-muted);
+    font-weight: 600; font-size: .8rem;
+  }
+  .policy-cookie-table td { padding: .6rem .75rem; border-top: 1px solid var(--border); color: var(--text); }
+  .policy-footer-bar {
+    background: var(--white); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+  .policy-footer-bar span { font-size: .85rem; color: var(--text-muted); }
+  .pf-btn {
+    padding: .55rem 1.25rem; border-radius: 8px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); background: var(--accent); color: var(--white);
+  }
+  .pf-btn:hover { background: var(--accent-dark); }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 768px) {
+    .banner-inner { flex-direction: column; text-align: center; }
+    .banner-actions { flex-wrap: wrap; justify-content: center; }
+    .prefs-modal { width: 95%; margin: 1rem; }
+    .layer-switcher { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html">Landing</a><a href="standard-spec.html">Spec</a><a href="onboarding.html">Onboarding</a><a href="consent-dashboard.html">Dashboard</a><a href="cmp-plugin-demo.html" class="mn-active">CMP Plugin</a><a href="visual-configurator.html">Configurator</a></div>
+
+<div class="demo-header">
+  <h1>CMP Plugin Demo</h1>
+  <p>See how the Cookies Accepter CMP looks on a real website. Switch between the three layers below.</p>
+</div>
+
+<div class="layer-switcher">
+  <button class="layer-btn active" onclick="showLayer('banner')">Layer 1: Banner</button>
+  <button class="layer-btn" onclick="showLayer('prefs')">Layer 2: Preference Center</button>
+  <button class="layer-btn" onclick="showLayer('policy')">Layer 3: Cookie Policy</button>
+</div>
+
+<!-- Fake webpage container for Layer 1 & 2 -->
+<div class="fake-page" id="fakePageContainer">
+  <div class="fake-page-nav">
+    <span class="fp-logo">Acme Corp</span>
+    <a href="#">Products</a>
+    <a href="#">Pricing</a>
+    <a href="#">Blog</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="fake-page-content">
+    <h2>Building the Future of Commerce</h2>
+    <p>Acme Corp provides innovative solutions for businesses of all sizes. Our platform helps you streamline operations, boost revenue, and deliver exceptional customer experiences.</p>
+    <div class="fake-placeholder">[ Hero Image Placeholder ]</div>
+    <p>With over 10,000 customers worldwide, Acme Corp is trusted by leading brands to power their digital transformation. Our suite of tools integrates seamlessly with your existing workflow.</p>
+    <p>Explore our products to learn how we can help your business grow. From analytics to automation, we have everything you need to succeed in today's competitive landscape.</p>
+  </div>
+
+  <!-- Layer 1: Banner -->
+  <div class="consent-banner visible" id="bannerLayer">
+    <div class="banner-inner">
+      <div class="banner-icons">
+        <div class="banner-cat-icon" style="background: #f3f4f6; color: #6b7280;" title="Essential">&#x1f512;</div>
+        <div class="banner-cat-icon" style="background: #dbeafe; color: #2563eb;" title="Functional">&#9881;</div>
+        <div class="banner-cat-icon" style="background: #ede9fe; color: #7c3aed;" title="Analytics">&#x1f4ca;</div>
+        <div class="banner-cat-icon" style="background: #ffedd5; color: #ea580c;" title="Marketing">&#x1f4e2;</div>
+      </div>
+      <div class="banner-text">
+        We use cookies to improve your experience. Essential cookies are always active. You can choose which optional cookies to allow.
+        <a href="#">Learn more</a>
+      </div>
+      <div class="banner-actions">
+        <button class="b-btn b-btn-reject" onclick="showLayer('banner')">Reject All</button>
+        <button class="b-btn-customize" onclick="showLayer('prefs')">Customize</button>
+        <button class="b-btn b-btn-accept" onclick="showLayer('banner')">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layer 2: Preference Center -->
+  <div class="prefs-overlay" id="prefsLayer">
+    <div class="prefs-modal">
+      <div class="prefs-header">
+        <h3>Cookie Preferences</h3>
+        <button class="prefs-close" onclick="showLayer('banner')">&times;</button>
+      </div>
+      <div class="prefs-categories">
+        <!-- Essential -->
+        <div class="p-cat">
+          <div class="p-cat-header" onclick="toggleCatDetail(this)">
+            <div class="p-cat-icon" style="background: #f3f4f6; color: #6b7280;">&#x1f512;</div>
+            <div class="p-cat-info"><h4>Essential</h4><span>Always active - required for the site to function</span></div>
+            <label class="toggle"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label>
+          </div>
+          <div class="p-cat-detail">
+            <p>These cookies are strictly necessary for the website to function. They enable core features like page navigation and access to secure areas.</p>
+            <table class="cookie-table">
+              <thead><tr><th>Cookie</th><th>Provider</th><th>Duration</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>session_id</code></td><td>Acme Corp</td><td>Session</td><td>Maintains login session</td></tr>
+                <tr><td><code>csrf_token</code></td><td>Acme Corp</td><td>Session</td><td>Prevents CSRF attacks</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Functional -->
+        <div class="p-cat">
+          <div class="p-cat-header" onclick="toggleCatDetail(this)">
+            <div class="p-cat-icon" style="background: #dbeafe; color: #2563eb;">&#9881;</div>
+            <div class="p-cat-info"><h4>Functional</h4><span>Preferences, language, personalization</span></div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="p-cat-detail">
+            <p>These cookies enable enhanced functionality such as remembering your language preference and region settings.</p>
+            <table class="cookie-table">
+              <thead><tr><th>Cookie</th><th>Provider</th><th>Duration</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>lang_pref</code></td><td>Acme Corp</td><td>1 year</td><td>Stores language preference</td></tr>
+                <tr><td><code>theme</code></td><td>Acme Corp</td><td>1 year</td><td>Stores dark/light mode preference</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Analytics -->
+        <div class="p-cat">
+          <div class="p-cat-header" onclick="toggleCatDetail(this)">
+            <div class="p-cat-icon" style="background: #ede9fe; color: #7c3aed;">&#x1f4ca;</div>
+            <div class="p-cat-info"><h4>Analytics</h4><span>Anonymous usage statistics</span></div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="p-cat-detail">
+            <p>These cookies help us understand how visitors interact with our website by collecting information anonymously.</p>
+            <table class="cookie-table">
+              <thead><tr><th>Cookie</th><th>Provider</th><th>Duration</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>_ga</code></td><td>Google Analytics</td><td>2 years</td><td>Distinguishes unique users</td></tr>
+                <tr><td><code>_gid</code></td><td>Google Analytics</td><td>24 hours</td><td>Distinguishes unique users</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Marketing -->
+        <div class="p-cat">
+          <div class="p-cat-header" onclick="toggleCatDetail(this)">
+            <div class="p-cat-icon" style="background: #ffedd5; color: #ea580c;">&#x1f4e2;</div>
+            <div class="p-cat-info"><h4>Marketing</h4><span>Ads and cross-site tracking</span></div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="p-cat-detail">
+            <p>These cookies are used to deliver advertisements relevant to you and your interests across websites.</p>
+            <table class="cookie-table">
+              <thead><tr><th>Cookie</th><th>Provider</th><th>Duration</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>_fbp</code></td><td>Facebook</td><td>3 months</td><td>Tracks visits for ad delivery</td></tr>
+                <tr><td><code>_gcl_au</code></td><td>Google Ads</td><td>3 months</td><td>Conversion tracking</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="prefs-footer">
+        <button class="b-btn b-btn-reject" onclick="showLayer('banner')">Reject All</button>
+        <button class="b-btn b-btn-accept" onclick="showLayer('banner')">Save Preferences</button>
+        <button class="b-btn b-btn-accept" onclick="showLayer('banner')">Accept All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Layer 3: Cookie Policy Page -->
+<div class="policy-page" id="policyLayer">
+  <h2>Cookie Policy</h2>
+  <p class="policy-meta">Last updated: March 24, 2026 &middot; Acme Corp &middot; acme.com</p>
+
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <div class="ps-icon" style="background: #f3f4f6; color: #6b7280;">&#x1f512;</div>
+      <h3>Essential Cookies</h3>
+    </div>
+    <p>These cookies are strictly necessary for the website to function and cannot be disabled. They are usually set in response to actions you take, such as setting your privacy preferences, logging in, or filling in forms.</p>
+    <table class="policy-cookie-table">
+      <thead><tr><th>Cookie</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>session_id</code></td><td>Acme Corp</td><td>Maintains user login session</td><td>Session</td><td>1st party</td></tr>
+        <tr><td><code>csrf_token</code></td><td>Acme Corp</td><td>Prevents cross-site request forgery attacks</td><td>Session</td><td>1st party</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <div class="ps-icon" style="background: #dbeafe; color: #2563eb;">&#9881;</div>
+      <h3>Functional Cookies</h3>
+    </div>
+    <p>These cookies enable enhanced functionality like remembering your preferences, language, and region settings. They may be set by us or by third-party providers whose services we have added to our pages.</p>
+    <table class="policy-cookie-table">
+      <thead><tr><th>Cookie</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>lang_pref</code></td><td>Acme Corp</td><td>Stores language preference</td><td>1 year</td><td>1st party</td></tr>
+        <tr><td><code>theme</code></td><td>Acme Corp</td><td>Stores dark/light mode preference</td><td>1 year</td><td>1st party</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <div class="ps-icon" style="background: #ede9fe; color: #7c3aed;">&#x1f4ca;</div>
+      <h3>Analytics Cookies</h3>
+    </div>
+    <p>These cookies help us understand how visitors interact with the website by collecting information anonymously. This data is used to improve website performance, content, and user experience.</p>
+    <table class="policy-cookie-table">
+      <thead><tr><th>Cookie</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>_ga</code></td><td>Google Analytics</td><td>Distinguishes unique users by assigning a randomly generated number</td><td>2 years</td><td>3rd party</td></tr>
+        <tr><td><code>_gid</code></td><td>Google Analytics</td><td>Distinguishes unique users</td><td>24 hours</td><td>3rd party</td></tr>
+        <tr><td><code>_gat</code></td><td>Google Analytics</td><td>Throttles request rate</td><td>1 minute</td><td>3rd party</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <div class="ps-icon" style="background: #ffedd5; color: #ea580c;">&#x1f4e2;</div>
+      <h3>Marketing Cookies</h3>
+    </div>
+    <p>These cookies are used to deliver advertisements that are relevant to you and your interests. They are also used to limit the number of times you see an ad and help measure the effectiveness of advertising campaigns.</p>
+    <table class="policy-cookie-table">
+      <thead><tr><th>Cookie</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>_fbp</code></td><td>Facebook</td><td>Tracks visits across websites for ad delivery</td><td>3 months</td><td>3rd party</td></tr>
+        <tr><td><code>_gcl_au</code></td><td>Google Ads</td><td>Stores and tracks conversions</td><td>3 months</td><td>3rd party</td></tr>
+        <tr><td><code>IDE</code></td><td>Google DoubleClick</td><td>Serves targeted advertisements</td><td>1 year</td><td>3rd party</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="policy-footer-bar">
+    <span>You can change your preferences at any time.</span>
+    <button class="pf-btn" onclick="showLayer('prefs')">Change My Preferences</button>
+  </div>
+</div>
+
+<script>
+  function showLayer(layer) {
+    var bannerLayer = document.getElementById('bannerLayer');
+    var prefsLayer = document.getElementById('prefsLayer');
+    var policyLayer = document.getElementById('policyLayer');
+    var fakePageContainer = document.getElementById('fakePageContainer');
+
+    bannerLayer.classList.remove('visible');
+    prefsLayer.classList.remove('visible');
+    policyLayer.classList.remove('visible');
+    fakePageContainer.style.display = '';
+
+    document.querySelectorAll('.layer-btn').forEach(function(b, i) {
+      b.classList.remove('active');
+    });
+
+    if (layer === 'banner') {
+      bannerLayer.classList.add('visible');
+      document.querySelectorAll('.layer-btn')[0].classList.add('active');
+    } else if (layer === 'prefs') {
+      prefsLayer.classList.add('visible');
+      document.querySelectorAll('.layer-btn')[1].classList.add('active');
+    } else if (layer === 'policy') {
+      fakePageContainer.style.display = 'none';
+      policyLayer.classList.add('visible');
+      document.querySelectorAll('.layer-btn')[2].classList.add('active');
+    }
+  }
+
+  function toggleCatDetail(header) {
+    var detail = header.nextElementSibling;
+    detail.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

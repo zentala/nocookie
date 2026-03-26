@@ -101,6 +101,21 @@
   .audience-card li { padding: 4px 0; font-size: 14px; color: var(--text); }
   .audience-card li::before { content: '\2713'; color: var(--accent); margin-right: 8px; font-weight: 700; }
 
+  /* CMP Plugin section */
+  .cmp-section { background: var(--gray-light); }
+  .cmp-install-block { background: #0d0b21; border-radius: var(--radius); padding: 24px; font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 13px; line-height: 1.7; color: #c4b5fd; overflow-x: auto; max-width: 700px; margin: 0 auto 24px; text-align: left; word-break: break-all; }
+  .cmp-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 700px; margin: 0 auto 32px; text-align: center; }
+  .cmp-feature { font-size: 14px; color: var(--text-muted); }
+  .cmp-feature .cf-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+
+  /* Cookie Policy Icons */
+  .icons-section { }
+  .icons-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; max-width: 700px; margin: 0 auto 16px; }
+  .icon-item { text-align: center; padding: 20px 12px; border-radius: var(--radius); border: 2px solid var(--border); background: var(--white); }
+  .icon-item .icon-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+  .icon-item .icon-label { font-size: 14px; font-weight: 600; color: var(--primary); }
+
   /* Stats */
   .stats-bar { background: var(--accent); color: var(--white); padding: 48px 0; }
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center; }
@@ -118,11 +133,12 @@
     .hero h1 { font-size: 28px; }
     .problem-grid, .steps, .audience-grid, .stats-grid { grid-template-columns: 1fr; }
     .hero-pills { flex-direction: column; align-items: center; }
+    .cmp-features, .icons-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
 <body>
-<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html" class="mn-active">Landing</a><a href="standard-spec.html">Spec</a></div>
+<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html" class="mn-active">Landing</a><a href="standard-spec.html">Spec</a><a href="onboarding.html">Onboarding</a><a href="consent-dashboard.html">Dashboard</a><a href="cmp-plugin-demo.html">CMP Plugin</a><a href="visual-configurator.html">Configurator</a></div>
   <!-- Nav -->
   <nav><div class="container">
     <a href="#" class="nav-logo">
@@ -130,7 +146,7 @@
       Cookies Accepter
     </a>
     <div class="nav-links">
-      <a href="#">Extension</a><a href="#">Standard</a><a href="#">Docs</a><a href="#">GitHub</a>
+      <a href="#">Extension</a><a href="#">Standard</a><a href="#">CMP Plugin</a><a href="#">Docs</a><a href="#">GitHub</a>
       <a href="#" class="btn btn-accent" style="padding:8px 18px;font-size:13px">Install Extension</a>
     </div>
   </div></nav>
@@ -198,7 +214,7 @@
         </div>
         <div class="step">
           <h3>Browse freely</h3>
-          <p>The extension detects cookie popups and applies your choices automatically via CMP APIs or smart click simulation.</p>
+          <p>The extension detects cookie popups and applies your choices automatically via CMP APIs or smart click simulation. See exactly what you've accepted on every site from the consent dashboard, and change your mind anytime.</p>
         </div>
       </div>
     </div>
@@ -248,12 +264,63 @@
     </div>
   </section>
 
+  <!-- CMP Plugin for Website Owners -->
+  <section class="cmp-section">
+    <div class="container text-center">
+      <div class="section-label">CMP Plugin</div>
+      <div class="section-title">Free consent management for your website</div>
+      <div class="section-sub">A free, open-source CMP that integrates natively with the extension. Users with Cookies Accepter never see a popup on your site.</div>
+      <div class="cmp-install-block">
+        <span class="punc">&lt;</span><span class="key">script</span> <span class="str">src</span><span class="punc">=</span><span class="str">"https://cdn.cookies-accepter.org/v1/ca-cmp.min.js"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">data-config</span><span class="punc">=</span><span class="str">"/cookie-config.json"</span><span class="punc">&gt;&lt;/</span><span class="key">script</span><span class="punc">&gt;</span>
+      </div>
+      <div class="cmp-features">
+        <div class="cmp-feature"><span class="cf-icon">&#127760;</span>Free &amp; open source</div>
+        <div class="cmp-feature"><span class="cf-icon">&#9889;</span>Under 30KB gzipped</div>
+        <div class="cmp-feature"><span class="cf-icon">&#128737;&#65039;</span>Shadow DOM isolation</div>
+        <div class="cmp-feature"><span class="cf-icon">&#128268;</span>One-line install</div>
+      </div>
+      <a href="visual-configurator.html" class="btn btn-accent" style="font-size:15px;padding:12px 28px">Try the Configurator</a>
+    </div>
+  </section>
+
+  <!-- Cookie Policy Icons -->
+  <section>
+    <div class="container text-center">
+      <div class="section-label">Cookie Policy Icons</div>
+      <div class="section-title">Transparency at a glance</div>
+      <div class="section-sub">Like Creative Commons badges, but for cookie practices. Standardized visual indicators so users know what a site collects before they consent.</div>
+      <div class="icons-grid">
+        <div class="icon-item">
+          <span class="icon-emoji">&#128274;</span>
+          <span class="icon-label">Essential</span>
+        </div>
+        <div class="icon-item">
+          <span class="icon-emoji">&#9881;&#65039;</span>
+          <span class="icon-label">Functional</span>
+        </div>
+        <div class="icon-item">
+          <span class="icon-emoji">&#128202;</span>
+          <span class="icon-label">Analytics</span>
+        </div>
+        <div class="icon-item">
+          <span class="icon-emoji">&#128227;</span>
+          <span class="icon-label">Marketing</span>
+        </div>
+        <div class="icon-item">
+          <span class="icon-emoji">&#128101;</span>
+          <span class="icon-label">Social</span>
+        </div>
+      </div>
+      <div style="margin-top:24px"><a href="#" class="btn btn-outline" style="font-size:13px">Download Badge Kit</a></div>
+    </div>
+  </section>
+
   <!-- Stats -->
   <section class="stats-bar">
     <div class="container">
       <div class="stats-grid">
         <div><div class="num">1.2M+</div><div class="lbl">Popups Handled</div></div>
-        <div><div class="num">9</div><div class="lbl">CMPs Supported</div></div>
+        <div><div class="num">9+100</div><div class="lbl">CMPs Natively + via Autoconsent</div></div>
         <div><div class="num">340+</div><div class="lbl">Sites with Standard</div></div>
         <div><div class="num">100%</div><div class="lbl">Open Source</div></div>
       </div>

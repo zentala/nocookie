@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — Visual Configurator</title>
+<style>
+  .mockup-nav{background:#1e1b4b;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-family:-apple-system,sans-serif;font-size:.85rem;position:sticky;top:0;z-index:9999}
+  .mockup-nav a{color:rgba(255,255,255,.7);text-decoration:none;padding:.35rem .75rem;border-radius:6px;transition:all .2s}
+  .mockup-nav a:hover{color:#fff;background:rgba(255,255,255,.15)}
+  .mockup-nav a.mn-active{color:#fff;background:#10b981;font-weight:600}
+  .mockup-nav .mn-logo{font-weight:700;font-size:1rem;margin-right:auto}
+</style>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --accent: #10b981; --accent-light: #d1fae5;
+    --accent-dark: #059669; --gray: #6b7280; --gray-light: #f3f4f6; --gray-200: #e5e7eb;
+    --white: #ffffff; --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --radius: 12px; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: var(--gray-light); min-height: 100vh; }
+
+  .config-page { max-width: 900px; margin: 0 auto; padding: 2rem; }
+  .config-page h1 { font-size: 1.75rem; color: var(--primary); margin-bottom: .25rem; }
+  .config-page > p { color: var(--text-muted); font-size: .95rem; margin-bottom: 1.5rem; }
+
+  /* Progress */
+  .config-progress { display: flex; gap: .5rem; margin-bottom: 2rem; }
+  .cp-step {
+    flex: 1; text-align: center; padding: .6rem .5rem; border-radius: 8px;
+    font-size: .8rem; font-weight: 600; background: var(--white); border: 2px solid var(--border);
+    color: var(--text-muted); transition: all .3s; cursor: pointer;
+  }
+  .cp-step.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+  .cp-step.done { background: var(--accent-light); border-color: var(--accent); color: #065f46; }
+  .cp-num { display: inline-block; width: 22px; height: 22px; line-height: 22px; border-radius: 50%; background: var(--gray-200); color: var(--gray); font-size: .7rem; margin-right: .35rem; }
+  .cp-step.active .cp-num { background: rgba(255,255,255,.2); color: var(--white); }
+  .cp-step.done .cp-num { background: var(--accent); color: var(--white); }
+
+  /* Step container */
+  .config-step { display: none; background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); padding: 2rem; }
+  .config-step.active { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .config-step h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: .25rem; }
+  .config-step .step-desc { font-size: .85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  /* Form elements */
+  .form-row { margin-bottom: 1.25rem; }
+  .form-row label { display: block; font-size: .85rem; font-weight: 600; color: var(--text); margin-bottom: .35rem; }
+  .form-row input[type="text"], .form-row input[type="email"], .form-row input[type="url"],
+  .form-row input[type="color"], .form-row select, .form-row textarea {
+    width: 100%; padding: .55rem .75rem; border: 1px solid var(--border); border-radius: 8px;
+    font-size: .85rem; font-family: var(--font); outline: none; transition: border .2s;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light);
+  }
+  .form-row textarea { resize: vertical; min-height: 60px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* Category toggles step 2 */
+  .cat-config {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-bottom: .75rem;
+  }
+  .cat-config-header { display: flex; align-items: center; gap: .75rem; }
+  .cat-config-icon {
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: .85rem; flex-shrink: 0;
+  }
+  .cat-config-info { flex: 1; }
+  .cat-config-info h4 { font-size: .9rem; color: var(--text); }
+  .cat-config-info span { font-size: .75rem; color: var(--text-muted); }
+  .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--gray-200); border-radius: 12px; cursor: pointer; transition: .3s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--white); top: 3px; left: 3px; transition: .3s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+  .toggle input:disabled + .toggle-slider { background: var(--gray); opacity: .5; cursor: not-allowed; }
+
+  .cat-desc-field { margin-top: .75rem; display: none; }
+  .cat-desc-field.visible { display: block; }
+
+  /* Cookies table step 3 */
+  .cookies-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .85rem; }
+  .cookies-table th {
+    text-align: left; padding: .6rem .5rem; background: var(--gray-light); color: var(--text-muted);
+    font-weight: 600; font-size: .75rem;
+  }
+  .cookies-table td { padding: .5rem; border-top: 1px solid var(--border); }
+  .cookies-table code { background: var(--gray-light); padding: .1rem .3rem; border-radius: 3px; font-size: .8rem; }
+  .add-cookie-btn {
+    margin-top: .75rem; padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: 2px dashed var(--border); background: none; color: var(--text-muted);
+    font-family: var(--font); transition: all .2s; width: 100%; text-align: center;
+  }
+  .add-cookie-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Theme step 4 */
+  .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .theme-controls { display: flex; flex-direction: column; gap: 1rem; }
+  .color-input-row { display: flex; align-items: center; gap: .75rem; }
+  .color-input-row input[type="color"] {
+    width: 40px; height: 40px; padding: 2px; border-radius: 8px; cursor: pointer;
+  }
+  .color-input-row span { font-size: .85rem; color: var(--text); }
+  .style-options { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .style-opt {
+    padding: .5rem 1rem; border: 2px solid var(--border); border-radius: 8px;
+    font-size: .8rem; cursor: pointer; background: var(--white); font-family: var(--font);
+    transition: all .2s; color: var(--text);
+  }
+  .style-opt.selected { border-color: var(--accent); background: var(--accent-light); color: #065f46; }
+  .style-opt:hover { border-color: var(--primary-light); }
+
+  /* Live preview */
+  .live-preview {
+    background: #f9fafb; border: 1px solid var(--border); border-radius: var(--radius);
+    min-height: 280px; position: relative; overflow: hidden;
+  }
+  .lp-page-sim {
+    padding: 1.5rem; font-size: .75rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .lp-page-sim h4 { font-size: .9rem; color: var(--text); margin-bottom: .5rem; }
+  .lp-banner-preview {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: .75rem 1rem;
+    border-top: 1px solid var(--border); font-size: .75rem; transition: all .3s;
+  }
+  .lp-banner-preview .lp-text { margin-bottom: .5rem; line-height: 1.4; }
+  .lp-banner-preview .lp-btns { display: flex; gap: .35rem; }
+  .lp-banner-preview .lp-btn {
+    padding: .35rem .75rem; border-radius: 6px; font-size: .7rem; font-weight: 600;
+    border: none; cursor: default;
+  }
+
+  /* Export step 5 */
+  .code-block {
+    background: #1e1b4b; color: #e2e8f0; border-radius: 8px; padding: 1rem; font-size: .8rem;
+    font-family: 'SF Mono', Monaco, Consolas, monospace; line-height: 1.6; overflow-x: auto;
+    position: relative; margin-bottom: 1rem; white-space: pre;
+  }
+  .copy-btn {
+    position: absolute; top: .5rem; right: .5rem; padding: .35rem .75rem; border-radius: 6px;
+    font-size: .7rem; font-weight: 600; cursor: pointer; border: none;
+    background: rgba(255,255,255,.15); color: rgba(255,255,255,.8); font-family: var(--font);
+    transition: all .15s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,.25); color: var(--white); }
+  .export-actions { display: flex; gap: .75rem; margin-top: 1rem; }
+  .exp-btn {
+    padding: .6rem 1.25rem; border-radius: 8px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); transition: all .2s;
+  }
+  .exp-btn-primary { background: var(--accent); color: var(--white); }
+  .exp-btn-primary:hover { background: var(--accent-dark); }
+  .exp-btn-outline { background: none; border: 2px solid var(--border); color: var(--text); }
+  .exp-btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+  .export-label { font-size: .85rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; display: block; }
+
+  /* Nav buttons */
+  .config-nav {
+    display: flex; justify-content: space-between; margin-top: 1.5rem;
+  }
+  .nav-btn {
+    padding: .6rem 1.5rem; border-radius: 8px; font-size: .9rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); transition: all .2s;
+  }
+  .nav-btn-primary { background: var(--accent); color: var(--white); }
+  .nav-btn-primary:hover { background: var(--accent-dark); }
+  .nav-btn-outline { background: none; border: 2px solid var(--border); color: var(--text); }
+  .nav-btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+  .invisible { visibility: hidden; }
+
+  @media (max-width: 768px) {
+    .form-grid, .theme-grid { grid-template-columns: 1fr; }
+    .config-progress { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html">Landing</a><a href="standard-spec.html">Spec</a><a href="onboarding.html">Onboarding</a><a href="consent-dashboard.html">Dashboard</a><a href="cmp-plugin-demo.html">CMP Plugin</a><a href="visual-configurator.html" class="mn-active">Configurator</a></div>
+
+<div class="config-page">
+  <h1>Visual Configurator</h1>
+  <p>Configure your CMP plugin in 5 steps. Preview your banner live as you build it.</p>
+
+  <div class="config-progress">
+    <div class="cp-step active" onclick="goStep(1)"><span class="cp-num">1</span>Site Info</div>
+    <div class="cp-step" onclick="goStep(2)"><span class="cp-num">2</span>Categories</div>
+    <div class="cp-step" onclick="goStep(3)"><span class="cp-num">3</span>Cookies</div>
+    <div class="cp-step" onclick="goStep(4)"><span class="cp-num">4</span>Theme</div>
+    <div class="cp-step" onclick="goStep(5)"><span class="cp-num">5</span>Export</div>
+  </div>
+
+  <!-- Step 1: Site Info -->
+  <div class="config-step active" id="cs1">
+    <h2>Site Information</h2>
+    <p class="step-desc">Basic details about your website for the consent banner and policy page.</p>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Site Name</label>
+        <input type="text" id="siteName" value="Acme Corp" placeholder="Your Website Name">
+      </div>
+      <div class="form-row">
+        <label>Domain</label>
+        <input type="text" id="siteDomain" value="acme.com" placeholder="example.com">
+      </div>
+      <div class="form-row">
+        <label>Contact Email</label>
+        <input type="email" id="siteEmail" value="privacy@acme.com" placeholder="privacy@example.com">
+      </div>
+      <div class="form-row">
+        <label>Privacy Policy URL</label>
+        <input type="url" id="sitePolicy" value="/cookie-policy" placeholder="/privacy-policy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Categories -->
+  <div class="config-step" id="cs2">
+    <h2>Cookie Categories</h2>
+    <p class="step-desc">Toggle which categories your site uses. Customize descriptions for each.</p>
+
+    <div class="cat-config">
+      <div class="cat-config-header">
+        <div class="cat-config-icon" style="background: #f3f4f6; color: #6b7280;">&#x1f512;</div>
+        <div class="cat-config-info"><h4>Essential</h4><span>Always on - cannot be disabled</span></div>
+        <label class="toggle"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cat-desc-field visible">
+        <div class="form-row" style="margin-bottom:0">
+          <label>Description</label>
+          <textarea>These cookies are required for the website to function and cannot be disabled.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-config">
+      <div class="cat-config-header">
+        <div class="cat-config-icon" style="background: #dbeafe; color: #2563eb;">&#9881;</div>
+        <div class="cat-config-info"><h4>Functional</h4><span>Preferences, language settings</span></div>
+        <label class="toggle"><input type="checkbox" checked onchange="toggleCatDesc(this)"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cat-desc-field visible">
+        <div class="form-row" style="margin-bottom:0">
+          <label>Description</label>
+          <textarea>These cookies enable enhanced functionality like remembering your preferences, language, and region settings.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-config">
+      <div class="cat-config-header">
+        <div class="cat-config-icon" style="background: #ede9fe; color: #7c3aed;">&#x1f4ca;</div>
+        <div class="cat-config-info"><h4>Analytics</h4><span>Anonymous usage statistics</span></div>
+        <label class="toggle"><input type="checkbox" checked onchange="toggleCatDesc(this)"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cat-desc-field visible">
+        <div class="form-row" style="margin-bottom:0">
+          <label>Description</label>
+          <textarea>These cookies help us understand how visitors interact with the website by collecting information anonymously.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-config">
+      <div class="cat-config-header">
+        <div class="cat-config-icon" style="background: #ffedd5; color: #ea580c;">&#x1f4e2;</div>
+        <div class="cat-config-info"><h4>Marketing</h4><span>Ads and cross-site tracking</span></div>
+        <label class="toggle"><input type="checkbox" onchange="toggleCatDesc(this)"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cat-desc-field">
+        <div class="form-row" style="margin-bottom:0">
+          <label>Description</label>
+          <textarea>These cookies are used to deliver advertisements that are relevant to you and your interests.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-config">
+      <div class="cat-config-header">
+        <div class="cat-config-icon" style="background: #e0f2fe; color: #0ea5e9;">&#x1f310;</div>
+        <div class="cat-config-info"><h4>Social Media</h4><span>Share buttons, embedded content</span></div>
+        <label class="toggle"><input type="checkbox" onchange="toggleCatDesc(this)"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cat-desc-field">
+        <div class="form-row" style="margin-bottom:0">
+          <label>Description</label>
+          <textarea>These cookies enable social media features like share buttons and embedded content from social platforms.</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Cookies -->
+  <div class="config-step" id="cs3">
+    <h2>Individual Cookies</h2>
+    <p class="step-desc">Declare each cookie your site uses. Pre-filled examples shown below.</p>
+    <table class="cookies-table">
+      <thead>
+        <tr><th>Name</th><th>Category</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>session_id</code></td>
+          <td>Essential</td>
+          <td>Acme Corp</td>
+          <td>Maintains login session</td>
+          <td>Session</td>
+          <td>1st party</td>
+        </tr>
+        <tr>
+          <td><code>lang_pref</code></td>
+          <td>Functional</td>
+          <td>Acme Corp</td>
+          <td>Stores language preference</td>
+          <td>1 year</td>
+          <td>1st party</td>
+        </tr>
+        <tr>
+          <td><code>_ga</code></td>
+          <td>Analytics</td>
+          <td>Google Analytics</td>
+          <td>Distinguishes unique users</td>
+          <td>2 years</td>
+          <td>3rd party</td>
+        </tr>
+        <tr>
+          <td><code>_gid</code></td>
+          <td>Analytics</td>
+          <td>Google Analytics</td>
+          <td>Distinguishes unique users</td>
+          <td>24 hours</td>
+          <td>3rd party</td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="add-cookie-btn">+ Add Cookie</button>
+
+    <div id="addCookieForm" style="display:none; margin-top: 1rem; padding: 1rem; background: var(--gray-light); border-radius: var(--radius);">
+      <div class="form-grid">
+        <div class="form-row"><label>Cookie Name</label><input type="text" placeholder="_fbp"></div>
+        <div class="form-row"><label>Category</label>
+          <select><option>Essential</option><option>Functional</option><option>Analytics</option><option>Marketing</option><option>Social Media</option></select>
+        </div>
+        <div class="form-row"><label>Provider</label><input type="text" placeholder="Facebook"></div>
+        <div class="form-row"><label>Purpose</label><input type="text" placeholder="Tracks visits for ads"></div>
+        <div class="form-row"><label>Duration</label><input type="text" placeholder="3 months"></div>
+        <div class="form-row"><label>Type</label>
+          <select><option>1st party</option><option>3rd party</option></select>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:.75rem;">
+        <button class="nav-btn nav-btn-primary" style="padding:.45rem 1rem;font-size:.8rem;" onclick="document.getElementById('addCookieForm').style.display='none'">Add Cookie</button>
+        <button class="nav-btn nav-btn-outline" style="padding:.45rem 1rem;font-size:.8rem;" onclick="document.getElementById('addCookieForm').style.display='none'">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Theme -->
+  <div class="config-step" id="cs4">
+    <h2>Theme &amp; Appearance</h2>
+    <p class="step-desc">Customize colors, position, and style. See changes in the live preview.</p>
+    <div class="theme-grid">
+      <div class="theme-controls">
+        <div class="form-row">
+          <label>Colors</label>
+          <div class="color-input-row"><input type="color" id="clrPrimary" value="#2563eb" oninput="updatePreview()"><span>Primary</span></div>
+          <div class="color-input-row" style="margin-top:.5rem"><input type="color" id="clrAccept" value="#16a34a" oninput="updatePreview()"><span>Accept Button</span></div>
+          <div class="color-input-row" style="margin-top:.5rem"><input type="color" id="clrBg" value="#ffffff" oninput="updatePreview()"><span>Background</span></div>
+        </div>
+        <div class="form-row">
+          <label>Position</label>
+          <div class="style-options" id="positionOpts">
+            <div class="style-opt selected" onclick="selectOpt(this, 'positionOpts')">Bottom</div>
+            <div class="style-opt" onclick="selectOpt(this, 'positionOpts')">Top</div>
+            <div class="style-opt" onclick="selectOpt(this, 'positionOpts')">Center</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Style</label>
+          <div class="style-options" id="styleOpts">
+            <div class="style-opt selected" onclick="selectOpt(this, 'styleOpts')">Bar</div>
+            <div class="style-opt" onclick="selectOpt(this, 'styleOpts')">Popup</div>
+            <div class="style-opt" onclick="selectOpt(this, 'styleOpts')">Modal</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Dark Mode</label>
+          <label class="toggle"><input type="checkbox" id="darkMode" onchange="updatePreview()"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:.85rem;font-weight:600;color:var(--text);display:block;margin-bottom:.5rem;">Live Preview</label>
+        <div class="live-preview" id="livePreview">
+          <div class="lp-page-sim">
+            <h4>Acme Corp</h4>
+            <p>Welcome to our website. We provide innovative solutions for businesses of all sizes. Browse our products and services to learn more about what we offer.</p>
+            <p>Our team is dedicated to delivering exceptional results. Contact us today to get started with your digital transformation journey.</p>
+          </div>
+          <div class="lp-banner-preview" id="bannerPreview" style="background:#fff;color:#111827;">
+            <div class="lp-text">We use cookies to improve your experience. <a href="#" style="color:#2563eb">Learn more</a></div>
+            <div class="lp-btns">
+              <div class="lp-btn" style="background:transparent;border:1px solid #e5e7eb;color:#111827;">Reject All</div>
+              <div class="lp-btn" id="prevAcceptBtn" style="background:#16a34a;color:#fff;">Accept All</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Export -->
+  <div class="config-step" id="cs5">
+    <h2>Export Configuration</h2>
+    <p class="step-desc">Your CMP is ready. Copy the config or download the files below.</p>
+
+    <span class="export-label">Generated JSON Config</span>
+    <div class="code-block" id="jsonOutput"><button class="copy-btn" onclick="copyCode('jsonOutput')">Copy</button>{
+  "siteName": "Acme Corp",
+  "siteUrl": "https://acme.com",
+  "privacyContact": "privacy@acme.com",
+  "policyUrl": "/cookie-policy",
+  "categories": [
+    {
+      "id": "essential",
+      "name": "Essential",
+      "required": true,
+      "cookies": [
+        { "name": "session_id", "provider": "Acme Corp", "duration": "Session" }
+      ]
+    },
+    {
+      "id": "functional",
+      "name": "Functional",
+      "cookies": [
+        { "name": "lang_pref", "provider": "Acme Corp", "duration": "1 year" }
+      ]
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics",
+      "cookies": [
+        { "name": "_ga", "provider": "Google Analytics", "duration": "2 years" },
+        { "name": "_gid", "provider": "Google Analytics", "duration": "24 hours" }
+      ]
+    }
+  ],
+  "theme": {
+    "mode": "light",
+    "position": "bottom",
+    "primaryColor": "#2563eb",
+    "acceptColor": "#16a34a"
+  }
+}</div>
+
+    <span class="export-label">Script Tag for Installation</span>
+    <div class="code-block" id="scriptOutput"><button class="copy-btn" onclick="copyCode('scriptOutput')">Copy</button>&lt;!-- Cookies Accepter CMP v1.0 --&gt;
+&lt;script src="https://cdn.cookies-accepter.org/cmp/v1/cookies-accepter-cmp.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  CookiesAccepterCMP.init({
+    siteName: "Acme Corp",
+    policyUrl: "/cookie-policy",
+    categories: ["essential", "functional", "analytics"],
+    theme: { position: "bottom", primaryColor: "#2563eb" }
+  });
+&lt;/script&gt;</div>
+
+    <div class="export-actions">
+      <button class="exp-btn exp-btn-primary">Download JSON Config</button>
+      <button class="exp-btn exp-btn-outline">Download Full Bundle</button>
+      <button class="exp-btn exp-btn-outline">Download well-known file</button>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="config-nav">
+    <button class="nav-btn nav-btn-outline invisible" id="cfgBack" onclick="prevConfigStep()">Back</button>
+    <button class="nav-btn nav-btn-primary" id="cfgNext" onclick="nextConfigStep()">Next Step</button>
+  </div>
+</div>
+
+<script>
+  var currentConfigStep = 1;
+  var totalConfigSteps = 5;
+
+  function goStep(n) {
+    currentConfigStep = n;
+    updateConfigUI();
+  }
+  function nextConfigStep() {
+    if (currentConfigStep < totalConfigSteps) { currentConfigStep++; updateConfigUI(); }
+  }
+  function prevConfigStep() {
+    if (currentConfigStep > 1) { currentConfigStep--; updateConfigUI(); }
+  }
+
+  function updateConfigUI() {
+    for (var i = 1; i <= totalConfigSteps; i++) {
+      var stepEl = document.getElementById('cs' + i);
+      stepEl.classList.toggle('active', i === currentConfigStep);
+      var progSteps = document.querySelectorAll('.cp-step');
+      progSteps[i - 1].classList.toggle('active', i === currentConfigStep);
+      progSteps[i - 1].classList.toggle('done', i < currentConfigStep);
+    }
+    document.getElementById('cfgBack').classList.toggle('invisible', currentConfigStep === 1);
+    document.getElementById('cfgNext').textContent = currentConfigStep === totalConfigSteps ? 'Done' : 'Next Step';
+  }
+
+  function toggleCatDesc(checkbox) {
+    var catConfig = checkbox.closest('.cat-config');
+    var descField = catConfig.querySelector('.cat-desc-field');
+    descField.classList.toggle('visible', checkbox.checked);
+  }
+
+  function selectOpt(el, groupId) {
+    var group = document.getElementById(groupId);
+    group.querySelectorAll('.style-opt').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    updatePreview();
+  }
+
+  function updatePreview() {
+    var primary = document.getElementById('clrPrimary').value;
+    var accept = document.getElementById('clrAccept').value;
+    var bg = document.getElementById('clrBg').value;
+    var dark = document.getElementById('darkMode').checked;
+
+    var banner = document.getElementById('bannerPreview');
+    var preview = document.getElementById('livePreview');
+    var acceptBtn = document.getElementById('prevAcceptBtn');
+
+    if (dark) {
+      banner.style.background = '#1f2937';
+      banner.style.color = '#e5e7eb';
+      preview.style.background = '#111827';
+      preview.querySelector('.lp-page-sim').style.color = '#9ca3af';
+      preview.querySelector('.lp-page-sim h4').style.color = '#e5e7eb';
+    } else {
+      banner.style.background = bg;
+      banner.style.color = '#111827';
+      preview.style.background = '#f9fafb';
+      preview.querySelector('.lp-page-sim').style.color = '#6b7280';
+      preview.querySelector('.lp-page-sim h4').style.color = '#111827';
+    }
+
+    acceptBtn.style.background = accept;
+    banner.querySelector('a').style.color = primary;
+  }
+
+  function copyCode(id) {
+    var el = document.getElementById(id);
+    var text = el.textContent.replace('Copy', '').trim();
+    navigator.clipboard.writeText(text);
+    var btn = el.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+  }
+
+  document.querySelector('.add-cookie-btn').addEventListener('click', function() {
+    document.getElementById('addCookieForm').style.display = 'block';
+  });
+</script>
+</body>
+</html>

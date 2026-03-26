@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookies Accepter — Onboarding</title>
+<style>
+  .mockup-nav{background:#1e1b4b;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-family:-apple-system,sans-serif;font-size:.85rem;position:sticky;top:0;z-index:9999}
+  .mockup-nav a{color:rgba(255,255,255,.7);text-decoration:none;padding:.35rem .75rem;border-radius:6px;transition:all .2s}
+  .mockup-nav a:hover{color:#fff;background:rgba(255,255,255,.15)}
+  .mockup-nav a.mn-active{color:#fff;background:#10b981;font-weight:600}
+  .mockup-nav .mn-logo{font-weight:700;font-size:1rem;margin-right:auto}
+</style>
+<style>
+  :root {
+    --primary: #1e1b4b; --primary-light: #312e81; --accent: #10b981; --accent-light: #d1fae5;
+    --accent-dark: #059669; --green: #10b981; --yellow: #f59e0b; --red: #ef4444;
+    --gray: #6b7280; --gray-light: #f3f4f6; --gray-200: #e5e7eb;
+    --white: #ffffff; --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --radius: 12px; --shadow: 0 4px 24px rgba(0,0,0,0.12);
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%); min-height: 100vh; display: flex; flex-direction: column; }
+
+  .onboarding-container {
+    flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .wizard {
+    background: var(--white); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%; max-width: 640px; overflow: hidden;
+  }
+
+  /* Progress bar */
+  .progress-bar { display: flex; padding: 1.5rem 2rem 0; gap: .5rem; }
+  .progress-step {
+    flex: 1; height: 4px; border-radius: 2px; background: var(--gray-200); transition: background .4s;
+  }
+  .progress-step.active { background: var(--accent); }
+  .progress-step.done { background: var(--accent); }
+
+  .step-labels { display: flex; padding: .5rem 2rem 1rem; gap: .5rem; }
+  .step-label {
+    flex: 1; text-align: center; font-size: .7rem; color: var(--text-muted); transition: color .3s;
+  }
+  .step-label.active { color: var(--primary); font-weight: 600; }
+
+  /* Step content */
+  .step-content { padding: 0 2rem 2rem; min-height: 380px; display: none; }
+  .step-content.active { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* Step 1: Welcome */
+  .welcome-icon {
+    width: 80px; height: 80px; margin: 1rem auto; background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  }
+  .welcome-icon svg { width: 44px; height: 44px; color: var(--white); }
+  .welcome-title { text-align: center; font-size: 1.5rem; color: var(--primary); margin: 1rem 0 .5rem; font-weight: 700; }
+  .welcome-desc { text-align: center; color: var(--text-muted); line-height: 1.6; max-width: 420px; margin: 0 auto 1.5rem; }
+  .welcome-features { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+  .welcome-feat {
+    display: flex; align-items: center; gap: .5rem; font-size: .85rem; color: var(--text);
+    background: var(--gray-light); padding: .5rem 1rem; border-radius: 8px;
+  }
+  .welcome-feat svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+  /* Step 2: Profile cards */
+  .profiles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .5rem; }
+  .profile-card {
+    border: 2px solid var(--border); border-radius: var(--radius); padding: 1rem; cursor: pointer;
+    transition: all .2s; position: relative;
+  }
+  .profile-card:hover { border-color: var(--primary-light); background: #fafafe; }
+  .profile-card.selected { border-color: var(--accent); background: var(--accent-light); }
+  .profile-card .card-icon {
+    width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; margin-bottom: .5rem;
+  }
+  .profile-card h4 { font-size: .9rem; color: var(--primary); margin-bottom: .25rem; }
+  .profile-card p { font-size: .75rem; color: var(--text-muted); line-height: 1.4; }
+  .profile-card .badge-rec {
+    position: absolute; top: -.5rem; right: .75rem; background: var(--accent); color: var(--white);
+    font-size: .65rem; font-weight: 700; padding: .2rem .5rem; border-radius: 4px;
+  }
+  .profile-card .cat-indicators {
+    display: flex; gap: .35rem; margin-top: .5rem; flex-wrap: wrap;
+  }
+  .cat-ind {
+    font-size: .65rem; padding: .15rem .4rem; border-radius: 3px; font-weight: 600;
+  }
+  .cat-ind.on { background: var(--accent-light); color: #065f46; }
+  .cat-ind.off { background: #fee2e2; color: #991b1b; }
+  .cat-ind.lock { background: var(--gray-light); color: var(--gray); }
+
+  .step-subtitle { font-size: 1.1rem; color: var(--primary); font-weight: 700; margin-bottom: .25rem; }
+  .step-desc { font-size: .85rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+  /* Step 3: Customize */
+  .category-list { display: flex; flex-direction: column; gap: .75rem; }
+  .cat-toggle-row {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; transition: all .2s;
+  }
+  .cat-toggle-row:hover { border-color: var(--primary-light); }
+  .cat-toggle-header { display: flex; align-items: center; gap: .75rem; }
+  .cat-toggle-icon {
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: .9rem; flex-shrink: 0;
+  }
+  .cat-toggle-info { flex: 1; }
+  .cat-toggle-info h4 { font-size: .9rem; color: var(--text); }
+  .cat-toggle-info span { font-size: .75rem; color: var(--text-muted); }
+  .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--gray-200); border-radius: 12px; cursor: pointer;
+    transition: .3s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--white); top: 3px; left: 3px; transition: .3s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+  .toggle input:disabled + .toggle-slider { background: var(--gray); opacity: .5; cursor: not-allowed; }
+  .toggle input:disabled:checked + .toggle-slider { background: var(--gray); }
+
+  .cat-expand {
+    display: none; margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border);
+    font-size: .8rem; color: var(--text-muted); line-height: 1.5;
+  }
+  .cat-expand.open { display: block; animation: fadeIn .2s ease; }
+  .expand-btn {
+    background: none; border: none; color: var(--primary-light); font-size: .75rem;
+    cursor: pointer; padding: 0; font-family: var(--font); margin-top: .5rem;
+  }
+  .expand-btn:hover { text-decoration: underline; }
+  .skip-link {
+    display: block; text-align: center; margin-top: 1rem; font-size: .85rem;
+    color: var(--text-muted); cursor: pointer; border: none; background: none; font-family: var(--font);
+  }
+  .skip-link:hover { color: var(--primary); text-decoration: underline; }
+
+  /* Step 4: Done */
+  .done-icon {
+    width: 80px; height: 80px; margin: 1.5rem auto; background: var(--accent-light);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    animation: scaleIn .5s ease;
+  }
+  @keyframes scaleIn { from { transform: scale(0); } 70% { transform: scale(1.1); } to { transform: scale(1); } }
+  .done-icon svg { width: 40px; height: 40px; color: var(--accent); }
+  .done-title { text-align: center; font-size: 1.4rem; color: var(--primary); font-weight: 700; margin-bottom: .5rem; }
+  .done-desc { text-align: center; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .done-summary {
+    background: var(--gray-light); border-radius: var(--radius); padding: 1rem; margin-bottom: 1.5rem;
+  }
+  .done-summary h4 { font-size: .85rem; color: var(--text); margin-bottom: .5rem; }
+  .done-summary .sum-row {
+    display: flex; justify-content: space-between; font-size: .8rem; padding: .25rem 0;
+  }
+  .done-summary .sum-label { color: var(--text-muted); }
+  .done-summary .sum-value { color: var(--text); font-weight: 600; }
+  .open-settings {
+    display: block; text-align: center; margin-top: .75rem; font-size: .85rem;
+    color: var(--primary-light); text-decoration: none;
+  }
+  .open-settings:hover { text-decoration: underline; }
+
+  /* Navigation buttons */
+  .wizard-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: .6rem 1.5rem; border-radius: 8px; font-size: .9rem; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font); transition: all .2s;
+  }
+  .btn-primary { background: var(--accent); color: var(--white); }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-outline { background: none; border: 2px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-large { padding: .75rem 2.5rem; font-size: 1rem; }
+  .btn-ghost { background: none; border: none; color: var(--text-muted); font-size: .85rem; cursor: pointer; font-family: var(--font); }
+  .btn-ghost:hover { color: var(--primary); }
+  .invisible { visibility: hidden; }
+</style>
+</head>
+<body>
+<div class="mockup-nav"><span class="mn-logo">Mockups</span><a href="index.html">Overview</a><a href="extension-popup.html">Popup</a><a href="extension-options.html">Settings</a><a href="landing-page.html">Landing</a><a href="standard-spec.html">Spec</a><a href="onboarding.html" class="mn-active">Onboarding</a><a href="consent-dashboard.html">Dashboard</a><a href="cmp-plugin-demo.html">CMP Plugin</a><a href="visual-configurator.html">Configurator</a></div>
+
+<div class="onboarding-container">
+  <div class="wizard">
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="progress-step active" id="pb1"></div>
+      <div class="progress-step" id="pb2"></div>
+      <div class="progress-step" id="pb3"></div>
+      <div class="progress-step" id="pb4"></div>
+    </div>
+    <div class="step-labels">
+      <span class="step-label active" id="sl1">Welcome</span>
+      <span class="step-label" id="sl2">Profile</span>
+      <span class="step-label" id="sl3">Customize</span>
+      <span class="step-label" id="sl4">Done</span>
+    </div>
+
+    <!-- Step 1: Welcome -->
+    <div class="step-content active" id="step1">
+      <div class="welcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="welcome-title">Welcome to Cookies Accepter</h2>
+      <p class="welcome-desc">Take back control of your cookie consent. Set your privacy preferences once, and we will automatically handle cookie popups on every website you visit.</p>
+      <div class="welcome-features">
+        <div class="welcome-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Privacy-first
+        </div>
+        <div class="welcome-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Saves time
+        </div>
+        <div class="welcome-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Transparent
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Choose Profile -->
+    <div class="step-content" id="step2">
+      <h3 class="step-subtitle">Choose Your Privacy Profile</h3>
+      <p class="step-desc">Pick a starting point. You can always customize later.</p>
+      <div class="profiles-grid">
+        <div class="profile-card" onclick="selectProfile(this, 'max')" data-profile="max">
+          <span class="badge-rec">Recommended</span>
+          <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4>Privacy Maximum</h4>
+          <p>Essential cookies only. Maximum privacy protection.</p>
+          <div class="cat-indicators">
+            <span class="cat-ind lock">Essential</span>
+            <span class="cat-ind off">Functional</span>
+            <span class="cat-ind off">Analytics</span>
+            <span class="cat-ind off">Marketing</span>
+          </div>
+        </div>
+        <div class="profile-card" onclick="selectProfile(this, 'balanced')" data-profile="balanced">
+          <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <h4>Balanced</h4>
+          <p>Essential + Functional. Good balance of privacy and features.</p>
+          <div class="cat-indicators">
+            <span class="cat-ind lock">Essential</span>
+            <span class="cat-ind on">Functional</span>
+            <span class="cat-ind off">Analytics</span>
+            <span class="cat-ind off">Marketing</span>
+          </div>
+        </div>
+        <div class="profile-card" onclick="selectProfile(this, 'analytics')" data-profile="analytics">
+          <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          </div>
+          <h4>Allow Analytics</h4>
+          <p>Essential + Functional + Analytics. Help sites improve.</p>
+          <div class="cat-indicators">
+            <span class="cat-ind lock">Essential</span>
+            <span class="cat-ind on">Functional</span>
+            <span class="cat-ind on">Analytics</span>
+            <span class="cat-ind off">Marketing</span>
+          </div>
+        </div>
+        <div class="profile-card" onclick="selectProfile(this, 'all')" data-profile="all">
+          <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h4>Accept All</h4>
+          <p>Accept everything. Fastest browsing, least privacy.</p>
+          <div class="cat-indicators">
+            <span class="cat-ind lock">Essential</span>
+            <span class="cat-ind on">Functional</span>
+            <span class="cat-ind on">Analytics</span>
+            <span class="cat-ind on">Marketing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Customize -->
+    <div class="step-content" id="step3">
+      <h3 class="step-subtitle">Fine-Tune Your Preferences</h3>
+      <p class="step-desc">Adjust individual categories based on your selected profile.</p>
+      <div class="category-list">
+        <div class="cat-toggle-row">
+          <div class="cat-toggle-header">
+            <div class="cat-toggle-icon" style="background: var(--gray-light); color: var(--gray);">&#x1f512;</div>
+            <div class="cat-toggle-info">
+              <h4>Essential</h4>
+              <span>Always on - required for the site to work</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked disabled>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand(this)">Learn more</button>
+          <div class="cat-expand">
+            These cookies are strictly necessary for the website to function. They enable core features like page navigation, secure areas, and shopping carts. The website cannot function properly without them.
+          </div>
+        </div>
+        <div class="cat-toggle-row">
+          <div class="cat-toggle-header">
+            <div class="cat-toggle-icon" style="background: #dbeafe; color: #2563eb;">&#9881;</div>
+            <div class="cat-toggle-info">
+              <h4>Functional</h4>
+              <span>Preferences, language, region settings</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="tog-functional" onchange="updateSummary()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand(this)">Learn more</button>
+          <div class="cat-expand">
+            Functional cookies enable enhanced functionality such as remembering your language preference, region, login status, and personalization settings. Without these, some features may not work as expected.
+          </div>
+        </div>
+        <div class="cat-toggle-row">
+          <div class="cat-toggle-header">
+            <div class="cat-toggle-icon" style="background: #ede9fe; color: #7c3aed;">&#x1f4ca;</div>
+            <div class="cat-toggle-info">
+              <h4>Analytics</h4>
+              <span>Anonymous usage statistics</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="tog-analytics" onchange="updateSummary()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand(this)">Learn more</button>
+          <div class="cat-expand">
+            Analytics cookies help website owners understand how visitors interact with their sites by collecting information anonymously. This data is used to improve website performance, content, and user experience.
+          </div>
+        </div>
+        <div class="cat-toggle-row">
+          <div class="cat-toggle-header">
+            <div class="cat-toggle-icon" style="background: #ffedd5; color: #ea580c;">&#x1f4e2;</div>
+            <div class="cat-toggle-info">
+              <h4>Marketing</h4>
+              <span>Ads and cross-site tracking</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="tog-marketing" onchange="updateSummary()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand(this)">Learn more</button>
+          <div class="cat-expand">
+            Marketing cookies are used to track visitors across websites. They are used to display ads that are relevant and engaging for the individual user, and thereby more valuable for publishers and advertisers.
+          </div>
+        </div>
+      </div>
+      <button class="skip-link" onclick="goToStep(4)">Skip &#8212; use profile defaults</button>
+    </div>
+
+    <!-- Step 4: Done -->
+    <div class="step-content" id="step4">
+      <div class="done-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h2 class="done-title">You're All Set!</h2>
+      <p class="done-desc">Cookies Accepter is now configured and ready to protect your privacy.</p>
+      <div class="done-summary">
+        <h4>Your Configuration</h4>
+        <div class="sum-row"><span class="sum-label">Profile</span><span class="sum-value" id="sum-profile">Privacy Maximum</span></div>
+        <div class="sum-row"><span class="sum-label">Essential</span><span class="sum-value">Always on</span></div>
+        <div class="sum-row"><span class="sum-label">Functional</span><span class="sum-value" id="sum-func">Off</span></div>
+        <div class="sum-row"><span class="sum-label">Analytics</span><span class="sum-value" id="sum-analytics">Off</span></div>
+        <div class="sum-row"><span class="sum-label">Marketing</span><span class="sum-value" id="sum-marketing">Off</span></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="wizard-nav">
+      <button class="btn btn-outline invisible" id="backBtn" onclick="prevStep()">Back</button>
+      <button class="btn btn-primary btn-large" id="nextBtn" onclick="nextStep()">Get Started</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  let selectedProfile = null;
+  const totalSteps = 4;
+
+  const profileSettings = {
+    max:       { functional: false, analytics: false, marketing: false, name: 'Privacy Maximum' },
+    balanced:  { functional: true,  analytics: false, marketing: false, name: 'Balanced' },
+    analytics: { functional: true,  analytics: true,  marketing: false, name: 'Allow Analytics' },
+    all:       { functional: true,  analytics: true,  marketing: true,  name: 'Accept All' }
+  };
+
+  function goToStep(n) {
+    currentStep = n;
+    updateUI();
+  }
+
+  function nextStep() {
+    if (currentStep === 2 && !selectedProfile) return;
+    if (currentStep < totalSteps) {
+      currentStep++;
+      updateUI();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      updateUI();
+    }
+  }
+
+  function selectProfile(el, profile) {
+    document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedProfile = profile;
+    const s = profileSettings[profile];
+    document.getElementById('tog-functional').checked = s.functional;
+    document.getElementById('tog-analytics').checked = s.analytics;
+    document.getElementById('tog-marketing').checked = s.marketing;
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const fn = document.getElementById('tog-functional').checked;
+    const an = document.getElementById('tog-analytics').checked;
+    const mk = document.getElementById('tog-marketing').checked;
+    document.getElementById('sum-func').textContent = fn ? 'On' : 'Off';
+    document.getElementById('sum-analytics').textContent = an ? 'On' : 'Off';
+    document.getElementById('sum-marketing').textContent = mk ? 'On' : 'Off';
+    document.getElementById('sum-func').style.color = fn ? '#059669' : '#991b1b';
+    document.getElementById('sum-analytics').style.color = an ? '#059669' : '#991b1b';
+    document.getElementById('sum-marketing').style.color = mk ? '#059669' : '#991b1b';
+    if (selectedProfile) {
+      document.getElementById('sum-profile').textContent = profileSettings[selectedProfile].name;
+    }
+  }
+
+  function toggleExpand(btn) {
+    const exp = btn.nextElementSibling;
+    exp.classList.toggle('open');
+    btn.textContent = exp.classList.contains('open') ? 'Show less' : 'Learn more';
+  }
+
+  function updateUI() {
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById('step' + i).classList.toggle('active', i === currentStep);
+      document.getElementById('pb' + i).classList.toggle('active', i <= currentStep);
+      document.getElementById('pb' + i).classList.toggle('done', i < currentStep);
+      document.getElementById('sl' + i).classList.toggle('active', i === currentStep);
+    }
+
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    backBtn.classList.toggle('invisible', currentStep === 1);
+
+    if (currentStep === 1) {
+      nextBtn.textContent = 'Get Started';
+    } else if (currentStep === 2) {
+      nextBtn.textContent = 'Continue';
+      nextBtn.style.opacity = selectedProfile ? '1' : '.5';
+    } else if (currentStep === 3) {
+      nextBtn.textContent = 'Finish Setup';
+      nextBtn.style.opacity = '1';
+    } else if (currentStep === 4) {
+      nextBtn.textContent = 'Start Browsing';
+      nextBtn.style.opacity = '1';
+    }
+
+    if (currentStep === 4) updateSummary();
+  }
+</script>
+</body>
+</html>
