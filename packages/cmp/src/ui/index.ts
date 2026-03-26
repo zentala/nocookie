@@ -3,4 +3,10 @@
  * Shadow DOM UI components: banner, preference center, policy page.
  */
 
-export {};
+export {
+  ThemeEngine,
+  mergeTheme,
+  buildStylesheet,
+  buildThemeVariables,
+  darkenColor,
+} from "./theme";

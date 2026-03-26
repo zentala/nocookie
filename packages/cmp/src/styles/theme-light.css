@@ -1,0 +1,12 @@
+/**
+ * Light theme overrides for the NoCookie CMP.
+ * Applied when the host has the .ca-theme-light class.
+ */
+
+:host(.ca-theme-light) {
+  --ca-color-bg: #ffffff;
+  --ca-color-text: #1f2937;
+  --ca-color-text-secondary: #6b7280;
+  --ca-color-border: #e5e7eb;
+  --ca-color-overlay: rgba(0, 0, 0, 0.5);
+}

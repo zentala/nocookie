@@ -1,0 +1,12 @@
+/**
+ * Dark theme overrides for the NoCookie CMP.
+ * Applied when the host has the .ca-theme-dark class.
+ */
+
+:host(.ca-theme-dark) {
+  --ca-color-bg: #1f2937;
+  --ca-color-text: #f9fafb;
+  --ca-color-text-secondary: #9ca3af;
+  --ca-color-border: #374151;
+  --ca-color-overlay: rgba(0, 0, 0, 0.7);
+}

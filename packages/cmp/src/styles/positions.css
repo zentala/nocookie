@@ -1,0 +1,33 @@
+/**
+ * Position styles for the NoCookie CMP banner host.
+ * The host element is fixed-positioned on the viewport.
+ */
+
+.ca-host {
+  position: fixed;
+  z-index: var(--ca-z-index);
+  max-width: var(--ca-max-width);
+  width: calc(100% - 32px);
+}
+
+.ca-host--bottom-left {
+  bottom: 16px;
+  left: 16px;
+}
+
+.ca-host--bottom-right {
+  bottom: 16px;
+  right: 16px;
+}
+
+.ca-host--bottom-center {
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ca-host--top-center {
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}

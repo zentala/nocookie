@@ -1,18 +1,45 @@
 /**
  * Base styles for the NoCookie CMP Shadow DOM host.
+ * Defines CSS custom properties and foundational layout.
  * All styles are scoped via Shadow DOM encapsulation.
  */
 
 :host {
+  /* Primary colors */
+  --ca-color-primary: #2563eb;
+  --ca-color-primary-hover: #1d4ed8;
+  --ca-color-accept: #16a34a;
+  --ca-color-reject: #dc2626;
+
+  /* Surface colors */
+  --ca-color-bg: #ffffff;
+  --ca-color-text: #1f2937;
+  --ca-color-text-secondary: #6b7280;
+  --ca-color-border: #e5e7eb;
+  --ca-color-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Category colors */
+  --ca-color-essential: #6b7280;
+  --ca-color-functional: #2563eb;
+  --ca-color-analytics: #7c3aed;
+  --ca-color-marketing: #ea580c;
+  --ca-color-social: #0ea5e9;
+
+  /* Typography */
+  --ca-font-family: system-ui, -apple-system, sans-serif;
+  --ca-font-size-base: 14px;
+
+  /* Layout */
+  --ca-border-radius: 12px;
+  --ca-max-width: 480px;
+  --ca-z-index: 999999;
+
+  /* Apply base styles */
   display: block;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
+  font-family: var(--ca-font-family);
+  font-size: var(--ca-font-size-base);
   line-height: 1.5;
-  color: #1a1a1a;
+  color: var(--ca-color-text);
   box-sizing: border-box;
 }
 
