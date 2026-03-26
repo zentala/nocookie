@@ -17,5 +17,8 @@
     "jsdom": "^29.0.1",
     "vite": "^6.0.0",
     "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "@duckduckgo/autoconsent": "^14.64.0"
   }
 }

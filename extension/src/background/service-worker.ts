@@ -8,6 +8,8 @@
 import type { Message, MessageType } from "@/shared/messages";
 import { isOnboardingCompleted, migrateStorageIfNeeded } from "@/shared/storage-api";
 import { injectGpcScript, syncGpcState } from "./gpc";
+import { AutoconsentAdapter } from "./autoconsent-adapter";
+import { registerRuleSource } from "./rule-engine";
 import {
   handleCmpDetected,
   handleConsentExecuted,
@@ -50,6 +52,11 @@ async function routeMessage(message: Message, tabId: number): Promise<unknown> {
       return { error: `Unknown message type: ${type}` };
   }
 }
+
+// -- Register autoconsent adapter for 2800+ CMP coverage --------------------
+
+const autoconsentAdapter = new AutoconsentAdapter();
+registerRuleSource(autoconsentAdapter);
 
 // -- Message listener ---------------------------------------------------------
 
