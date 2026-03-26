@@ -1,0 +1,38 @@
+---
+/**
+ * Table of contents sidebar for the v1 specification page.
+ * Sticky on desktop, hidden on mobile.
+ */
+const sections = [
+  { id: "introduction", label: "Introduction" },
+  { id: "quick-start", label: "Quick Start" },
+  { id: "file-location", label: "File Location" },
+  { id: "required-fields", label: "Required Fields" },
+  { id: "optional-fields", label: "Optional Fields" },
+  { id: "field-reference", label: "Field Reference" },
+  { id: "categories", label: "Categories" },
+  { id: "examples", label: "Examples" },
+  { id: "cmp-examples", label: "CMP Examples" },
+  { id: "security", label: "Security" },
+  { id: "versioning", label: "Versioning" },
+  { id: "json-schema", label: "JSON Schema" },
+];
+---
+
+<nav class="hidden lg:block sticky top-24 w-56 shrink-0 self-start">
+  <h3 class="text-xs font-semibold uppercase tracking-wider text-muted mb-4">
+    On this page
+  </h3>
+  <ul class="space-y-2 border-l border-white/10 pl-4">
+    {sections.map((s) => (
+      <li>
+        <a
+          href={`#${s.id}`}
+          class="text-sm text-muted hover:text-white transition-colors"
+        >
+          {s.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

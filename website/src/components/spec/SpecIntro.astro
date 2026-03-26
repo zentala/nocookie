@@ -1,0 +1,57 @@
+---
+/**
+ * Introduction, Quick Start, and File Location sections of the v1 spec.
+ */
+---
+
+<section id="introduction" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">1. Introduction</h2>
+  <p class="text-muted leading-relaxed mb-4">
+    The <strong class="text-white">Cookie Consent Declaration</strong> is an open standard
+    that allows websites to declare their cookie usage in a machine-readable format. By
+    placing a JSON file at a well-known URL, websites enable browsers, extensions, and
+    automated agents to read and act on cookie consent preferences without requiring
+    user interaction with consent popups.
+  </p>
+  <p class="text-muted leading-relaxed">
+    Think of it as <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">robots.txt</code>
+    for cookie consent. Just as <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">robots.txt</code>
+    tells crawlers what they can access, <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">cookie-consent.json</code>
+    tells tools what cookies a site uses and how to manage consent programmatically.
+  </p>
+</section>
+
+<section id="quick-start" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">2. Quick Start</h2>
+  <p class="text-muted leading-relaxed mb-4">
+    The minimal valid file requires just two fields:
+  </p>
+  <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto mb-4">
+    <pre class="text-sm"><code class="text-muted">{`{
+  "version": "1.0",
+  "categories": ["essential"]
+}`}</code></pre>
+  </div>
+  <p class="text-muted leading-relaxed">
+    Place this file at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">
+    https://yoursite.com/.well-known/cookie-consent.json</code> and you are compliant
+    with the standard.
+  </p>
+</section>
+
+<section id="file-location" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">3. File Location</h2>
+  <p class="text-muted leading-relaxed mb-4">
+    The declaration file <strong class="text-white">must</strong> be served at:
+  </p>
+  <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto mb-4">
+    <pre class="text-sm"><code class="text-primary">/.well-known/cookie-consent.json</code></pre>
+  </div>
+  <ul class="list-disc list-inside text-muted space-y-2">
+    <li>Content-Type must be <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">application/json</code></li>
+    <li>Must be accessible without authentication</li>
+    <li>Must be served over HTTPS in production</li>
+    <li>Should include appropriate CORS headers for cross-origin access</li>
+    <li>File size should not exceed 10 KB</li>
+  </ul>
+</section>

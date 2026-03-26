@@ -1,0 +1,107 @@
+---
+/**
+ * Security Considerations, Versioning, and JSON Schema sections.
+ */
+---
+
+<section id="security" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">10. Security Considerations</h2>
+  <div class="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-6 mb-6">
+    <h3 class="text-base font-semibold text-yellow-400 mb-2">Warning: API Field</h3>
+    <p class="text-sm text-muted leading-relaxed">
+      The <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded">api</code> field
+      contains JavaScript expressions that tools may execute in the page context. Consumers
+      of this field <strong class="text-white">must not</strong> execute API expressions from
+      untrusted or unverified sources.
+    </p>
+  </div>
+  <ul class="list-disc list-inside text-muted space-y-3">
+    <li>
+      <strong class="text-white">Origin validation:</strong> Only read the declaration file from
+      the same origin it is served on. Never execute API expressions from a third-party-hosted
+      declaration file.
+    </li>
+    <li>
+      <strong class="text-white">Content-Type checking:</strong> Verify the response has
+      <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">application/json</code>
+      content type before parsing.
+    </li>
+    <li>
+      <strong class="text-white">Schema validation:</strong> Validate against the
+      <a href="/standard/v1/schema.json" class="text-primary hover:underline">JSON Schema</a>
+      before processing. Reject malformed files.
+    </li>
+    <li>
+      <strong class="text-white">API expression sandboxing:</strong> If executing
+      <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">api</code>
+      expressions, run them in a sandboxed context. Never pass unsanitized strings to
+      code evaluation functions without validation.
+    </li>
+    <li>
+      <strong class="text-white">File integrity:</strong> Consider implementing
+      Subresource Integrity (SRI) or signature verification for high-security deployments.
+    </li>
+    <li>
+      <strong class="text-white">Rate limiting:</strong> Consumers should cache the declaration
+      file and avoid fetching it on every page load. A TTL of 1 hour is recommended.
+    </li>
+  </ul>
+</section>
+
+<section id="versioning" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">11. Versioning</h2>
+  <p class="text-muted leading-relaxed mb-4">
+    The standard uses semantic versioning with two components:
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">major.minor</code>.
+  </p>
+  <ul class="list-disc list-inside text-muted space-y-2">
+    <li>
+      <strong class="text-white">Minor versions</strong> (1.0 &rarr; 1.1) are backward-compatible.
+      New optional fields may be added. Existing fields retain their meaning.
+    </li>
+    <li>
+      <strong class="text-white">Major versions</strong> (1.x &rarr; 2.0) may introduce breaking
+      changes: renamed fields, changed semantics, removed fields, or new required fields.
+    </li>
+  </ul>
+  <p class="text-muted leading-relaxed mt-4">
+    Consumers should check the <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">version</code>
+    field and handle unknown major versions gracefully. If a consumer only understands v1.x,
+    it should skip a v2.0 file rather than misinterpret it.
+  </p>
+</section>
+
+<section id="json-schema" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">12. JSON Schema</h2>
+  <p class="text-muted leading-relaxed mb-4">
+    The official JSON Schema for v1.0 is available for download and can be used to validate
+    declaration files in editors, CI pipelines, and automated tools.
+  </p>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <a
+      href="/standard/v1/schema.json"
+      download
+      class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary hover:bg-primary-dark text-white font-medium transition-colors"
+    >
+      Download schema.json
+    </a>
+    <a
+      href="https://github.com/zentala/cookies-accepter/tree/main/packages/schema"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/20 hover:border-white/40 text-white font-medium transition-colors"
+    >
+      View on GitHub
+    </a>
+  </div>
+  <div class="mt-6 rounded-xl border border-white/10 bg-surface-light p-4">
+    <p class="text-sm text-muted mb-2">Use in your editor (VS Code, JetBrains):</p>
+    <div class="overflow-x-auto">
+      <pre class="text-sm"><code class="text-muted">{`{
+  "$schema": "https://nocookie.org/standard/v1/schema.json",
+  "version": "1.0",
+  "categories": ["essential"]
+}`}</code></pre>
+    </div>
+  </div>
+</section>

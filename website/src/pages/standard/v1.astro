@@ -1,0 +1,47 @@
+---
+/**
+ * Full v1 specification page with sidebar TOC and all spec sections.
+ */
+import Base from "@/layouts/Base.astro";
+import SpecToc from "@/components/spec/SpecToc.astro";
+import SpecIntro from "@/components/spec/SpecIntro.astro";
+import SpecFields from "@/components/spec/SpecFields.astro";
+import SpecCategories from "@/components/spec/SpecCategories.astro";
+import SpecExamples from "@/components/spec/SpecExamples.astro";
+import SpecCmpExamples from "@/components/spec/SpecCmpExamples.astro";
+import SpecSecurity from "@/components/spec/SpecSecurity.astro";
+---
+
+<Base title="v1.0 Specification - Cookie Consent Standard" description="Full specification for the Cookie Consent Declaration standard v1.0.">
+  <section class="py-16 sm:py-20 px-4">
+    <div class="max-w-6xl mx-auto">
+      {/* Header */}
+      <div class="mb-12">
+        <a href="/standard" class="text-sm text-muted hover:text-white transition-colors">
+          &larr; Standard Overview
+        </a>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4">
+          Cookie Consent Declaration
+          <span class="text-primary">v1.0</span>
+        </h1>
+        <p class="mt-4 text-lg text-muted max-w-2xl">
+          The complete specification for machine-readable cookie consent files
+          served at <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code>.
+        </p>
+      </div>
+
+      {/* Content with sidebar */}
+      <div class="flex gap-12">
+        <SpecToc />
+        <article class="flex-1 min-w-0">
+          <SpecIntro />
+          <SpecFields />
+          <SpecCategories />
+          <SpecExamples />
+          <SpecCmpExamples />
+          <SpecSecurity />
+        </article>
+      </div>
+    </div>
+  </section>
+</Base>

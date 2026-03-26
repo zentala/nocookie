@@ -1,0 +1,94 @@
+---
+/**
+ * CMP-specific examples: OneTrust, Cookiebot, Didomi.
+ */
+const onetrust = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "cmp": { "name": "onetrust", "version": "6.x" },
+  "selectors": {
+    "banner": "#onetrust-banner-sdk",
+    "acceptAll": "#onetrust-accept-btn-handler",
+    "rejectAll": "#onetrust-reject-all-handler",
+    "preferences": "#onetrust-pc-btn-handler"
+  },
+  "categorySelectors": {
+    "functional": { "toggle": "#ot-group-id-C0003", "cmpId": "C0003" },
+    "analytics": { "toggle": "#ot-group-id-C0002", "cmpId": "C0002" },
+    "marketing": { "toggle": "#ot-group-id-C0004", "cmpId": "C0004" }
+  },
+  "api": {
+    "type": "onetrust",
+    "acceptAll": "OneTrust.AllowAll()",
+    "rejectAll": "OneTrust.RejectAll()",
+    "setCategory": "OneTrust.UpdateConsent()"
+  }
+}`;
+
+const cookiebot = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "cmp": { "name": "cookiebot" },
+  "selectors": {
+    "banner": "#CybotCookiebotDialog",
+    "acceptAll": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll",
+    "rejectAll": "#CybotCookiebotDialogBodyButtonDecline",
+    "preferences": "#CybotCookiebotDialogBodyLevelButtonCustomize"
+  },
+  "categorySelectors": {
+    "functional": { "cmpId": "CookieCatPreferences" },
+    "analytics": { "cmpId": "CookieCatStatistics" },
+    "marketing": { "cmpId": "CookieCatMarketing" }
+  },
+  "api": {
+    "type": "cookiebot",
+    "acceptAll": "Cookiebot.submitCustomConsent(true,true,true)",
+    "rejectAll": "Cookiebot.submitCustomConsent(false,false,false)"
+  }
+}`;
+
+const didomi = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "cmp": { "name": "didomi" },
+  "selectors": {
+    "banner": "#didomi-popup",
+    "acceptAll": "#didomi-notice-agree-button",
+    "rejectAll": "#didomi-notice-disagree-button"
+  },
+  "categorySelectors": {
+    "functional": { "cmpId": "preferences" },
+    "analytics": { "cmpId": "analytics" },
+    "marketing": { "cmpId": "advertising" }
+  },
+  "api": {
+    "type": "didomi",
+    "acceptAll": "Didomi.setUserAgreeToAll()",
+    "rejectAll": "Didomi.setUserDisagreeToAll()"
+  }
+}`;
+
+const cmps = [
+  { name: "OneTrust", code: onetrust },
+  { name: "Cookiebot", code: cookiebot },
+  { name: "Didomi", code: didomi },
+];
+---
+
+<section id="cmp-examples" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">9. CMP-Specific Examples</h2>
+  <p class="text-muted leading-relaxed mb-6">
+    These examples show how to write a declaration file for popular Consent Management
+    Platforms. Selectors and API calls match each CMP's real DOM structure.
+  </p>
+  <div class="space-y-8">
+    {cmps.map((cmp) => (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3">{cmp.name}</h3>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{cmp.code}</code></pre>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

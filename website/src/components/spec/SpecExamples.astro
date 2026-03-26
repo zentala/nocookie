@@ -1,0 +1,90 @@
+---
+/**
+ * Examples section: minimal, with selectors, with API, and full file.
+ */
+const minimal = `{
+  "version": "1.0",
+  "categories": ["essential"]
+}`;
+
+const withSelectors = `{
+  "version": "1.0",
+  "categories": ["essential", "analytics", "marketing"],
+  "selectors": {
+    "banner": "#cookie-banner",
+    "acceptAll": "#cookie-accept-all",
+    "rejectAll": "#cookie-reject-all",
+    "preferences": "#cookie-settings",
+    "save": "#cookie-save"
+  },
+  "categorySelectors": {
+    "analytics": { "toggle": "#toggle-analytics" },
+    "marketing": { "toggle": "#toggle-marketing" }
+  }
+}`;
+
+const withApi = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics"],
+  "api": {
+    "type": "custom",
+    "acceptAll": "window.consent.acceptAll()",
+    "rejectAll": "window.consent.rejectAll()",
+    "setCategory": "window.consent.set('{category}', {enabled})"
+  },
+  "gpc": true
+}`;
+
+const full = `{
+  "version": "1.0",
+  "categories": ["essential", "functional", "analytics", "marketing"],
+  "cmp": {
+    "name": "custom",
+    "version": "2.1.0"
+  },
+  "selectors": {
+    "banner": "#consent-banner",
+    "acceptAll": "#btn-accept",
+    "rejectAll": "#btn-reject",
+    "preferences": "#btn-preferences",
+    "save": "#btn-save"
+  },
+  "categorySelectors": {
+    "functional": { "toggle": "#toggle-func" },
+    "analytics": { "toggle": "#toggle-analytics" },
+    "marketing": { "toggle": "#toggle-marketing" }
+  },
+  "api": {
+    "type": "custom",
+    "acceptAll": "CMP.acceptAll()",
+    "rejectAll": "CMP.rejectAll()",
+    "setCategory": "CMP.set('{category}', {enabled})"
+  },
+  "gpc": true,
+  "tcf": false,
+  "contact": "privacy@example.com",
+  "policyUrl": "https://example.com/privacy"
+}`;
+
+const examples = [
+  { title: "Minimal", desc: "Only essential cookies, no consent UI needed.", code: minimal },
+  { title: "With Selectors", desc: "Custom consent banner with CSS selectors for automation.", code: withSelectors },
+  { title: "With API", desc: "Programmatic consent via JavaScript API with GPC support.", code: withApi },
+  { title: "Full Declaration", desc: "Complete file using all available fields.", code: full },
+];
+---
+
+<section id="examples" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">8. Examples</h2>
+  <div class="space-y-8">
+    {examples.map((ex) => (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-1">{ex.title}</h3>
+        <p class="text-sm text-muted mb-3">{ex.desc}</p>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-4 overflow-x-auto">
+          <pre class="text-sm"><code class="text-muted">{ex.code}</code></pre>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

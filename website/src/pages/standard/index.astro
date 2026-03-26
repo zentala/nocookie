@@ -1,0 +1,99 @@
+---
+/**
+ * Standard overview page. Brief intro and link to full v1 specification.
+ */
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Cookie Consent Standard - NoCookie" description="An open standard for machine-readable cookie consent declarations.">
+  <section class="py-20 sm:py-32 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+        The Cookie Consent
+        <span class="text-primary">Open Standard</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-muted max-w-2xl mx-auto">
+        A machine-readable format for declaring cookie usage on websites. Drop a
+        JSON file at a well-known URL and let browsers, extensions, and AI agents
+        handle consent automatically.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 border-t border-white/10">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div class="rounded-xl border border-white/10 bg-surface-light p-6">
+          <h3 class="text-lg font-semibold text-white mb-2">Simple</h3>
+          <p class="text-sm text-muted">
+            A single JSON file with two required fields. Add it to your site in
+            under a minute.
+          </p>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-6">
+          <h3 class="text-lg font-semibold text-white mb-2">Open</h3>
+          <p class="text-sm text-muted">
+            Free to use, MIT licensed, no vendor lock-in. Works with any CMP or
+            without one.
+          </p>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-surface-light p-6">
+          <h3 class="text-lg font-semibold text-white mb-2">Machine-Readable</h3>
+          <p class="text-sm text-muted">
+            Designed for automation. Extensions, crawlers, and AI agents can read
+            and act on it.
+          </p>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">
+          Current Version: v1.0
+        </h2>
+        <p class="text-muted mb-8 max-w-xl mx-auto">
+          The first stable release of the standard defines cookie categories,
+          CMP metadata, UI selectors, and JavaScript API declarations.
+        </p>
+        <a
+          href="/standard/v1"
+          class="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-primary hover:bg-primary-dark text-white font-medium transition-colors text-lg"
+        >
+          Read the v1 Specification &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 border-t border-white/10">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-2xl font-bold text-white mb-4">Quick Start</h2>
+      <p class="text-muted mb-6">
+        Create <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">/.well-known/cookie-consent.json</code>
+        with this content:
+      </p>
+      <div class="max-w-md mx-auto rounded-xl border border-white/10 bg-surface-light p-4 text-left overflow-x-auto">
+        <pre class="text-sm"><code class="text-muted">{`{
+  "version": "1.0",
+  "categories": ["essential"]
+}`}</code></pre>
+      </div>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/standard/v1/schema.json"
+          download
+          class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/20 hover:border-white/40 text-white font-medium transition-colors"
+        >
+          Download JSON Schema
+        </a>
+        <a
+          href="https://github.com/zentala/cookies-accepter"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/20 hover:border-white/40 text-white font-medium transition-colors"
+        >
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

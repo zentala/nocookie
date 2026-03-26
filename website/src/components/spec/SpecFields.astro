@@ -1,0 +1,129 @@
+---
+/**
+ * Required Fields, Optional Fields, and Field Reference Table sections.
+ */
+const fields = [
+  { name: "version", type: "string", required: true, desc: 'Schema version in major.minor format (e.g. "1.0")' },
+  { name: "categories", type: "string[]", required: true, desc: 'Cookie categories used. Must include "essential"' },
+  { name: "cmp", type: "object", required: false, desc: "CMP name and version metadata" },
+  { name: "selectors", type: "object", required: false, desc: "CSS selectors for consent UI elements" },
+  { name: "categorySelectors", type: "object", required: false, desc: "Per-category toggle selectors" },
+  { name: "api", type: "object", required: false, desc: "JavaScript API for programmatic consent" },
+  { name: "gpc", type: "boolean", required: false, desc: "Whether the site respects Global Privacy Control" },
+  { name: "tcf", type: "boolean", required: false, desc: "Whether the site uses IAB TCF" },
+  { name: "contact", type: "string", required: false, desc: "Privacy contact email address" },
+  { name: "policyUrl", type: "string", required: false, desc: "URL to cookie/privacy policy" },
+];
+---
+
+<section id="required-fields" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">4. Required Fields</h2>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">version</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    The schema version in <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">major.minor</code>
+    format. Current version is <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">"1.0"</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">categories</code>
+  </h3>
+  <p class="text-muted leading-relaxed">
+    An array of cookie category strings used on this site. Must include
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">"essential"</code>.
+    See <a href="#categories" class="text-primary hover:underline">Categories</a> for valid values.
+  </p>
+</section>
+
+<section id="optional-fields" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">5. Optional Fields</h2>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">cmp</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    Identifies the Consent Management Platform. Contains <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">name</code>
+    and optional <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">version</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">selectors</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    CSS selectors for the consent banner UI. Allows automated tools to interact
+    with the banner directly. Properties: <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">banner</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">acceptAll</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">rejectAll</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">preferences</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">save</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">categorySelectors</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    Per-category CSS selectors for individual toggle controls. Each key is a
+    category name mapping to an object with <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">toggle</code>
+    and optional <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">cmpId</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">api</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    JavaScript API expressions for programmatic consent management. Contains
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">type</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">acceptAll</code>,
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">rejectAll</code>, and
+    <code class="text-primary bg-surface-light px-1.5 py-0.5 rounded text-sm">setCategory</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">gpc</code>, <code class="text-primary">tcf</code>
+  </h3>
+  <p class="text-muted leading-relaxed mb-2">
+    Boolean flags indicating support for Global Privacy Control and IAB Transparency
+    and Consent Framework respectively.
+  </p>
+
+  <h3 class="text-lg font-semibold text-white mt-6 mb-2">
+    <code class="text-primary">contact</code>, <code class="text-primary">policyUrl</code>
+  </h3>
+  <p class="text-muted leading-relaxed">
+    Contact email for privacy inquiries and URL to the site's privacy policy.
+  </p>
+</section>
+
+<section id="field-reference" class="mb-16">
+  <h2 class="text-2xl font-bold text-white mb-4">6. Field Reference</h2>
+  <div class="overflow-x-auto rounded-xl border border-white/10">
+    <table class="w-full text-sm">
+      <thead class="bg-surface-light">
+        <tr>
+          <th class="text-left px-4 py-3 font-semibold text-white">Field</th>
+          <th class="text-left px-4 py-3 font-semibold text-white">Type</th>
+          <th class="text-left px-4 py-3 font-semibold text-white">Required</th>
+          <th class="text-left px-4 py-3 font-semibold text-white">Description</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-white/5">
+        {fields.map((f) => (
+          <tr class="hover:bg-surface-light/50">
+            <td class="px-4 py-3">
+              <code class="text-primary text-xs">{f.name}</code>
+            </td>
+            <td class="px-4 py-3 text-muted">{f.type}</td>
+            <td class="px-4 py-3">
+              {f.required
+                ? <span class="text-green-400">Yes</span>
+                : <span class="text-muted">No</span>}
+            </td>
+            <td class="px-4 py-3 text-muted">{f.desc}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
