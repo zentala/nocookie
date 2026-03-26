@@ -7,7 +7,8 @@
  */
 
 import { createMessage } from "@/shared/messages";
-import type { ConfidenceLevel } from "@/shared/types";
+import type { ConfidenceLevel, ConsentResult } from "@/shared/types";
+import { EXECUTOR_MESSAGE_TYPE } from "./executor";
 import { findCmpSelector, startObserver, stopObserver } from "./observer";
 
 /** Known CMP script URL patterns mapped to CMP names. */
@@ -172,10 +173,28 @@ function onSpaNavigation(): void {
 
 // -- Initialization -----------------------------------------------------------
 
+/**
+ * Relay consent results from MAIN world executor to background.
+ * MAIN world scripts cannot use chrome.runtime.sendMessage directly,
+ * so the executor posts results via window.postMessage, and this
+ * ISOLATED world listener relays them.
+ */
+function onExecutorMessage(event: MessageEvent): void {
+  if (event.source !== window) return;
+  if (event.data?.type !== EXECUTOR_MESSAGE_TYPE) return;
+
+  const result = event.data.payload as ConsentResult;
+  const message = createMessage("CONSENT_EXECUTED", result);
+  chrome.runtime.sendMessage(message).catch(() => {
+    /* Extension context may be invalidated */
+  });
+}
+
 /** Set up event listeners and run initial detection. */
 export function init(): void {
   window.addEventListener("popstate", onSpaNavigation);
   window.addEventListener("hashchange", onSpaNavigation);
+  window.addEventListener("message", onExecutorMessage);
 
   // Listen for re-scan commands from background
   chrome.runtime.onMessage.addListener((message) => {
