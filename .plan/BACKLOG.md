@@ -2,8 +2,6 @@
 
 ## High Priority
 - Cross-browser settings sync via Google account / Google Drive / chrome.storage.sync
-- Website CMP plugin ("Cookies Accepter CMP") — JS widget for website owners that is natively compatible with our Chrome extension
-- Standardized cookie policy icons (like Creative Commons icons but for cookie categories)
 
 ## Ideas
 - Firefox extension port
