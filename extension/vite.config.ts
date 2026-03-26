@@ -14,6 +14,11 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        onboarding: resolve(__dirname, "src/onboarding/onboarding.html"),
+      },
+    },
   },
   test: {
     coverage: {

@@ -4,12 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome to NoCookie</title>
+    <link rel="stylesheet" href="onboarding.css" />
   </head>
   <body>
-    <div id="app">
-      <h1>Welcome to NoCookie</h1>
-      <p>Set your cookie preferences once. We handle the rest.</p>
-    </div>
+    <main class="wizard" role="main" aria-label="NoCookie onboarding wizard">
+      <nav class="progress" role="navigation" aria-label="Onboarding progress">
+        <div class="progress-dot active" data-step="1" aria-label="Step 1: Welcome, current"></div>
+        <div class="progress-dot" data-step="2" aria-label="Step 2: Choose profile"></div>
+        <div class="progress-dot" data-step="3" aria-label="Step 3: Customize"></div>
+        <div class="progress-dot" data-step="4" aria-label="Step 4: Done"></div>
+      </nav>
+
+      <!-- Step 1: Welcome -->
+      <section class="step active" id="step-1" aria-label="Welcome">
+        <div class="shield-icon" aria-hidden="true">&#x1F6E1;</div>
+        <h1 class="step-title">Welcome to NoCookie</h1>
+        <p class="step-subtitle">
+          Cookie popups are about to become a thing of the past.<br />
+          Let's set up your preferences in 15 seconds.
+        </p>
+        <div class="btn-row">
+          <button class="btn-primary" id="btn-get-started">Get Started</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Choose Profile -->
+      <section class="step" id="step-2" aria-label="Choose profile">
+        <h2 class="step-title">How much do you care about cookie privacy?</h2>
+        <p class="step-subtitle">Pick a profile that matches your preference.</p>
+        <div class="profile-cards" role="radiogroup" aria-label="Privacy profile"></div>
+        <button class="customize-link" id="btn-customize" type="button">
+          I want to customize &rarr;
+        </button>
+        <div class="btn-row">
+          <button class="btn-back" id="btn-back-2">Back</button>
+          <button class="btn-primary" id="btn-next-2" disabled>Continue</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Customize (optional) -->
+      <section class="step" id="step-3" aria-label="Customize categories">
+        <h2 class="step-title">Customize your categories</h2>
+        <p class="step-subtitle">Fine-tune which cookie types you accept.</p>
+        <div class="categories-list" id="categories-list"></div>
+        <div class="btn-row">
+          <button class="btn-back" id="btn-back-3">Back</button>
+          <button class="btn-primary" id="btn-save-custom">Save &amp; Continue</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Done -->
+      <section class="step" id="step-4" aria-label="Setup complete">
+        <div class="shield-animated" aria-hidden="true">&#x1F6E1;</div>
+        <h2 class="step-title">You're all set!</h2>
+        <div class="summary" id="done-summary"></div>
+        <div class="btn-row">
+          <button class="btn-back" id="btn-back-4">Back</button>
+          <button class="btn-primary" id="btn-start-browsing">Start Browsing</button>
+        </div>
+      </section>
+    </main>
     <script type="module" src="onboarding.ts"></script>
   </body>
 </html>

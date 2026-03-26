@@ -87,7 +87,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "install") {
     const completed = await isOnboardingCompleted();
     if (!completed) {
-      await chrome.tabs.create({ url: "src/options/options.html" });
+      await chrome.tabs.create({ url: "src/onboarding/onboarding.html" });
     }
   }
 });
