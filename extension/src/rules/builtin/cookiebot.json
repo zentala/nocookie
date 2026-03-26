@@ -16,11 +16,6 @@
       { "type": "click", "target": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll" }
     ],
     "rejectAll": [{ "type": "click", "target": "#CybotCookiebotDialogBodyButtonDecline" }],
-    "custom": [
-      {
-        "type": "click",
-        "target": "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection"
-      }
-    ]
+    "custom": [{ "type": "eval", "target": "Cookiebot.submitCustomConsent(false, false, false)" }]
   }
 }

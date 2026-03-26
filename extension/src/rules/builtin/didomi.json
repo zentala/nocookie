@@ -16,9 +16,10 @@
     "acceptAll": [{ "type": "click", "target": "#didomi-notice-agree-button" }],
     "rejectAll": [{ "type": "click", "target": "#didomi-notice-disagree-button" }],
     "custom": [
-      { "type": "click", "target": "#didomi-notice-learn-more-button" },
-      { "type": "waitFor", "target": ".didomi-popup-container", "timeout": 2000 },
-      { "type": "click", "target": ".didomi-components-button--save" }
+      {
+        "type": "eval",
+        "target": "Didomi.setUserStatus({purposes:{consent:{enabled:[],disabled:[]}},vendors:{consent:{enabled:[],disabled:[]}}})"
+      }
     ]
   }
 }

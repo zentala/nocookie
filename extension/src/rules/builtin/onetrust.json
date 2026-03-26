@@ -16,9 +16,9 @@
     "acceptAll": [{ "type": "click", "target": "#onetrust-accept-btn-handler" }],
     "rejectAll": [{ "type": "click", "target": "#onetrust-reject-all-handler" }],
     "custom": [
-      { "type": "click", "target": "#onetrust-pc-btn-handler" },
-      { "type": "waitFor", "target": ".ot-pc-content", "timeout": 2000 },
-      { "type": "click", "target": ".save-preference-btn-handler" }
+      { "type": "eval", "target": "OneTrust.UpdateConsent()" },
+      { "type": "waitFor", "target": "#onetrust-consent-sdk", "timeout": 2000 },
+      { "type": "eval", "target": "OneTrust.Close()" }
     ]
   }
 }
