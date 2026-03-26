@@ -1,0 +1,144 @@
+---
+/**
+ * Generator tab content: CMP preset selector, form fields,
+ * live JSON preview, and copy/download buttons.
+ */
+const categories = [
+  { value: "essential", label: "Essential", checked: true, disabled: true },
+  { value: "functional", label: "Functional", checked: false, disabled: false },
+  { value: "analytics", label: "Analytics", checked: false, disabled: false },
+  { value: "marketing", label: "Marketing", checked: false, disabled: false },
+  { value: "social-media", label: "Social Media", checked: false, disabled: false },
+];
+
+const cmps = [
+  { value: "", label: "Select a CMP..." },
+  { value: "onetrust", label: "OneTrust" },
+  { value: "cookiebot", label: "Cookiebot" },
+  { value: "didomi", label: "Didomi" },
+  { value: "cookieyes", label: "CookieYes" },
+  { value: "complianz", label: "Complianz" },
+  { value: "osano", label: "Osano" },
+  { value: "custom", label: "Custom" },
+];
+---
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  {/* Form */}
+  <div class="space-y-6">
+    {/* CMP Select */}
+    <div>
+      <label class="block text-sm font-medium text-white mb-2">CMP Platform</label>
+      <select
+        id="cmp-select"
+        class="w-full rounded-lg border border-white/10 bg-surface-light px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+      >
+        {cmps.map((cmp) => (
+          <option value={cmp.value}>{cmp.label}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* Categories */}
+    <div>
+      <label class="block text-sm font-medium text-white mb-2">Categories</label>
+      <div class="flex flex-wrap gap-4">
+        {categories.map((cat) => (
+          <label class="flex items-center gap-2 text-sm text-muted">
+            <input
+              type="checkbox"
+              class="gen-category rounded border-white/20 bg-surface-light text-primary focus:ring-primary"
+              value={cat.value}
+              checked={cat.checked}
+              disabled={cat.disabled}
+            />
+            {cat.label}
+          </label>
+        ))}
+      </div>
+    </div>
+
+    {/* Selectors */}
+    <fieldset>
+      <legend class="text-sm font-medium text-white mb-2">CSS Selectors</legend>
+      <div class="space-y-3">
+        <input id="gen-banner" type="text" placeholder="Banner selector" class="gen-input" />
+        <input id="gen-accept-all" type="text" placeholder="Accept All selector" class="gen-input" />
+        <input id="gen-reject-all" type="text" placeholder="Reject All selector" class="gen-input" />
+        <input id="gen-preferences" type="text" placeholder="Preferences selector" class="gen-input" />
+        <input id="gen-save" type="text" placeholder="Save selector" class="gen-input" />
+      </div>
+    </fieldset>
+
+    {/* API */}
+    <fieldset>
+      <legend class="text-sm font-medium text-white mb-2">JavaScript API</legend>
+      <div class="space-y-3">
+        <input id="gen-api-type" type="text" placeholder="API type (e.g., onetrust)" class="gen-input" />
+        <input id="gen-api-accept" type="text" placeholder="Accept All expression" class="gen-input" />
+        <input id="gen-api-reject" type="text" placeholder="Reject All expression" class="gen-input" />
+      </div>
+    </fieldset>
+
+    {/* Options */}
+    <div class="flex flex-wrap gap-6">
+      <label class="flex items-center gap-2 text-sm text-muted">
+        <input id="gen-gpc" type="checkbox" class="rounded border-white/20 bg-surface-light text-primary focus:ring-primary" />
+        GPC support
+      </label>
+      <label class="flex items-center gap-2 text-sm text-muted">
+        <input id="gen-tcf" type="checkbox" class="rounded border-white/20 bg-surface-light text-primary focus:ring-primary" />
+        TCF support
+      </label>
+    </div>
+
+    {/* Contact & Policy */}
+    <div class="space-y-3">
+      <input id="gen-contact" type="email" placeholder="Contact email" class="gen-input" />
+      <input id="gen-policy-url" type="url" placeholder="Privacy policy URL" class="gen-input" />
+    </div>
+  </div>
+
+  {/* Preview */}
+  <div class="space-y-4">
+    <div class="sticky top-20">
+      <label class="block text-sm font-medium text-white mb-2">Live Preview</label>
+      <pre
+        id="json-preview"
+        class="rounded-xl border border-white/10 bg-surface p-4 text-sm text-muted overflow-x-auto font-mono min-h-[200px] max-h-[500px] overflow-y-auto"
+      ></pre>
+
+      <div class="flex gap-3 mt-4">
+        <button
+          id="copy-btn"
+          class="flex-1 px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
+        >
+          Copy to Clipboard
+        </button>
+        <button
+          id="download-btn"
+          class="flex-1 px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 text-white text-sm font-medium transition-colors"
+        >
+          Download File
+        </button>
+      </div>
+
+      <div class="mt-6 rounded-lg border border-white/10 bg-surface-light p-4">
+        <p class="text-sm font-medium text-white mb-2">Deployment</p>
+        <p class="text-xs text-muted">
+          Save the file as <code class="text-primary/80">cookie-consent.json</code> and serve it at
+          <code class="text-primary/80">/.well-known/cookie-consent.json</code> on your domain.
+          Ensure the response has <code class="text-primary/80">Content-Type: application/json</code>
+          and appropriate CORS headers if you want cross-origin access.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @reference "@/styles/global.css";
+  .gen-input {
+    @apply w-full rounded-lg border border-white/10 bg-surface-light px-4 py-2.5 text-sm text-white placeholder-muted focus:outline-none focus:border-primary transition-colors;
+  }
+</style>

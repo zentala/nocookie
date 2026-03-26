@@ -1,0 +1,29 @@
+---
+/**
+ * Validator tab content: URL input, validate button, and results area.
+ */
+---
+
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row gap-3">
+    <input
+      id="url-input"
+      type="text"
+      placeholder="https://example.com"
+      class="flex-1 rounded-lg border border-white/10 bg-surface-light px-4 py-3 text-white placeholder-muted focus:outline-none focus:border-primary transition-colors"
+    />
+    <button
+      id="validate-btn"
+      class="px-6 py-3 rounded-lg bg-primary hover:bg-primary-dark text-white font-medium transition-colors whitespace-nowrap"
+    >
+      Validate
+    </button>
+  </div>
+
+  <p class="text-xs text-muted">
+    Fetches <code class="text-primary/80">&lbrace;url&rbrace;/.well-known/cookie-consent.json</code>
+    and validates it against the schema. Some servers may block cross-origin requests.
+  </p>
+
+  <div id="validator-results"></div>
+</div>

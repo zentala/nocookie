@@ -1,0 +1,49 @@
+---
+/**
+ * Online validator and generator tool for cookie-consent.json files.
+ * Two-tab interface: validate a URL or generate a new declaration.
+ */
+import Base from "@/layouts/Base.astro";
+import ValidatorTab from "@/components/ValidatorTab.astro";
+import GeneratorTab from "@/components/GeneratorTab.astro";
+---
+
+<Base title="Validator & Generator - NoCookie" description="Validate or generate cookie-consent.json files for the NoCookie open standard.">
+  <section class="py-16 sm:py-24 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-center mb-2">
+        Validator & Generator
+      </h1>
+      <p class="text-muted text-center mb-10 max-w-2xl mx-auto">
+        Validate an existing <code class="text-primary/80">cookie-consent.json</code> file
+        or generate a new one for your website.
+      </p>
+
+      {/* Tabs */}
+      <div class="flex border-b border-white/10 mb-8">
+        <button
+          id="tab-validator"
+          class="px-6 py-3 text-sm font-medium border-b-2 border-primary text-white transition-colors"
+        >
+          Validator
+        </button>
+        <button
+          id="tab-generator"
+          class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-muted transition-colors"
+        >
+          Generator
+        </button>
+      </div>
+
+      {/* Panels */}
+      <div id="panel-validator">
+        <ValidatorTab />
+      </div>
+      <div id="panel-generator" class="hidden">
+        <GeneratorTab />
+      </div>
+    </div>
+  </section>
+
+  <script src="../scripts/validator-tool.ts"></script>
+</Base>
