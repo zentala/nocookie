@@ -252,6 +252,25 @@ export async function initOptions(): Promise<void> {
       handleInfoToggle(target as HTMLButtonElement);
     }
   });
+
+  categoriesList.addEventListener("keydown", async (e) => {
+    const kbEvent = e as KeyboardEvent;
+    const target = kbEvent.target as HTMLElement;
+    if (kbEvent.key !== "Enter" && kbEvent.key !== " ") return;
+    if (target.classList.contains("toggle-switch")) {
+      kbEvent.preventDefault();
+      const item = target.closest(".category-item") as HTMLElement;
+      const categoryId = item?.dataset.categoryId as CategoryId;
+      if (categoryId) {
+        preferences = await handleToggle(categoryId, preferences, profileSelect);
+        syncToggles(preferences);
+      }
+    }
+    if (target.classList.contains("info-btn")) {
+      kbEvent.preventDefault();
+      handleInfoToggle(target as HTMLButtonElement);
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", initOptions);

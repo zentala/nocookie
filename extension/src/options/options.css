@@ -258,6 +258,11 @@ h1 {
   background: #1d4ed8;
 }
 
+.btn-primary:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .btn-secondary {
   padding: 8px 16px;
   font-size: 14px;
@@ -273,6 +278,11 @@ h1 {
   background: #d1d5db;
 }
 
+.btn-secondary:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .btn-small {
   padding: 4px 10px;
   font-size: 12px;
@@ -285,6 +295,11 @@ h1 {
 
 .btn-small:hover {
   background: #f3f4f6;
+}
+
+.btn-small:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .btn-danger {

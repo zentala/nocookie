@@ -63,12 +63,14 @@ export async function renderOverridesTable(): Promise<void> {
     const editBtn = document.createElement("button");
     editBtn.className = "btn-small";
     editBtn.textContent = "Edit";
+    editBtn.setAttribute("aria-label", `Edit override for ${domain}`);
     editBtn.dataset.domain = domain;
     editBtn.addEventListener("click", () => openEditModal(domain, override));
 
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "btn-small btn-danger";
     deleteBtn.textContent = "Delete";
+    deleteBtn.setAttribute("aria-label", `Delete override for ${domain}`);
     deleteBtn.dataset.domain = domain;
     deleteBtn.addEventListener("click", () => deleteOverride(domain));
 

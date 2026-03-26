@@ -102,6 +102,11 @@ export function buildAdvancedPanel(container: HTMLElement, settings: ExtensionSe
   slider.step = "100";
   slider.value = String(settings.consentDelay);
   slider.id = "setting-consentDelay";
+  slider.setAttribute("aria-label", "Consent delay in milliseconds");
+  slider.setAttribute("aria-valuemin", "0");
+  slider.setAttribute("aria-valuemax", "2000");
+  slider.setAttribute("aria-valuenow", String(settings.consentDelay));
+  slider.setAttribute("aria-valuetext", `${settings.consentDelay} milliseconds`);
 
   const valueSpan = document.createElement("span");
   valueSpan.id = "delay-value";
@@ -144,6 +149,8 @@ export async function initAdvanced(): Promise<void> {
   slider?.addEventListener("input", async () => {
     const value = Number(slider.value);
     if (delayValue) delayValue.textContent = `${value}ms`;
+    slider.setAttribute("aria-valuenow", String(value));
+    slider.setAttribute("aria-valuetext", `${value} milliseconds`);
     await updateSettings({ consentDelay: value });
   });
 }

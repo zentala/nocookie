@@ -269,10 +269,21 @@ class DashboardController {
   private setupExportMenu(): void {
     const exportBtn = this.$("export-btn");
     const exportMenu = this.$("export-menu");
+
+    const closeMenu = (): void => {
+      exportMenu.classList.add("hidden");
+      exportBtn.setAttribute("aria-expanded", "false");
+      exportBtn.focus();
+    };
+
     exportBtn.addEventListener("click", () => {
       const open = !exportMenu.classList.contains("hidden");
       exportMenu.classList.toggle("hidden", open);
       exportBtn.setAttribute("aria-expanded", String(!open));
+      if (!open) {
+        const firstItem = exportMenu.querySelector<HTMLElement>("[role='menuitem']");
+        firstItem?.focus();
+      }
     });
 
     exportMenu.addEventListener("click", (e) => {
@@ -280,8 +291,35 @@ class DashboardController {
       if (!target) return;
       const format = (target as HTMLElement).dataset.format;
       this.doExport(format as "json" | "csv");
-      exportMenu.classList.add("hidden");
-      exportBtn.setAttribute("aria-expanded", "false");
+      closeMenu();
+    });
+
+    exportMenu.addEventListener("keydown", (e) => {
+      const kbEvent = e as KeyboardEvent;
+      const items = [...exportMenu.querySelectorAll<HTMLElement>("[role='menuitem']")];
+      const idx = items.indexOf(document.activeElement as HTMLElement);
+
+      if (kbEvent.key === "Escape") {
+        kbEvent.preventDefault();
+        closeMenu();
+      } else if (kbEvent.key === "ArrowDown") {
+        kbEvent.preventDefault();
+        items[(idx + 1) % items.length]?.focus();
+      } else if (kbEvent.key === "ArrowUp") {
+        kbEvent.preventDefault();
+        items[(idx - 1 + items.length) % items.length]?.focus();
+      } else if (kbEvent.key === "Tab") {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!exportBtn.contains(e.target as Node) && !exportMenu.contains(e.target as Node)) {
+        if (!exportMenu.classList.contains("hidden")) {
+          exportMenu.classList.add("hidden");
+          exportBtn.setAttribute("aria-expanded", "false");
+        }
+      }
     });
   }
 
