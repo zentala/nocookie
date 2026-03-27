@@ -85,3 +85,90 @@
 - `navigator.globalPrivacyControl` might not exist in TypeScript types — needs type assertion
 - No re-detection on navigation (SPA) — assumes single check on init
 - Doesn't modify banner text yet — just returns GPCResult for caller to use
+
+## 2026-03-27 — Wave 4 (T13-T16, T20-T21)
+
+### T13: i18n
+- 16 languages in 4 translation files — large payload if all loaded at once, consider lazy loading
+- Translation quality for non-major languages (FI, RO, HU, EL) may be lower — needs native review
+- `FullTranslations` extends `TranslationStrings` but adds incompatible fields — type widening issue
+- No plural form support — some languages need singular/plural variants
+- RTL support is just a placeholder comment — no actual implementation for Arabic/Hebrew
+
+### T14: Accessibility
+- Accept button contrast (#16a34a on white) is 3.05:1 — passes only as "large text" (bold 14px+), not standard text
+- AccessibilityManager event-to-announcement mapping is hardcoded — not configurable
+- No automated axe-core tests (plan mentioned it) — only manual CSS/ARIA verification
+- Screen reader testing with NVDA/JAWS not feasible in CI — documented but untested
+
+### T15: CDN & npm Publishing
+- `tsc --emitDeclarationOnly` fails when i18n module imports aren't complete — build chain fragile
+- SRI hashes regenerate on every build — should be pinned for specific releases
+- No actual CDN deployment configured — just URL patterns documented
+- CHANGELOG is manually maintained — consider conventional-changelog automation
+- Source map files are generated but `files` in package.json doesn't explicitly include them
+
+### T16: E2E Tests
+- E2E tests use jsdom + manual component orchestration, NOT real Playwright browser tests
+- No actual `NoCookieCMP.init()` integration — components manually wired in test helpers
+- Missing: cross-browser testing, real screenshot comparison, network interception
+- E2E helper duplicates what will be the real `init()` logic — coupling risk
+- 50 E2E tests run fast (~300ms) but don't test real browser rendering
+
+### T20: Badge Kit
+- SVG generation duplicated between `icons.ts` and `generate-badge-kit.mjs` — DRY violation
+- Badge kit is gitignored — needs CI to regenerate on release
+- No SVGO optimization applied — raw SVGs may have unnecessary whitespace
+- No automated test that badge-kit script produces valid SVGs (only existence check)
+
+### T21: Description i18n
+- Translation files are per-language (~200 lines each) — manageable but adds to bundle
+- Cookie purpose translations only cover top 10 cookies (not all 20 in EN database)
+- No mechanism for community translations — need contribution workflow
+- Fallback chain is language-level only — no regional fallback (pt-BR → pt → en)
+
+## 2026-03-27 — Wave 5 (T17-T18, T22)
+
+### T17: Documentation
+- README documents the intended public API but `NoCookieCMP.init()` doesn't fully orchestrate all components yet
+- Example HTML files reference CDN URLs that don't exist yet (cdn.nocookie.zentala.io)
+- No live demo page on the website — examples are standalone HTML files
+- API reference is in README rather than separate generated docs (TSDoc → HTML)
+
+### T18: Extension Integration
+- Extension sends `postMessage` to `*` origin — same concern as CMP side
+- `cmp-names.ts` centralizes CMP data but it's manually maintained — could be auto-generated
+- NoCookie CMP detection is first in priority order — may cause issues if other CMPs also present
+- No integration test that runs both CMP and extension together
+
+### T22: Configurator
+- Mock banner preview doesn't use actual CMP library — HTML/CSS is duplicated
+- No cookie detail editor per category — deferred to future version
+- No pre-built templates — deferred
+- No URL hash state sharing — deferred
+- No policy page preview — only banner preview
+- Configurator client script is vanilla TS — could benefit from a reactive framework for form state
+
+## Cross-Cutting Issues (Entire Epic)
+
+### HIGH PRIORITY — Must fix before v1.0
+1. **No `NoCookieCMP.init()` orchestration** — individual components work but the top-level init() that creates ThemeEngine + Banner + PreferenceCenter + etc. is still a placeholder. This is the #1 blocker for real usage.
+2. **No real Playwright E2E tests** — "E2E" tests use jsdom, not real browsers. Need actual browser tests.
+3. **Consent state ↔ Event bus not wired** — ConsentStateManager doesn't emit events on state changes. Manual emit() calls needed.
+4. **Banner doesn't integrate real icons** — uses colored dots, not the SVG icons from T08.
+5. **`tsc --emitDeclarationOnly` build step fragile** — depends on all imports resolving correctly.
+
+### MEDIUM PRIORITY — Should fix for v1.0
+6. **SVG generation duplicated** — icons.ts and generate-badge-kit.mjs have the same SVG paths.
+7. **Accept button color contrast** — #16a34a on white is 3.05:1, needs darker green for AA compliance.
+8. **Extension bridge test file exceeds 250 lines** (314 lines).
+9. **Cookie descriptions not wired into banner/preference center** — descriptions module exists but isn't used by UI components yet.
+10. **i18n not wired into components** — translations exist but banner/preference center still use config.translations directly.
+
+### LOW PRIORITY — Nice to have
+11. EventBus needs `once()` method for one-time listeners.
+12. Lazy loading for translations (16 languages = large bundle).
+13. CDN deployment pipeline not configured.
+14. npm publishing pipeline not configured.
+15. Community translation contribution workflow needed.
+16. Configurator could use actual CMP library for preview instead of mock HTML.
