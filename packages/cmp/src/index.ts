@@ -45,69 +45,95 @@ export {
   ConfigValidationError,
 } from "@/core/index";
 
-import type { CMPConfig, ResolvedCMPConfig, ConsentState } from "@/shared/types";
-import { parseConfig } from "@/core/config";
+import type {
+  CMPConfig,
+  ResolvedCMPConfig,
+  ConsentState,
+  CategoryId,
+  CMPEvent,
+} from "@/shared/types";
+import { CMPOrchestrator } from "@/core/cmp";
 
-/** CMP controller interface. */
+/** CMP controller interface with full public API. */
 export interface NoCookieCMPInstance {
   readonly version: string;
   init(config: CMPConfig): NoCookieCMPInstance;
   getConsent(): ConsentState;
+  setConsent(category: CategoryId, granted: boolean): void;
+  acceptAll(): void;
+  rejectAll(): void;
+  openPreferences(): void;
+  close(): void;
+  reset(): void;
+  on(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void;
+  off(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void;
+  getWellKnownJSON(): object;
+  getPolicyHTML(): string;
   getConfig(): ResolvedCMPConfig | null;
 }
+
+const orchestrator = new CMPOrchestrator();
 
 /**
  * Main CMP controller.
  *
- * Manages cookie consent UI (Shadow DOM banner) and consent state.
- * This is a placeholder implementation to be expanded in subsequent tasks.
+ * Manages cookie consent UI (Shadow DOM banner), consent state,
+ * extension bridge, GPC detection, and accessibility features.
+ * Call `init(config)` to start the CMP.
  */
-export const NoCookieCMP: NoCookieCMPInstance = (() => {
-  let resolvedConfig: ResolvedCMPConfig | null = null;
+export const NoCookieCMP: NoCookieCMPInstance = {
+  version: "0.1.0",
 
-  return {
-    version: "0.1.0",
+  init(config: CMPConfig): NoCookieCMPInstance {
+    orchestrator.init(config);
+    return NoCookieCMP;
+  },
 
-    /**
-     * Initialize the CMP with the given configuration.
-     *
-     * @param config - CMP configuration from the site owner
-     * @returns The CMP instance for chaining
-     */
-    init(config: CMPConfig): NoCookieCMPInstance {
-      resolvedConfig = parseConfig(config);
-      return NoCookieCMP;
-    },
+  getConsent(): ConsentState {
+    return orchestrator.getConsent();
+  },
 
-    /**
-     * Get current consent preferences.
-     *
-     * @returns Current consent state per category
-     */
-    getConsent(): ConsentState {
-      if (!resolvedConfig) {
-        return {
-          essential: true,
-          functional: false,
-          analytics: false,
-          marketing: false,
-          "social-media": false,
-        };
-      }
-      const state: Record<string, boolean> = {};
-      for (const cat of resolvedConfig.categories) {
-        state[cat.id] = cat.defaultState ?? false;
-      }
-      return state as ConsentState;
-    },
+  setConsent(category: CategoryId, granted: boolean): void {
+    orchestrator.setConsent(category, granted);
+  },
 
-    /**
-     * Get the resolved configuration, or null if not yet initialized.
-     *
-     * @returns The resolved config or null
-     */
-    getConfig(): ResolvedCMPConfig | null {
-      return resolvedConfig;
-    },
-  };
-})();
+  acceptAll(): void {
+    orchestrator.acceptAll();
+  },
+
+  rejectAll(): void {
+    orchestrator.rejectAll();
+  },
+
+  openPreferences(): void {
+    orchestrator.openPreferences();
+  },
+
+  close(): void {
+    orchestrator.close();
+  },
+
+  reset(): void {
+    orchestrator.reset();
+  },
+
+  on(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void {
+    orchestrator.on(event, handler);
+  },
+
+  off(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void {
+    orchestrator.off(event, handler);
+  },
+
+  getWellKnownJSON(): object {
+    return orchestrator.getWellKnownJSON();
+  },
+
+  getPolicyHTML(): string {
+    return orchestrator.getPolicyHTML();
+  },
+
+  getConfig(): ResolvedCMPConfig | null {
+    return orchestrator.getConfig();
+  },
+};

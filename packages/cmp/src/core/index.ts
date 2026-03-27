@@ -17,3 +17,4 @@ export {
   type ExtensionAppliedPayload,
   type CMPEventPayloadMap,
 } from "./event-bus";
+export { CMPOrchestrator } from "./cmp";
