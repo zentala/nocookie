@@ -35,6 +35,14 @@ export type { CategoryDescription, DescriptionPreset, CommonCookieInfo } from ".
 
 export { getCategoryDescription, getCommonCookieInfo, resolveDescription } from "./descriptions";
 
+export type { LocalizedDescriptions } from "./descriptions-i18n";
+
+export {
+  getLocalizedDescriptions,
+  getLocalizedCategoryDescription,
+  getLocalizedCookiePurpose,
+} from "./descriptions-i18n";
+
 export type { FullTranslations, CategoryTranslation, LegalTranslation } from "./i18n";
 
 export {
