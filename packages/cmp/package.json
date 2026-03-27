@@ -2,7 +2,25 @@
   "name": "@nocookie/cmp",
   "version": "0.1.0",
   "description": "Open-source CMP plugin with Shadow DOM UI for automatic cookie consent management",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zentala/cookies-accepter",
+    "directory": "packages/cmp"
+  },
+  "keywords": [
+    "cookie-consent",
+    "cmp",
+    "gdpr",
+    "privacy",
+    "cookie-banner",
+    "shadow-dom",
+    "nocookie"
+  ],
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "main": "dist/nocookie-cmp.umd.cjs",
   "module": "dist/nocookie-cmp.esm.js",
   "types": "dist/index.d.ts",
@@ -19,6 +37,7 @@
   ],
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
+    "build:sri": "node scripts/generate-sri.mjs",
     "dev": "vite build --watch",
     "test": "vitest run",
     "test:watch": "vitest"
