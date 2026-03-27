@@ -44,6 +44,8 @@ export {
   DEFAULT_SYNC_STORAGE,
 } from "./storage";
 
+export { getCmpDisplayName, CMP_SCRIPT_URLS, SELECTOR_TO_CMP } from "./cmp-names";
+
 export { safeAsync } from "./ui-error-handler";
 
 export {

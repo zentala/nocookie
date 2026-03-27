@@ -6,37 +6,13 @@
  * Communicates results to background service worker.
  */
 
+import { CMP_SCRIPT_URLS, SELECTOR_TO_CMP } from "@/shared/cmp-names";
 import { createMessage } from "@/shared/messages";
 import type { ConfidenceLevel, ConsentResult } from "@/shared/types";
 import { EXECUTOR_MESSAGE_TYPE } from "./executor";
+import { executeNoCookieHandshake } from "./nocookie-handler";
 import { findCmpSelector, startObserver, stopObserver } from "./observer";
 import { getWellKnown, wellKnownToRule, setWellKnownRule } from "./well-known-reader";
-
-/** Known CMP script URL patterns mapped to CMP names. */
-const CMP_SCRIPT_URLS: Record<string, string> = {
-  "cdn.cookielaw.org": "onetrust",
-  "consent.cookiebot.com": "cookiebot",
-  "sdk.privacy-center.org": "didomi",
-  "quantcast.mgr.consensu.org": "quantcast",
-  "consent.trustarc.com": "trustarc",
-  "cdn-cookieyes.com": "cookieyes",
-  "complianz.io": "complianz",
-  "cdn.osano.com": "osano",
-  "delivery.consentmanager.net": "consentmanager",
-};
-
-/** Map of DOM selectors to CMP names. */
-const SELECTOR_TO_CMP: Record<string, string> = {
-  "#onetrust-consent-sdk": "onetrust",
-  "#CybotCookiebotDialog": "cookiebot",
-  "#didomi-host": "didomi",
-  ".qc-cmp2-ui": "quantcast",
-  "#truste-consent-track": "trustarc",
-  ".cky-consent-container": "cookieyes",
-  ".cc-window": "osano",
-  ".cmplz-cookiebanner": "complianz",
-  "#cmpbox": "consentmanager",
-};
 
 /** Detection timeout in milliseconds. */
 const DETECTION_TIMEOUT_MS = 5000;
@@ -158,6 +134,34 @@ async function checkWellKnown(): Promise<boolean> {
 }
 
 /**
+ * Attempt the NoCookie CMP native handshake.
+ * Requests user preferences from background, sends HELLO, waits for ACK.
+ * Posts the consent result via the same relay channel as the executor.
+ */
+async function tryNoCookieHandshake(): Promise<void> {
+  const domain = window.location.hostname;
+  const prefsMsg = createMessage("GET_PREFERENCES", { domain });
+  const response = await chrome.runtime.sendMessage(prefsMsg);
+  if (!response?.preferences) return;
+
+  const result = await executeNoCookieHandshake(response.preferences, domain);
+  if (result) {
+    window.postMessage({ type: EXECUTOR_MESSAGE_TYPE, payload: result }, "*");
+  }
+}
+
+/** Notify detection and trigger NoCookie handshake if applicable. */
+function onCmpFound(cmpName: string, confidence: ConfidenceLevel): void {
+  scanning = false;
+  notifyCmpDetected(cmpName, confidence);
+  if (cmpName === "nocookie") {
+    tryNoCookieHandshake().catch((err) => {
+      console.debug("[NoCookie] handshake failed:", err);
+    });
+  }
+}
+
+/**
  * Run DOM-based detection (selectors, scripts, observer).
  * Called when well-known file is not available.
  */
@@ -165,17 +169,14 @@ function runDomDetection(): void {
   // Step 1: DOM selector scan
   const matchedSelector = findCmpSelector();
   if (matchedSelector) {
-    const cmpName = SELECTOR_TO_CMP[matchedSelector] ?? "unknown";
-    scanning = false;
-    notifyCmpDetected(cmpName, "high");
+    onCmpFound(SELECTOR_TO_CMP[matchedSelector] ?? "unknown", "high");
     return;
   }
 
   // Step 2: Script URL scan
   const scriptCmp = scanScriptUrls();
   if (scriptCmp) {
-    scanning = false;
-    notifyCmpDetected(scriptCmp, "medium");
+    onCmpFound(scriptCmp, "medium");
     return;
   }
 
@@ -185,10 +186,8 @@ function runDomDetection(): void {
       clearTimeout(activeTimeout);
       activeTimeout = null;
     }
-    const cmpName = SELECTOR_TO_CMP[selector] ?? "unknown";
     activeObserver = null;
-    scanning = false;
-    notifyCmpDetected(cmpName, "high");
+    onCmpFound(SELECTOR_TO_CMP[selector] ?? "unknown", "high");
   });
 
   // Step 4: Timeout — give up after DETECTION_TIMEOUT_MS

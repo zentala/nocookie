@@ -9,6 +9,7 @@ import type { BadgeState, TabStateChangedNotification } from "@/shared/messages"
 import type { ConsentResult } from "@/shared/types";
 import type { ProfileName, CategoryId } from "@/shared/categories";
 import { CATEGORY_META, PROFILE_LABELS } from "@/shared/categories";
+import { getCmpDisplayName } from "@/shared/cmp-names";
 import { createMessage } from "@/shared/messages";
 import { getProfile, setProfile, setPreferences } from "@/shared/storage-api";
 import { getPreferencesForProfile } from "@/shared/categories";
@@ -84,11 +85,11 @@ export function buildStatusDetail(tabState: PopupTabState): string {
   const { state, cmp, result } = tabState;
   if (state === "handled" && result) {
     const parts: string[] = [];
-    if (cmp) parts.push(`CMP: ${cmp}`);
+    if (cmp) parts.push(`CMP: ${getCmpDisplayName(cmp)}`);
     parts.push(`Method: ${result.method}`);
     return parts.join(" \u00b7 ");
   }
-  if (state === "attention" && cmp) return `CMP detected: ${cmp}`;
+  if (state === "attention" && cmp) return `CMP detected: ${getCmpDisplayName(cmp)}`;
   if (state === "error" && result) return "Could not apply preferences";
   return "";
 }

@@ -6,18 +6,10 @@
  * body direct children + subtree to minimize performance impact.
  */
 
-/** Known CMP container selectors (top 9 CMPs). */
-export const CMP_SELECTORS = [
-  "#onetrust-consent-sdk",
-  "#CybotCookiebotDialog",
-  "#didomi-host",
-  ".qc-cmp2-ui",
-  "#truste-consent-track",
-  ".cky-consent-container",
-  ".cc-window",
-  ".cmplz-cookiebanner",
-  "#cmpbox",
-] as const;
+import { SELECTOR_TO_CMP } from "@/shared/cmp-names";
+
+/** Known CMP container selectors derived from the shared CMP registry. */
+export const CMP_SELECTORS = Object.keys(SELECTOR_TO_CMP);
 
 /** Debounce interval in milliseconds for mutation checks. */
 const DEBOUNCE_MS = 100;

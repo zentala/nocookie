@@ -57,7 +57,14 @@ export interface CMPRule {
 export type ConfidenceLevel = "high" | "medium" | "low";
 
 /** Method used to apply consent on a page. */
-export type ConsentMethod = "api" | "click" | "tcf" | "heuristic" | "well-known" | "autoconsent";
+export type ConsentMethod =
+  | "api"
+  | "click"
+  | "tcf"
+  | "heuristic"
+  | "well-known"
+  | "autoconsent"
+  | "extension-native";
 
 /** Result of a consent operation on a single domain. */
 export interface ConsentResult {
