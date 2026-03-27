@@ -119,7 +119,19 @@ declare module "astro:content" {
     ? import("astro/zod").infer<L["schema"]>
     : any;
 
-  type DataEntryMap = {};
+  type DataEntryMap = {
+    articles: Record<
+      string,
+      {
+        id: string;
+        body?: string;
+        collection: "articles";
+        data: InferEntrySchema<"articles">;
+        rendered?: RenderedContent;
+        filePath?: string;
+      }
+    >;
+  };
 
   type ExtractLoaderTypes<T> = T extends import("astro/loaders").LiveLoader<
     infer TData,
@@ -147,6 +159,6 @@ declare module "astro:content" {
     LiveContentConfig["collections"][C]["loader"]
   >;
 
-  export type ContentConfig = never;
+  export type ContentConfig = typeof import("./../src/content.config.js");
   export type LiveContentConfig = never;
 }

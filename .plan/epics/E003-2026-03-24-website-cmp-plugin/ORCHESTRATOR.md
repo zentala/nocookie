@@ -11,25 +11,25 @@ created: 2026-03-24
 
 | ID | Task | Wave | Complexity | Estimate | Status |
 |----|------|------|-----------|----------|--------|
-| E003-T01 | Project scaffolding & build setup | 1 | Medium | 4h | [ ] |
-| E003-T02 | Core types & config schema | 1 | Medium | 3h | [ ] |
-| E003-T03 | Consent state engine | 1 | Medium | 4h | [ ] |
-| E003-T04 | Event bus system | 1 | Low | 2h | [ ] |
-| E003-T05 | Theme engine & CSS variables | 2 | Medium | 4h | [ ] |
-| E003-T06 | Banner UI (first layer) | 2 | Medium | 6h | [ ] |
-| E003-T07 | Preference center UI (second layer) | 2 | High | 8h | [ ] |
-| E003-T08 | Cookie policy icon system | 2 | Medium | 6h | [ ] |
-| E003-T09 | Cookie policy page generator | 3 | High | 8h | [ ] |
-| E003-T10 | Well-known JSON generator | 3 | Low | 3h | [ ] |
-| E003-T11 | Extension bridge (handshake protocol) | 3 | High | 6h | [ ] |
-| E003-T12 | GPC signal detection & response | 3 | Low | 2h | [ ] |
+| E003-T01 | Project scaffolding & build setup | 1 | Medium | 4h | [x] |
+| E003-T02 | Core types & config schema | 1 | Medium | 3h | [x] |
+| E003-T03 | Consent state engine | 1 | Medium | 4h | [x] |
+| E003-T04 | Event bus system | 1 | Low | 2h | [x] |
+| E003-T05 | Theme engine & CSS variables | 2 | Medium | 4h | [x] |
+| E003-T06 | Banner UI (first layer) | 2 | Medium | 6h | [x] |
+| E003-T07 | Preference center UI (second layer) | 2 | High | 8h | [x] |
+| E003-T08 | Cookie policy icon system | 2 | Medium | 6h | [x] |
+| E003-T09 | Cookie policy page generator | 3 | High | 8h | [x] |
+| E003-T10 | Well-known JSON generator | 3 | Low | 3h | [x] |
+| E003-T11 | Extension bridge (handshake protocol) | 3 | High | 6h | [x] |
+| E003-T12 | GPC signal detection & response | 3 | Low | 2h | [x] |
 | E003-T13 | Internationalization (i18n) | 4 | Medium | 6h | [ ] |
 | E003-T14 | Accessibility audit & fixes | 4 | Medium | 4h | [ ] |
 | E003-T15 | CDN bundle & npm package publishing | 4 | Medium | 4h | [ ] |
 | E003-T16 | E2E tests with Playwright | 4 | High | 8h | [ ] |
 | E003-T17 | Documentation & examples | 5 | Medium | 6h | [ ] |
 | E003-T18 | Extension-side integration (E002 update) | 5 | Medium | 4h | [ ] |
-| E003-T19 | Standardized cookie practice descriptions | 2 | Medium | 5h | [ ] |
+| E003-T19 | Standardized cookie practice descriptions | 2 | Medium | 5h | [x] |
 | E003-T20 | Downloadable badge kit & icon publishing | 4 | Low | 3h | [ ] |
 | E003-T21 | Cookie practice descriptions i18n (DE/FR/ES/PL) | 4 | Medium | 6h | [ ] |
 | E003-T22 | Visual preview / configurator tool | 5 | High | 12h | [ ] |

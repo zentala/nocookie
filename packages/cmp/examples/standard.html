@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NoCookie CMP - Standard Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      h1 {
+        color: #1f2937;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      pre {
+        background: #f9fafb;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+      button {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        cursor: pointer;
+        margin: 4px;
+      }
+      button:hover {
+        background: #f3f4f6;
+      }
+      #consent-output {
+        background: #f9fafb;
+        padding: 12px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Standard Example</h1>
+    <p>Uses all four common categories, auto theme, custom position, and event listeners.</p>
+
+    <h2>Live Consent State</h2>
+    <div id="consent-output">Waiting for initialization...</div>
+
+    <h2>Actions</h2>
+    <button onclick="NoCookieCMP.openPreferences()">Open Preferences</button>
+    <button onclick="NoCookieCMP.acceptAll()">Accept All</button>
+    <button onclick="NoCookieCMP.rejectAll()">Reject All</button>
+    <button onclick="NoCookieCMP.reset()">Reset</button>
+    <button onclick="showConsent()">Log Consent</button>
+
+    <h2>Event Log</h2>
+    <ul id="event-log"></ul>
+
+    <script src="https://cdn.nocookie.zentala.io/cmp/v1/nocookie-cmp.min.js"></script>
+    <script>
+      var output = document.getElementById("consent-output");
+      var log = document.getElementById("event-log");
+
+      function showConsent() {
+        var consent = NoCookieCMP.getConsent();
+        output.textContent = JSON.stringify(consent, null, 2);
+      }
+
+      function logEvent(name, payload) {
+        var li = document.createElement("li");
+        var time = new Date().toLocaleTimeString();
+        li.textContent = time + " - " + name;
+        if (payload) li.textContent += ": " + JSON.stringify(payload);
+        log.prepend(li);
+      }
+
+      NoCookieCMP.init({
+        siteName: "Acme Corp",
+        policyUrl: "/privacy-policy",
+        categories: ["essential", "functional", "analytics", "marketing"],
+        theme: {
+          mode: "auto",
+          position: "bottom-right",
+          primaryColor: "#6366f1",
+          animation: "slide-up",
+        },
+        behavior: {
+          consentExpiry: 365,
+          respectGPC: true,
+          rejectAllOnFirstLayer: true,
+        },
+        language: "en",
+      });
+
+      // Listen to all events
+      NoCookieCMP.on("*", function (event, payload) {
+        logEvent(event, payload);
+      });
+
+      // Update consent display on changes
+      NoCookieCMP.on("consent:updated", function () {
+        showConsent();
+      });
+
+      showConsent();
+    </script>
+  </body>
+</html>

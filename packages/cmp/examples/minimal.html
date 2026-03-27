@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NoCookie CMP - Minimal Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      h1 {
+        color: #1f2937;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Minimal Example</h1>
+    <p>
+      This page loads <code>@nocookie/cmp</code> via CDN with the simplest possible configuration:
+    </p>
+    <ul>
+      <li>Site name</li>
+      <li>Two categories: essential + analytics</li>
+    </ul>
+    <p>
+      Everything else uses defaults: light theme, bottom-left position, English, slide-up animation.
+    </p>
+
+    <h2>Configuration used</h2>
+    <pre><code>NoCookieCMP.init({
+  siteName: "My Website",
+  categories: ["essential", "analytics"],
+});</code></pre>
+
+    <!-- Load the CMP script from CDN -->
+    <script src="https://cdn.nocookie.zentala.io/cmp/v1/nocookie-cmp.min.js"></script>
+    <script>
+      NoCookieCMP.init({
+        siteName: "My Website",
+        categories: ["essential", "analytics"],
+      });
+    </script>
+  </body>
+</html>

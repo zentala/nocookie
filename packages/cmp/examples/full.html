@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NoCookie CMP - Full Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      h1 {
+        color: #1f2937;
+      }
+      h2 {
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 8px;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      pre {
+        background: #f9fafb;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+      }
+      button {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        cursor: pointer;
+        margin: 4px;
+      }
+      button:hover {
+        background: #f3f4f6;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      #consent-output,
+      #wellknown-output {
+        background: #f9fafb;
+        padding: 12px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 12px;
+        max-height: 300px;
+        overflow: auto;
+        white-space: pre;
+      }
+      #policy-container {
+        border: 1px solid #e5e7eb;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Full Example</h1>
+    <p>
+      Demonstrates all configuration options, events, policy page generation, and well-known JSON.
+    </p>
+
+    <h2>Actions</h2>
+    <button onclick="NoCookieCMP.openPreferences()">Open Preferences</button>
+    <button onclick="NoCookieCMP.acceptAll()">Accept All</button>
+    <button onclick="NoCookieCMP.rejectAll()">Reject All</button>
+    <button onclick="NoCookieCMP.reset()">Reset</button>
+
+    <div class="grid">
+      <div>
+        <h2>Consent State</h2>
+        <div id="consent-output">Loading...</div>
+      </div>
+      <div>
+        <h2>Event Log</h2>
+        <ul id="event-log" style="max-height: 200px; overflow: auto; font-size: 13px"></ul>
+      </div>
+    </div>
+
+    <h2>Well-Known JSON Output</h2>
+    <button onclick="showWellKnown()">Generate /.well-known/cookie-consent.json</button>
+    <div id="wellknown-output"></div>
+
+    <h2>Cookie Policy Page (generated)</h2>
+    <button onclick="showPolicy()">Generate Policy</button>
+    <div id="policy-container"></div>
+
+    <script src="https://cdn.nocookie.zentala.io/cmp/v1/nocookie-cmp.min.js"></script>
+    <script>
+      var output = document.getElementById("consent-output");
+      var log = document.getElementById("event-log");
+
+      function showConsent() {
+        output.textContent = JSON.stringify(NoCookieCMP.getConsent(), null, 2);
+      }
+
+      function logEvent(name, payload) {
+        var li = document.createElement("li");
+        var time = new Date().toLocaleTimeString();
+        li.textContent = time + " - " + name;
+        if (payload) li.textContent += ": " + JSON.stringify(payload);
+        log.prepend(li);
+      }
+
+      function showWellKnown() {
+        var json = NoCookieCMP.getWellKnownJSON();
+        document.getElementById("wellknown-output").textContent = JSON.stringify(json, null, 2);
+      }
+
+      function showPolicy() {
+        // Use CMP's safe inject method for policy page rendering
+        NoCookieCMP.injectPolicy(document.getElementById("policy-container"));
+      }
+
+      NoCookieCMP.init({
+        siteName: "Acme Corp",
+        privacyContact: "privacy@acme.com",
+        dpo: "dpo@acme.com",
+        policyUrl: "/privacy-policy",
+        siteUrl: "https://acme.com",
+        imprintUrl: "/imprint",
+
+        categories: [
+          "essential",
+          "functional",
+          {
+            id: "analytics",
+            name: "Analytics & Performance",
+            description: "We use analytics to understand site usage patterns.",
+            cookies: [
+              {
+                name: "_ga",
+                provider: "Google Analytics",
+                providerUrl: "https://analytics.google.com",
+                providerPrivacyUrl: "https://policies.google.com/privacy",
+                domain: ".acme.com",
+                duration: "2 years",
+                purpose: "Distinguishes users for analytics reporting",
+                type: "third-party",
+              },
+              {
+                name: "_gid",
+                provider: "Google Analytics",
+                domain: ".acme.com",
+                duration: "24 hours",
+                purpose: "Distinguishes users for short-term analytics",
+                type: "third-party",
+              },
+            ],
+          },
+          {
+            id: "marketing",
+            cookies: [
+              {
+                name: "_fbp",
+                provider: "Meta (Facebook)",
+                domain: ".acme.com",
+                duration: "3 months",
+                purpose: "Tracks visits across websites for ad delivery",
+                type: "third-party",
+              },
+            ],
+          },
+          "social-media",
+        ],
+
+        theme: {
+          mode: "auto",
+          position: "bottom-left",
+          primaryColor: "#2563eb",
+          acceptColor: "#16a34a",
+          rejectColor: "#dc2626",
+          backgroundColor: "#ffffff",
+          textColor: "#1f2937",
+          borderRadius: 12,
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          fontSize: 14,
+          maxWidth: 480,
+          zIndex: 999999,
+          showOverlay: false,
+          animation: "slide-up",
+        },
+
+        behavior: {
+          consentExpiry: 365,
+          showOnEveryVisit: false,
+          rejectAllOnFirstLayer: true,
+          closeOnScroll: false,
+          closeOnOutsideClick: false,
+          blockScriptsBeforeConsent: false,
+          respectGPC: true,
+          respectDNT: false,
+          emitTCFSignal: false,
+          googleConsentMode: false,
+          cookieName: "ca_consent",
+          cookieDomain: "auto",
+          cookiePath: "/",
+          cookieSecure: true,
+          cookieSameSite: "Lax",
+        },
+
+        language: "en",
+        translations: {
+          bannerTitle: "We value your privacy",
+          bannerDescription: "Choose which cookies you allow on this website.",
+        },
+
+        wellKnown: {
+          enabled: true,
+          categories: ["essential", "analytics", "marketing"],
+        },
+
+        policyPage: {
+          enabled: true,
+          title: "Cookie Policy",
+          intro: "This page explains how Acme Corp uses cookies.",
+        },
+      });
+
+      // Listen to all events
+      NoCookieCMP.on("*", function (event, payload) {
+        logEvent(event, payload);
+      });
+
+      NoCookieCMP.on("consent:updated", showConsent);
+      NoCookieCMP.on("extension:detected", function () {
+        logEvent("extension:detected", "NoCookie extension found!");
+      });
+      NoCookieCMP.on("gpc:detected", function () {
+        logEvent("gpc:detected", "GPC signal active");
+      });
+
+      showConsent();
+    </script>
+  </body>
+</html>
