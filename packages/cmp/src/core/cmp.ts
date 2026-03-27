@@ -12,6 +12,7 @@ import type {
   CategoryId,
   CMPEvent,
 } from "@/shared/types";
+import { DEFAULT_CONSENT_STATE } from "@/shared/constants";
 import { parseConfig } from "@/core/config";
 import { ConsentStateManager } from "@/core/consent-state";
 import { EventBus } from "@/core/event-bus";
@@ -107,9 +108,9 @@ export class CMPOrchestrator {
   /** Get current consent state from cookie. */
   getConsent(): ConsentState {
     if (!this.state) {
-      return defaultConsentState();
+      return { ...DEFAULT_CONSENT_STATE };
     }
-    return this.state.consentState.getConsent() ?? defaultConsentState();
+    return this.state.consentState.getConsent() ?? { ...DEFAULT_CONSENT_STATE };
   }
 
   /** Set consent for a single category and emit events. */
@@ -172,15 +173,17 @@ export class CMPOrchestrator {
   }
 
   /** Subscribe to a CMP event. */
-  on(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  on(event: CMPEvent | "*", handler: (...args: any[]) => void): void {
     if (!this.state) return;
-    this.state.eventBus.on(event as CMPEvent, handler as () => void);
+    this.state.eventBus.on(event as CMPEvent, handler);
   }
 
   /** Unsubscribe from a CMP event. */
-  off(event: CMPEvent | "*", handler: (...args: unknown[]) => void): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  off(event: CMPEvent | "*", handler: (...args: any[]) => void): void {
     if (!this.state) return;
-    this.state.eventBus.off(event as CMPEvent, handler as () => void);
+    this.state.eventBus.off(event as CMPEvent, handler);
   }
 
   /** Generate the well-known cookie-consent.json object. */
@@ -236,15 +239,4 @@ export class CMPOrchestrator {
       changes: [{ category, granted }],
     });
   }
-}
-
-/** Build a default consent state where only essential is true. */
-function defaultConsentState(): ConsentState {
-  return {
-    essential: true,
-    functional: false,
-    analytics: false,
-    marketing: false,
-    "social-media": false,
-  };
 }

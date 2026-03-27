@@ -25,6 +25,26 @@ Monorepo with:
 - Cloudflare Pages (website hosting)
 - GPC support (`Sec-GPC: 1` header emission)
 
+## Packages
+
+### `packages/cmp/` — `@nocookie/cmp`
+Shadow DOM-based consent management plugin. Key modules:
+- `src/core/` — config parser, consent state (cookie-based), event bus, CMP orchestrator
+- `src/ui/` — banner, preference center, theme engine, icons, policy page, accessibility
+- `src/integration/` — extension bridge (postMessage handshake), well-known JSON, GPC detection
+- `src/shared/` — types, constants, descriptions, i18n (16 languages), icon data (JSON)
+- Tests: `__tests__/` (unit, vitest), `e2e/` (integration, vitest+jsdom)
+- Scripts: `scripts/generate-sri.mjs`, `scripts/generate-badge-kit.mjs`
+
+### `packages/schema/` — `@nocookie/schema`
+JSON Schema and validator for `/.well-known/cookie-consent.json`.
+
+### `extension/` — Chrome Extension
+Manifest V3 extension with autoconsent, GPC, native NoCookie CMP handshake.
+
+### `website/` — Astro Website
+Documentation site with configurator tool at `/configurator`.
+
 ## Conventions
 - All code and docs in English
 - Conventional Commits

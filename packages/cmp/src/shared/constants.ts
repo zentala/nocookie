@@ -7,6 +7,7 @@ import type {
   BehaviorConfig,
   CategoryId,
   CategoryMeta,
+  ConsentState,
   ThemeConfig,
   TranslationStrings,
   WellKnownConfig,
@@ -138,3 +139,12 @@ export const DEFAULT_POLICY_PAGE: Required<PolicyPageConfig> = {
 
 /** Default language code. */
 export const DEFAULT_LANGUAGE = "en";
+
+/** Default consent state — only essential is true. */
+export const DEFAULT_CONSENT_STATE: ConsentState = {
+  essential: true,
+  functional: false,
+  analytics: false,
+  marketing: false,
+  "social-media": false,
+};

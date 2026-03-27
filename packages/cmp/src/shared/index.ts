@@ -29,6 +29,7 @@ export {
   DEFAULT_WELL_KNOWN,
   DEFAULT_POLICY_PAGE,
   DEFAULT_LANGUAGE,
+  DEFAULT_CONSENT_STATE,
 } from "./constants";
 
 export type { CategoryDescription, DescriptionPreset, CommonCookieInfo } from "./descriptions";
