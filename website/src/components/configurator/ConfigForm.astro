@@ -1,0 +1,190 @@
+---
+/**
+ * Configuration form for the CMP configurator.
+ * Three steps: basic info, categories, and theme settings.
+ */
+const categories = [
+  {
+    value: "essential",
+    label: "Strictly Necessary",
+    desc: "Required for website function, cannot be disabled",
+    checked: true,
+    disabled: true,
+  },
+  {
+    value: "functional",
+    label: "Functional",
+    desc: "Enhanced functionality like preferences and language",
+    checked: false,
+    disabled: false,
+  },
+  {
+    value: "analytics",
+    label: "Analytics & Performance",
+    desc: "Understanding how visitors interact with the website",
+    checked: false,
+    disabled: false,
+  },
+  {
+    value: "marketing",
+    label: "Marketing & Advertising",
+    desc: "Delivering relevant advertisements",
+    checked: false,
+    disabled: false,
+  },
+  {
+    value: "social-media",
+    label: "Social Media",
+    desc: "Social media features like share buttons",
+    checked: false,
+    disabled: false,
+  },
+];
+
+const positions = [
+  { value: "bottom-left", label: "Bottom Left" },
+  { value: "bottom-right", label: "Bottom Right" },
+  { value: "bottom-center", label: "Bottom Center" },
+  { value: "top-center", label: "Top Center" },
+];
+
+const modes = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "auto", label: "Auto" },
+];
+---
+
+{/* Step 1: Basic Info */}
+<fieldset class="space-y-4">
+  <legend class="text-lg font-semibold text-white mb-1">1. Basic Info</legend>
+  <div>
+    <label for="cfg-site-name" class="cfg-label">Site Name *</label>
+    <input
+      id="cfg-site-name"
+      type="text"
+      placeholder="My Website"
+      required
+      class="cfg-input"
+    />
+  </div>
+  <div>
+    <label for="cfg-contact" class="cfg-label">Privacy Contact Email</label>
+    <input
+      id="cfg-contact"
+      type="email"
+      placeholder="privacy@example.com"
+      class="cfg-input"
+    />
+  </div>
+  <div>
+    <label for="cfg-policy-url" class="cfg-label">Cookie Policy URL</label>
+    <input
+      id="cfg-policy-url"
+      type="url"
+      placeholder="https://example.com/privacy"
+      class="cfg-input"
+    />
+  </div>
+</fieldset>
+
+{/* Step 2: Categories */}
+<fieldset class="space-y-3">
+  <legend class="text-lg font-semibold text-white mb-1">2. Categories</legend>
+  {categories.map((cat) => (
+    <label class="flex items-start gap-3 p-3 rounded-lg border border-white/10 bg-surface-light hover:border-primary/30 transition-colors cursor-pointer">
+      <input
+        type="checkbox"
+        class="cfg-category mt-0.5 rounded border-white/20 bg-surface text-primary focus:ring-primary"
+        value={cat.value}
+        checked={cat.checked}
+        disabled={cat.disabled}
+      />
+      <div>
+        <span class="text-sm font-medium text-white">{cat.label}</span>
+        <p class="text-xs text-muted mt-0.5">{cat.desc}</p>
+      </div>
+    </label>
+  ))}
+</fieldset>
+
+{/* Step 3: Theme */}
+<fieldset class="space-y-4">
+  <legend class="text-lg font-semibold text-white mb-1">3. Theme</legend>
+
+  {/* Mode */}
+  <div>
+    <span class="cfg-label">Mode</span>
+    <div class="flex gap-4 mt-1">
+      {modes.map((m) => (
+        <label class="flex items-center gap-2 text-sm text-muted cursor-pointer">
+          <input
+            type="radio"
+            name="cfg-mode"
+            value={m.value}
+            checked={m.value === "light"}
+            class="text-primary focus:ring-primary"
+          />
+          {m.label}
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Position */}
+  <div>
+    <span class="cfg-label">Position</span>
+    <div class="grid grid-cols-2 gap-2 mt-1">
+      {positions.map((p) => (
+        <label class="flex items-center gap-2 text-sm text-muted cursor-pointer">
+          <input
+            type="radio"
+            name="cfg-position"
+            value={p.value}
+            checked={p.value === "bottom-left"}
+            class="text-primary focus:ring-primary"
+          />
+          {p.label}
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Colors */}
+  <div class="grid grid-cols-3 gap-4">
+    <div>
+      <label for="cfg-primary-color" class="cfg-label">Primary</label>
+      <div class="flex items-center gap-2">
+        <input id="cfg-primary-color" type="color" value="#2563eb" class="cfg-color" />
+        <span id="cfg-primary-color-hex" class="text-xs text-muted">#2563eb</span>
+      </div>
+    </div>
+    <div>
+      <label for="cfg-accept-color" class="cfg-label">Accept</label>
+      <div class="flex items-center gap-2">
+        <input id="cfg-accept-color" type="color" value="#16a34a" class="cfg-color" />
+        <span id="cfg-accept-color-hex" class="text-xs text-muted">#16a34a</span>
+      </div>
+    </div>
+    <div>
+      <label for="cfg-reject-color" class="cfg-label">Reject</label>
+      <div class="flex items-center gap-2">
+        <input id="cfg-reject-color" type="color" value="#dc2626" class="cfg-color" />
+        <span id="cfg-reject-color-hex" class="text-xs text-muted">#dc2626</span>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<style>
+  @reference "@/styles/global.css";
+  .cfg-input {
+    @apply w-full rounded-lg border border-white/10 bg-surface-light px-4 py-2.5 text-sm text-white placeholder-muted focus:outline-none focus:border-primary transition-colors;
+  }
+  .cfg-label {
+    @apply block text-sm font-medium text-white mb-1;
+  }
+  .cfg-color {
+    @apply w-8 h-8 rounded border border-white/10 bg-surface-light cursor-pointer;
+  }
+</style>
