@@ -75,7 +75,7 @@ describe("buildThemeVariables", () => {
   it("produces CSS variable declarations for default theme", () => {
     const css = buildThemeVariables(DEFAULT_THEME);
     expect(css).toContain("--ca-color-primary: #2563eb;");
-    expect(css).toContain("--ca-color-accept: #16a34a;");
+    expect(css).toContain("--ca-color-accept: #15803d;");
     expect(css).toContain("--ca-color-reject: #dc2626;");
     expect(css).toContain("--ca-color-bg: #ffffff;");
     expect(css).toContain("--ca-color-text: #1f2937;");

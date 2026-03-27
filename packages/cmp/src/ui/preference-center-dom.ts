@@ -43,7 +43,7 @@ function buildHeader(config: ResolvedCMPConfig, onClose: () => void): HTMLDivEle
   header.className = "ca-prefs__header";
 
   const title = document.createElement("h2");
-  title.textContent = config.translations.bannerTitle;
+  title.textContent = config.translations.preferencesTitle;
   header.appendChild(title);
 
   const closeBtn = document.createElement("button");

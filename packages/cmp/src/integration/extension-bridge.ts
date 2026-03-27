@@ -194,7 +194,7 @@ export class ExtensionBridge {
       applied,
       conflicts,
     };
-    window.postMessage(ackMessage, "*");
+    window.postMessage(ackMessage, window.location.origin);
 
     this.ackTimeoutId = setTimeout(() => {
       // eslint-disable-next-line no-console

@@ -140,7 +140,7 @@ describe("renderPrivacyBadge", () => {
   });
 
   it("uses correct color for each level", () => {
-    expect(renderPrivacyBadge("maximum")).toContain("#16a34a");
+    expect(renderPrivacyBadge("maximum")).toContain("#15803d");
     expect(renderPrivacyBadge("friendly")).toContain("#2563eb");
     expect(renderPrivacyBadge("balanced")).toContain("#d97706");
     expect(renderPrivacyBadge("full-tracking")).toContain("#ea580c");
@@ -174,7 +174,7 @@ describe("renderComplianceBadge", () => {
 
   it("uses correct colors", () => {
     expect(renderComplianceBadge("gdpr")).toContain("#2563eb");
-    expect(renderComplianceBadge("gpc")).toContain("#16a34a");
+    expect(renderComplianceBadge("gpc")).toContain("#15803d");
     expect(renderComplianceBadge("standard")).toContain("#7c3aed");
     expect(renderComplianceBadge("extension-ready")).toContain("#ea580c");
   });

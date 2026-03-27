@@ -33,7 +33,7 @@
 
 /* Privacy badge color variants */
 .ca-badge--privacy-maximum {
-  --ca-badge-color: #16a34a;
+  --ca-badge-color: #15803d;
 }
 
 .ca-badge--privacy-friendly {
@@ -54,7 +54,7 @@
 }
 
 .ca-badge--gpc {
-  --ca-badge-color: #16a34a;
+  --ca-badge-color: #15803d;
 }
 
 .ca-badge--standard {

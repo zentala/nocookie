@@ -76,7 +76,7 @@ export const DEFAULT_THEME: Required<ThemeConfig> = {
   mode: "light",
   position: "bottom-left",
   primaryColor: "#2563eb",
-  acceptColor: "#16a34a",
+  acceptColor: "#15803d",
   rejectColor: "#dc2626",
   backgroundColor: "#ffffff",
   textColor: "#1f2937",
@@ -113,10 +113,12 @@ export const DEFAULT_TRANSLATIONS: TranslationStrings = {
   bannerTitle: "Cookie Consent",
   bannerDescription:
     "We use cookies to enhance your browsing experience. Choose which categories you allow.",
+  preferencesTitle: "Cookie Preferences",
   acceptAll: "Accept All",
   rejectAll: "Reject All",
   customize: "Customize",
   savePreferences: "Save Preferences",
+  learnMore: "Learn more",
   closeAriaLabel: "Close cookie consent banner",
   categoryRequired: "Always active",
 };

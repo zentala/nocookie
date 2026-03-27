@@ -5,6 +5,7 @@ export const de: FullTranslations = {
   bannerTitle: "Cookie-Einstellungen",
   bannerDescription:
     "Wir verwenden Cookies, um Ihr Surferlebnis zu verbessern. Wählen Sie, welche Kategorien Sie zulassen.",
+  preferencesTitle: "Cookie-Einstellungen",
   acceptAll: "Alle akzeptieren",
   rejectAll: "Alle ablehnen",
   customize: "Anpassen",
@@ -51,6 +52,7 @@ export const fr: FullTranslations = {
   bannerTitle: "Consentement aux cookies",
   bannerDescription:
     "Nous utilisons des cookies pour améliorer votre expérience. Choisissez les catégories que vous autorisez.",
+  preferencesTitle: "Préférences de cookies",
   acceptAll: "Tout accepter",
   rejectAll: "Tout refuser",
   customize: "Personnaliser",
@@ -103,6 +105,7 @@ export const es: FullTranslations = {
   bannerTitle: "Consentimiento de cookies",
   bannerDescription:
     "Utilizamos cookies para mejorar su experiencia. Elija qué categorías permite.",
+  preferencesTitle: "Preferencias de cookies",
   acceptAll: "Aceptar todo",
   rejectAll: "Rechazar todo",
   customize: "Personalizar",
@@ -152,6 +155,7 @@ export const pl: FullTranslations = {
   bannerTitle: "Zgoda na cookies",
   bannerDescription:
     "Używamy plików cookie, aby poprawić komfort przeglądania. Wybierz, które kategorie chcesz zezwolić.",
+  preferencesTitle: "Preferencje plików cookie",
   acceptAll: "Zaakceptuj wszystkie",
   rejectAll: "Odrzuć wszystkie",
   customize: "Dostosuj",
@@ -198,6 +202,7 @@ export const nl: FullTranslations = {
   bannerTitle: "Cookietoestemming",
   bannerDescription:
     "Wij gebruiken cookies om uw ervaring te verbeteren. Kies welke categorieën u toestaat.",
+  preferencesTitle: "Cookie-voorkeuren",
   acceptAll: "Alles accepteren",
   rejectAll: "Alles weigeren",
   customize: "Aanpassen",
@@ -250,6 +255,7 @@ export const it: FullTranslations = {
   bannerTitle: "Consenso ai cookie",
   bannerDescription:
     "Utilizziamo i cookie per migliorare la tua esperienza. Scegli quali categorie consentire.",
+  preferencesTitle: "Preferenze cookie",
   acceptAll: "Accetta tutto",
   rejectAll: "Rifiuta tutto",
   customize: "Personalizza",
@@ -299,6 +305,7 @@ export const pt: FullTranslations = {
   bannerTitle: "Consentimento de cookies",
   bannerDescription:
     "Usamos cookies para melhorar a sua experiência. Escolha quais categorias permite.",
+  preferencesTitle: "Preferências de cookies",
   acceptAll: "Aceitar tudo",
   rejectAll: "Rejeitar tudo",
   customize: "Personalizar",

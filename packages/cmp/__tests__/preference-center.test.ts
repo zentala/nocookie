@@ -44,7 +44,7 @@ describe("PreferenceCenter", () => {
     it("renders header with title and close button", () => {
       pc.render();
       const h2 = shadowRoot.querySelector(".ca-prefs__header h2");
-      expect(h2?.textContent).toBe(DEFAULT_TRANSLATIONS.bannerTitle);
+      expect(h2?.textContent).toBe(DEFAULT_TRANSLATIONS.preferencesTitle);
 
       const closeBtn = shadowRoot.querySelector(".ca-prefs__close");
       expect(closeBtn).toBeTruthy();

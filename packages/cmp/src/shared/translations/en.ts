@@ -10,6 +10,7 @@ export const en: FullTranslations = {
   bannerTitle: "Cookie Consent",
   bannerDescription:
     "We use cookies to enhance your browsing experience. Choose which categories you allow.",
+  preferencesTitle: "Cookie Preferences",
   acceptAll: "Accept All",
   rejectAll: "Reject All",
   customize: "Customize",

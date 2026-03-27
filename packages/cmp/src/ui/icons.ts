@@ -50,7 +50,7 @@ const PRIVACY_LEVELS: Record<
   { color: string; label: string; text: string; path: string }
 > = {
   maximum: {
-    color: "#16a34a",
+    color: "#15803d",
     label: "Privacy Maximum",
     text: "Essential only",
     path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z",
@@ -87,7 +87,7 @@ const COMPLIANCE_BADGES: Record<
     icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4z" fill="currentColor"/>',
   },
   gpc: {
-    color: "#16a34a",
+    color: "#15803d",
     label: "GPC Respected",
     text: "GPC",
     icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" fill="currentColor"/>',

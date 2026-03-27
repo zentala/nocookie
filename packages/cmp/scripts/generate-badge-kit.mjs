@@ -35,7 +35,7 @@ const CATEGORIES = [
 ];
 
 const PRIVACY_LEVELS = [
-  { id: "maximum", color: "#16a34a", label: "Privacy Maximum", text: "Essential only", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" },
+  { id: "maximum", color: "#15803d", label: "Privacy Maximum", text: "Essential only", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" },
   { id: "friendly", color: "#2563eb", label: "Privacy Friendly", text: "Essential + Functional", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 4a4 4 0 0 1 0 8v-2a2 2 0 0 0 0-4V6z" },
   { id: "balanced", color: "#d97706", label: "Balanced", text: "Includes Analytics", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-3 12l3-6 3 6H9z" },
   { id: "full-tracking", color: "#ea580c", label: "Full Tracking", text: "All categories", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 5a5 5 0 0 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 0 0 0 6 3 3 0 0 0 0-6zm0 1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" },
@@ -43,7 +43,7 @@ const PRIVACY_LEVELS = [
 
 const COMPLIANCE_BADGES = [
   { id: "gdpr", color: "#2563eb", label: "GDPR Compliant", text: "GDPR", icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4z" fill="currentColor"/>' },
-  { id: "gpc", color: "#16a34a", label: "GPC Respected", text: "GPC", icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" fill="currentColor"/>' },
+  { id: "gpc", color: "#15803d", label: "GPC Respected", text: "GPC", icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" fill="currentColor"/>' },
   { id: "standard", color: "#7c3aed", label: "Standard Compliant", text: "v1", icon: '<path d="M9 12l2 2 4-4M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" fill="none" stroke="currentColor" stroke-width="2"/>' },
   { id: "extension-ready", color: "#ea580c", label: "Extension Ready", text: "\u26A1", icon: '<path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="currentColor"/>' },
 ];
@@ -159,12 +159,12 @@ function generateCSS() {
 
 /* Compliance badges */
 .nocookie-badge--gdpr { background: #2563eb20; color: #2563eb; }
-.nocookie-badge--gpc { background: #16a34a20; color: #16a34a; }
+.nocookie-badge--gpc { background: #15803d20; color: #15803d; }
 .nocookie-badge--standard { background: #7c3aed20; color: #7c3aed; }
 .nocookie-badge--extension { background: #ea580c20; color: #ea580c; }
 
 /* Privacy level badges */
-.nocookie-privacy--maximum { background: #16a34a20; color: #16a34a; }
+.nocookie-privacy--maximum { background: #15803d20; color: #15803d; }
 .nocookie-privacy--friendly { background: #2563eb20; color: #2563eb; }
 .nocookie-privacy--balanced { background: #d9770620; color: #d97706; }
 .nocookie-privacy--full { background: #ea580c20; color: #ea580c; }

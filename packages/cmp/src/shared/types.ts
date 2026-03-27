@@ -112,10 +112,12 @@ export interface BehaviorConfig {
 export interface TranslationStrings {
   bannerTitle: string;
   bannerDescription: string;
+  preferencesTitle: string;
   acceptAll: string;
   rejectAll: string;
   customize: string;
   savePreferences: string;
+  learnMore: string;
   closeAriaLabel: string;
   categoryRequired: string;
 }

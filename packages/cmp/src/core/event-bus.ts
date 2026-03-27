@@ -96,6 +96,19 @@ export class EventBus {
   }
 
   /**
+   * Subscribe to an event and automatically unsubscribe after the first invocation.
+   * @param event - The event name to listen for.
+   * @param handler - Callback invoked once when the event fires.
+   */
+  once<E extends CMPEvent>(event: E, handler: EventHandler<E>): void {
+    const wrapper: AnyHandler = (...args: unknown[]) => {
+      this.off(event, wrapper);
+      (handler as AnyHandler)(...args);
+    };
+    this.on(event, wrapper as EventHandler<E>);
+  }
+
+  /**
    * Emit a CMP event, notifying specific listeners first then wildcards.
    * @param event - The event name.
    * @param payload - Optional payload matching the event's type.

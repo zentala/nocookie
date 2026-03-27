@@ -9,6 +9,7 @@ export const sv: FullTranslations = {
   bannerTitle: "Cookiesamtycke",
   bannerDescription:
     "Vi använder cookies för att förbättra din upplevelse. Välj vilka kategorier du tillåter.",
+  preferencesTitle: "Cookie-inställningar",
   acceptAll: "Acceptera alla",
   rejectAll: "Avvisa alla",
   customize: "Anpassa",
@@ -55,6 +56,7 @@ export const da: FullTranslations = {
   bannerTitle: "Cookiesamtykke",
   bannerDescription:
     "Vi bruger cookies for at forbedre din oplevelse. Vælg hvilke kategorier du tillader.",
+  preferencesTitle: "Cookie-præferencer",
   acceptAll: "Accepter alle",
   rejectAll: "Afvis alle",
   customize: "Tilpas",
@@ -101,6 +103,7 @@ export const no: FullTranslations = {
   bannerTitle: "Samtykke til informasjonskapsler",
   bannerDescription:
     "Vi bruker informasjonskapsler for å forbedre opplevelsen din. Velg hvilke kategorier du tillater.",
+  preferencesTitle: "Informasjonskapselinnstillinger",
   acceptAll: "Godta alle",
   rejectAll: "Avvis alle",
   customize: "Tilpass",
@@ -146,6 +149,7 @@ export const no: FullTranslations = {
 export const fi: FullTranslations = {
   bannerTitle: "Evästeiden hyväksyntä",
   bannerDescription: "Käytämme evästeitä parantaaksemme kokemustasi. Valitse sallimasi kategoriat.",
+  preferencesTitle: "Evästeasetukset",
   acceptAll: "Hyväksy kaikki",
   rejectAll: "Hylkää kaikki",
   customize: "Mukauta",
@@ -192,6 +196,7 @@ export const cs: FullTranslations = {
   bannerTitle: "Souhlas s cookies",
   bannerDescription:
     "Používáme cookies ke zlepšení vašeho zážitku. Vyberte, které kategorie povolíte.",
+  preferencesTitle: "Nastavení cookies",
   acceptAll: "Přijmout vše",
   rejectAll: "Odmítnout vše",
   customize: "Přizpůsobit",

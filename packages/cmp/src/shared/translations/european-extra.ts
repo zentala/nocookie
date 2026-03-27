@@ -9,6 +9,7 @@ export const ro: FullTranslations = {
   bannerTitle: "Consimțământ pentru cookie-uri",
   bannerDescription:
     "Folosim cookie-uri pentru a vă îmbunătăți experiența. Alegeți categoriile pe care le permiteți.",
+  preferencesTitle: "Preferințe cookie",
   acceptAll: "Acceptă toate",
   rejectAll: "Respinge toate",
   customize: "Personalizează",
@@ -55,6 +56,7 @@ export const hu: FullTranslations = {
   bannerTitle: "Cookie-hozzájárulás",
   bannerDescription:
     "Sütiket használunk a böngészési élmény javításához. Válassza ki, mely kategóriákat engedélyezi.",
+  preferencesTitle: "Sütik beállításai",
   acceptAll: "Összes elfogadása",
   rejectAll: "Összes elutasítása",
   customize: "Testreszabás",
@@ -101,6 +103,7 @@ export const el: FullTranslations = {
   bannerTitle: "Συγκατάθεση cookies",
   bannerDescription:
     "Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας. Επιλέξτε ποιες κατηγορίες επιτρέπετε.",
+  preferencesTitle: "Προτιμήσεις cookies",
   acceptAll: "Αποδοχή όλων",
   rejectAll: "Απόρριψη όλων",
   customize: "Προσαρμογή",

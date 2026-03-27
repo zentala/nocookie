@@ -160,7 +160,7 @@ export class Banner {
       link.href = this.config.policyUrl;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.textContent = "Learn more";
+      link.textContent = this.config.translations.learnMore;
       p.appendChild(link);
     }
 

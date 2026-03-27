@@ -31,7 +31,6 @@ export interface FullTranslations extends TranslationStrings {
   cookiePolicy: string;
   poweredBy: string;
   alwaysActive: string;
-  learnMore: string;
   categories: Record<string, CategoryTranslation>;
   legal: LegalTranslation;
 }
