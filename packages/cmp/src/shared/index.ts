@@ -34,3 +34,13 @@ export {
 export type { CategoryDescription, DescriptionPreset, CommonCookieInfo } from "./descriptions";
 
 export { getCategoryDescription, getCommonCookieInfo, resolveDescription } from "./descriptions";
+
+export type { FullTranslations, CategoryTranslation, LegalTranslation } from "./i18n";
+
+export {
+  SUPPORTED_LANGUAGES,
+  normalizeLanguageCode,
+  detectLanguage,
+  getTranslations,
+  mergeTranslations,
+} from "./i18n";
