@@ -10,7 +10,7 @@ nocookie/
 ├── packages/
 │   └── schema/       → @nocookie/schema — JSON Schema + validator library
 ├── website/          → Project website (Astro, Cloudflare Pages)
-├── cmp-plugin/       → CMP widget for websites (@nocookie/cmp) [E003]
+│   └── cmp/          → @nocookie/cmp — Shadow DOM consent management plugin
 └── website-content/  → Articles and content for the website
 ```
 
@@ -111,7 +111,7 @@ interface UserPreferences {
 
 ---
 
-## 2. CMP Plugin (@nocookie/cmp)
+## 2. CMP Plugin (`packages/cmp/` — @nocookie/cmp)
 
 ### Distribution
 
@@ -121,37 +121,41 @@ interface UserPreferences {
 
 ### Architecture
 
+- **CMPOrchestrator** (`core/cmp.ts`) — wires all components on `init()`
 - **Shadow DOM isolation** — all UI rendered inside Shadow DOM to prevent style leakage
 - **Three UI layers**: consent banner, preference center modal, full cookie policy page
 - **Cookie policy icons** — standardized visual indicators (like Creative Commons badges)
 - **Event bus** — pub/sub system for consent lifecycle events
+- **Consent state** — cookie-based (`ca_consent=e:1|f:0|...`) with expiry (see ADR-006)
+- **i18n** — 16 languages, fallback chain (config > detected > en)
+- **Icon data** — shared via `icon-data.json` (DRY between runtime + badge kit generator)
 
-### Extension Handshake Protocol
+### Extension Handshake Protocol (ADR-007)
 
-When our extension is present, the CMP detects it and skips the popup:
+When our extension is present, the CMP communicates via `window.postMessage`:
 
 ```
-Extension loads on page
-  → content script dispatches CustomEvent('ca-extension-present')
-  → CMP plugin listens, responds with CustomEvent('ca-cmp-ready')
-  → extension sends user preferences via postMessage
-  → CMP applies preferences silently, fires 'extension:applied' event
-  → no popup shown to user
+Extension detects #ca-cmp-root + window.__cookiesAccepterCMP marker
+  → extension sends CA_EXTENSION_HELLO { version, preferences }
+  → CMP applies preferences via ConsentStateManager
+  → CMP sends CA_EXTENSION_ACK { applied, conflicts }
+  → banner hidden/closed, events emitted
+  → consent logged as method: 'extension-native', confidence: 'high'
 ```
 
-Handshake target: under 100ms.
+Handshake target: under 100ms. Timeout: 2s ACK warning.
 
 ### Integration Features
 
 - Auto-generates `/.well-known/cookie-consent.json` from config
-- GPC signal detection and response (`Sec-GPC: 1`)
-- TCF consent string emission (optional)
+- GPC signal detection and response (`navigator.globalPrivacyControl`)
 - Standardized cookie practice descriptions (5 languages: EN, DE, FR, ES, PL)
 - Downloadable badge kit (SVG icons for all categories)
+- Visual configurator tool on website (`/configurator`)
 
 ### Size Budget
 
-Under 30KB gzipped (JS + CSS, excluding visual configurator).
+Under 30KB gzipped (JS + CSS). Current: ~18KB gzip ESM, ~15KB gzip UMD.
 
 ---
 

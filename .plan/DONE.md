@@ -37,3 +37,25 @@
 - [x] E002-T30 — Accessibility audit and fixes — E002, 2026-03-26
 - [x] E002-T23 — Comprehensive test suite — E002, 2026-03-26
 - [x] E002-T32 — Website articles integration — E002, 2026-03-26
+- [x] E003-T01 — Project scaffolding & build setup — E003, 2026-03-27
+- [x] E003-T02 — Core types & config schema — E003, 2026-03-27
+- [x] E003-T03 — Consent state engine — E003, 2026-03-27
+- [x] E003-T04 — Event bus system — E003, 2026-03-27
+- [x] E003-T05 — Theme engine & CSS variables — E003, 2026-03-27
+- [x] E003-T06 — Banner UI (first layer) — E003, 2026-03-27
+- [x] E003-T07 — Preference center UI (second layer) — E003, 2026-03-27
+- [x] E003-T08 — Cookie policy icon system — E003, 2026-03-27
+- [x] E003-T09 — Cookie policy page generator — E003, 2026-03-27
+- [x] E003-T10 — Well-known JSON generator — E003, 2026-03-27
+- [x] E003-T11 — Extension bridge (handshake protocol) — E003, 2026-03-27
+- [x] E003-T12 — GPC signal detection & response — E003, 2026-03-27
+- [x] E003-T13 — Internationalization (i18n, 16 languages) — E003, 2026-03-27
+- [x] E003-T14 — Accessibility audit & fixes — E003, 2026-03-27
+- [x] E003-T15 — CDN bundle & npm package config — E003, 2026-03-27
+- [x] E003-T16 — E2E integration tests — E003, 2026-03-27
+- [x] E003-T17 — Documentation & examples — E003, 2026-03-27
+- [x] E003-T18 — Extension-side integration — E003, 2026-03-27
+- [x] E003-T19 — Standardized cookie practice descriptions — E003, 2026-03-27
+- [x] E003-T20 — Downloadable badge kit & icon publishing — E003, 2026-03-27
+- [x] E003-T21 — Cookie practice descriptions i18n (DE/FR/ES/PL) — E003, 2026-03-27
+- [x] E003-T22 — Visual preview / configurator tool — E003, 2026-03-27
