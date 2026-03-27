@@ -11,42 +11,21 @@
  *
  * Usage: node scripts/generate-badge-kit.mjs
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(__dirname, "..", "badge-kit");
 
-const CATEGORY_PATHS = {
-  lock: "M9 11V9a3 3 0 0 1 6 0v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1z",
-  gear: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1-4h2l.4 1.6c.3.1.6.3.9.5l1.5-.6 1 1.7-1.1 1c.1.3.1.7 0 1l1.1 1.1-1 1.7-1.5-.6c-.3.2-.6.4-.9.5L13 18h-2l-.4-1.6c-.3-.1-.6-.3-.9-.5l-1.5.6-1-1.7 1.1-1c-.1-.3-.1-.7 0-1L7.2 7.8l1-1.7 1.5.6c.3-.2.6-.4.9-.5L11 6z",
-  chart: "M7 17V11h2v6H7zm4 0V7h2v10h-2zm4 0v-4h2v4h-2z",
-  megaphone: "M6 10v4h2l4 4V6L8 10H6zm10.5 2A4.5 4.5 0 0 0 14 8.5v7a4.47 4.47 0 0 0 2.5-3.5z",
-  share: "M16 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM8 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1.5-2.6-5-2.8m0 4.8 5-2.8",
-};
+// Single source of truth: icon-data.json (shared with src/shared/icon-data.ts)
+const jsonPath = resolve(__dirname, "..", "src", "shared", "icon-data.json");
+const iconData = JSON.parse(readFileSync(jsonPath, "utf-8"));
 
-const CATEGORIES = [
-  { id: "essential", name: "Essential cookies", icon: "lock", color: "#6b7280" },
-  { id: "functional", name: "Functional cookies", icon: "gear", color: "#2563eb" },
-  { id: "analytics", name: "Analytics cookies", icon: "chart", color: "#7c3aed" },
-  { id: "marketing", name: "Marketing cookies", icon: "megaphone", color: "#ea580c" },
-  { id: "social-media", name: "Social media cookies", icon: "share", color: "#0ea5e9" },
-];
-
-const PRIVACY_LEVELS = [
-  { id: "maximum", color: "#15803d", label: "Privacy Maximum", text: "Essential only", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" },
-  { id: "friendly", color: "#2563eb", label: "Privacy Friendly", text: "Essential + Functional", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 4a4 4 0 0 1 0 8v-2a2 2 0 0 0 0-4V6z" },
-  { id: "balanced", color: "#d97706", label: "Balanced", text: "Includes Analytics", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-3 12l3-6 3 6H9z" },
-  { id: "full-tracking", color: "#ea580c", label: "Full Tracking", text: "All categories", path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 5a5 5 0 0 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 0 0 0 6 3 3 0 0 0 0-6zm0 1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" },
-];
-
-const COMPLIANCE_BADGES = [
-  { id: "gdpr", color: "#2563eb", label: "GDPR Compliant", text: "GDPR", icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4z" fill="currentColor"/>' },
-  { id: "gpc", color: "#15803d", label: "GPC Respected", text: "GPC", icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" fill="currentColor"/>' },
-  { id: "standard", color: "#7c3aed", label: "Standard Compliant", text: "v1", icon: '<path d="M9 12l2 2 4-4M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" fill="none" stroke="currentColor" stroke-width="2"/>' },
-  { id: "extension-ready", color: "#ea580c", label: "Extension Ready", text: "\u26A1", icon: '<path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="currentColor"/>' },
-];
+const CATEGORY_PATHS = iconData.categoryPaths;
+const CATEGORIES = iconData.categories;
+const PRIVACY_LEVELS = iconData.privacyLevels;
+const COMPLIANCE_BADGES = iconData.complianceBadges;
 
 /** Wraps SVG content in a standalone SVG document with XML declaration. */
 function wrapSvg(content, label) {

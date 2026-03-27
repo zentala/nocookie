@@ -52,3 +52,7 @@ export {
   getTranslations,
   mergeTranslations,
 } from "./i18n";
+
+export type { PrivacyLevelData, ComplianceBadgeData } from "./icon-data";
+
+export { CATEGORY_PATHS, CATEGORY_LABELS, PRIVACY_LEVELS, COMPLIANCE_BADGES } from "./icon-data";

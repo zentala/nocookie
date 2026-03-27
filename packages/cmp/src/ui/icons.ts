@@ -5,6 +5,12 @@
 
 import type { CategoryId } from "@/shared/types";
 import { CATEGORY_META } from "@/shared/constants";
+import {
+  CATEGORY_PATHS,
+  CATEGORY_LABELS,
+  PRIVACY_LEVELS,
+  COMPLIANCE_BADGES,
+} from "@/shared/icon-data";
 
 /** Available icon size tokens. */
 export type IconSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
@@ -24,87 +30,6 @@ export type PrivacyLevel = "maximum" | "friendly" | "balanced" | "full-tracking"
 
 /** Compliance badge identifiers. */
 export type ComplianceBadgeType = "gdpr" | "gpc" | "standard" | "extension-ready";
-
-/** SVG path data for each category icon (drawn inside a 24x24 viewBox). */
-const CATEGORY_PATHS: Record<string, string> = {
-  lock: "M9 11V9a3 3 0 0 1 6 0v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1z",
-  gear: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1-4h2l.4 1.6c.3.1.6.3.9.5l1.5-.6 1 1.7-1.1 1c.1.3.1.7 0 1l1.1 1.1-1 1.7-1.5-.6c-.3.2-.6.4-.9.5L13 18h-2l-.4-1.6c-.3-.1-.6-.3-.9-.5l-1.5.6-1-1.7 1.1-1c-.1-.3-.1-.7 0-1L7.2 7.8l1-1.7 1.5.6c.3-.2.6-.4.9-.5L11 6z",
-  chart: "M7 17V11h2v6H7zm4 0V7h2v10h-2zm4 0v-4h2v4h-2z",
-  megaphone: "M6 10v4h2l4 4V6L8 10H6zm10.5 2A4.5 4.5 0 0 0 14 8.5v7a4.47 4.47 0 0 0 2.5-3.5z",
-  share:
-    "M16 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM8 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1.5-2.6-5-2.8m0 4.8 5-2.8",
-};
-
-/** Aria label for each category icon. */
-const CATEGORY_LABELS: Record<CategoryId, string> = {
-  essential: "Essential cookies",
-  functional: "Functional cookies",
-  analytics: "Analytics cookies",
-  marketing: "Marketing cookies",
-  "social-media": "Social media cookies",
-};
-
-/** Privacy level metadata for badge rendering. */
-const PRIVACY_LEVELS: Record<
-  PrivacyLevel,
-  { color: string; label: string; text: string; path: string }
-> = {
-  maximum: {
-    color: "#15803d",
-    label: "Privacy Maximum",
-    text: "Essential only",
-    path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z",
-  },
-  friendly: {
-    color: "#2563eb",
-    label: "Privacy Friendly",
-    text: "Essential + Functional",
-    path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 4a4 4 0 0 1 0 8v-2a2 2 0 0 0 0-4V6z",
-  },
-  balanced: {
-    color: "#d97706",
-    label: "Balanced",
-    text: "Includes Analytics",
-    path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-3 12l3-6 3 6H9z",
-  },
-  "full-tracking": {
-    color: "#ea580c",
-    label: "Full Tracking",
-    text: "All categories",
-    path: "M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm0 5a5 5 0 0 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 0 0 0 6 3 3 0 0 0 0-6zm0 1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z",
-  },
-};
-
-/** Compliance badge metadata. */
-const COMPLIANCE_BADGES: Record<
-  ComplianceBadgeType,
-  { color: string; label: string; text: string; icon: string }
-> = {
-  gdpr: {
-    color: "#2563eb",
-    label: "GDPR Compliant",
-    text: "GDPR",
-    icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4z" fill="currentColor"/>',
-  },
-  gpc: {
-    color: "#15803d",
-    label: "GPC Respected",
-    text: "GPC",
-    icon: '<path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4zm-1 14l-3-3 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z" fill="currentColor"/>',
-  },
-  standard: {
-    color: "#7c3aed",
-    label: "Standard Compliant",
-    text: "v1",
-    icon: '<path d="M9 12l2 2 4-4M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" fill="none" stroke="currentColor" stroke-width="2"/>',
-  },
-  "extension-ready": {
-    color: "#ea580c",
-    label: "Extension Ready",
-    text: "\u26A1",
-    icon: '<path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="currentColor"/>',
-  },
-};
 
 /**
  * Render a category icon as an inline SVG string.
