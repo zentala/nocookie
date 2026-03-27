@@ -5,7 +5,8 @@
 
 import type { FullTranslations } from "../i18n";
 import { en } from "./en";
-import { de, fr, es, pl, nl, it, pt } from "./european-major";
+import { de, fr, es, pl } from "./european-major";
+import { nl, it, pt } from "./european-southern";
 import { sv, da, no, fi, cs } from "./european-other";
 import { ro, hu, el } from "./european-extra";
 
@@ -30,6 +31,7 @@ export const translations: Record<string, FullTranslations> = {
 };
 
 export { en } from "./en";
-export { de, fr, es, pl, nl, it, pt } from "./european-major";
+export { de, fr, es, pl } from "./european-major";
+export { nl, it, pt } from "./european-southern";
 export { sv, da, no, fi, cs } from "./european-other";
 export { ro, hu, el } from "./european-extra";

@@ -4,11 +4,11 @@
  * Handles accept/reject/customize actions, animations, and accessibility.
  */
 
-import type { ResolvedCMPConfig, CategoryConfig } from "@/shared/types";
+import type { ResolvedCMPConfig } from "@/shared/types";
 import type { ConsentStateManager } from "@/core/consent-state";
 import type { EventBus } from "@/core/event-bus";
-import { CATEGORY_META } from "@/shared/constants";
 import bannerCss from "@/styles/banner.css?raw";
+import { createCategoryDots, createTitle, createTextSection, createActions } from "@/ui/banner-dom";
 
 /** Animation duration for the exit transition (ms). */
 const EXIT_ANIMATION_MS = 200;
@@ -43,10 +43,16 @@ export class Banner {
     const content = document.createElement("div");
     content.className = "ca-banner__content";
 
-    content.appendChild(this.buildIcons());
-    content.appendChild(this.buildTitle());
-    content.appendChild(this.buildText());
-    content.appendChild(this.buildActions());
+    content.appendChild(createCategoryDots(this.config.categories));
+    content.appendChild(createTitle(this.config.translations.bannerTitle));
+    content.appendChild(createTextSection(this.config));
+    content.appendChild(
+      createActions(this.config, {
+        onRejectAll: () => this.handleRejectAll(),
+        onCustomize: () => this.handleCustomize(),
+        onAcceptAll: () => this.handleAcceptAll(),
+      }),
+    );
 
     banner.appendChild(content);
     this.shadowRoot.appendChild(banner);
@@ -121,90 +127,6 @@ export class Banner {
     this.styleEl = style;
   }
 
-  /** Build category icon placeholder dots. */
-  private buildIcons(): HTMLElement {
-    const container = document.createElement("div");
-    container.className = "ca-banner__icons";
-
-    for (const cat of this.config.categories) {
-      const dot = document.createElement("span");
-      dot.className = "ca-banner__icon-dot";
-      dot.style.backgroundColor = this.getCategoryColor(cat);
-      dot.title = cat.name ?? cat.id;
-      container.appendChild(dot);
-    }
-
-    return container;
-  }
-
-  /** Build the banner title element. */
-  private buildTitle(): HTMLElement {
-    const title = document.createElement("h2");
-    title.className = "ca-banner__title";
-    title.textContent = this.config.translations.bannerTitle;
-    return title;
-  }
-
-  /** Build the banner description text with optional policy link. */
-  private buildText(): HTMLElement {
-    const p = document.createElement("p");
-    p.className = "ca-banner__text";
-    p.textContent = this.config.translations.bannerDescription;
-
-    if (this.config.policyUrl) {
-      const space = document.createTextNode(" ");
-      p.appendChild(space);
-
-      const link = document.createElement("a");
-      link.className = "ca-banner__link";
-      link.href = this.config.policyUrl;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = this.config.translations.learnMore;
-      p.appendChild(link);
-    }
-
-    return p;
-  }
-
-  /** Build the action buttons row. */
-  private buildActions(): HTMLElement {
-    const actions = document.createElement("div");
-    actions.className = "ca-banner__actions";
-
-    if (this.config.behavior.rejectAllOnFirstLayer) {
-      actions.appendChild(
-        this.createButton("ca-btn ca-btn--reject", this.config.translations.rejectAll, () =>
-          this.handleRejectAll(),
-        ),
-      );
-    }
-
-    actions.appendChild(
-      this.createButton("ca-btn ca-btn--customize", this.config.translations.customize, () =>
-        this.handleCustomize(),
-      ),
-    );
-
-    actions.appendChild(
-      this.createButton("ca-btn ca-btn--accept", this.config.translations.acceptAll, () =>
-        this.handleAcceptAll(),
-      ),
-    );
-
-    return actions;
-  }
-
-  /** Create a button element with click handler. */
-  private createButton(className: string, text: string, onClick: () => void): HTMLButtonElement {
-    const btn = document.createElement("button");
-    btn.className = className;
-    btn.textContent = text;
-    btn.type = "button";
-    btn.addEventListener("click", onClick);
-    return btn;
-  }
-
   /** Handle Accept All button click. */
   private handleAcceptAll(): void {
     this.consentState.acceptAll();
@@ -234,11 +156,6 @@ export class Banner {
   /** Handle Customize button click. */
   private handleCustomize(): void {
     this.eventBus.emit("ui:preferences:open");
-  }
-
-  /** Resolve color for a category from config or standard metadata. */
-  private getCategoryColor(cat: CategoryConfig): string {
-    return CATEGORY_META[cat.id]?.color ?? "#6b7280";
   }
 
   /** Get the entrance animation CSS class from theme config. */
