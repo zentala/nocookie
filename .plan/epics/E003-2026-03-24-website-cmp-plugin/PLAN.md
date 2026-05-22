@@ -1,7 +1,6 @@
 ---
-id: E003
 title: NoCookie CMP — Open Source Website Consent Plugin
-status: planned
+status: pending
 created: 2026-03-24
 depends_on: E002
 ---

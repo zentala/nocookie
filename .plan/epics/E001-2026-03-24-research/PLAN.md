@@ -1,7 +1,6 @@
 ---
-id: E001
 title: Research — Competitive Landscape, Cookie Standards & CMP Analysis
-status: done
+status: completed
 created: 2026-03-24
 completed: 2026-03-24
 ---

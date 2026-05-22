@@ -1,7 +1,6 @@
 ---
-id: E002
 title: Chrome Extension + Open Standard + Website — Full Solution Design
-status: planned
+status: pending
 created: 2026-03-24
 depends_on: E001
 ---

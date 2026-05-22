@@ -1,7 +1,6 @@
 ---
-id: E002
 title: Chrome Extension + Open Standard + Website — Execution Plan
-status: done
+status: completed
 created: 2026-03-24
 updated: 2026-03-26
 completed: 2026-03-26

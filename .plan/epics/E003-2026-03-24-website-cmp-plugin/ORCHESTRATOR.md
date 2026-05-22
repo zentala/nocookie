@@ -1,7 +1,6 @@
 ---
-id: E003
 title: NoCookie CMP — Task Breakdown & Execution Plan
-status: done
+status: completed
 created: 2026-03-24
 ---
 
